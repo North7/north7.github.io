@@ -15,17 +15,18 @@
 
 ## 頁面
 
+設計是「色場」：向 Josef Albers《向方形致敬》致意。每個作品一整片平面色場，內外三層方形，內層往下偏；不用陰影、光暈或玻璃。每個作品的四個色階都由 `data/lab.js` 的 `color` 算出來。
+
 | # | 章節 | 內容 |
 |---|---|---|
-| — | 跑馬燈 | 各作品的即時狀態（Tidemark 訊號、Daybreak BTC 收盤、Morningbell S&P／加權、Market Ticker 版本） |
-| — | 首屏 | 作品數、公開上線數、入口數、開工天數 |
-| 01 | 作品 | 每個作品一列：封面、狀態、簡介、即時數據、所有版面／分頁的直達連結；可依領域篩選 |
+| — | 首屏 | 方形每 4.2 秒換成下一個作品的配色；右下角顯示那個作品的即時數據（Tidemark 訊號、Daybreak BTC 收盤、Morningbell S&P／加權、Market Ticker 版本）；底部是作品數、上線數、入口數、開工天數 |
+| 01 | 作品 | 每個作品一整片色場：方形裡是領域符號（加密＝圓、股市＝方、運動＝三角、健康＝半圓），滑過顯示畫面；旁邊是簡介、即時數據、所有版面／分頁色塊、按鈕與「全部 N 個入口」 |
 | 02 | 分頁索引 | 所有入口（首頁、分頁、作品集章節、語言版本、資料、工具、原始碼、本機、舊版、封存主題），可搜尋、依作品或類型篩選；按 `/` 直接搜尋 |
 | 03 | 作品集 | 案例研究：Tidemark 作品集、OneStroke 產品案例、個人作品集 |
 | 04 | 宣傳素材 | 有 `promo` 的作品會出現在這裡：影片（捲到畫面裡自動無聲播放）、海報、說明圖橫向捲動，點圖放大（← → 切換、Esc 關閉），附下載 |
 | 05 | 時間軸 | 每個作品從開工到今天的甘特圖，加上里程碑紀錄 |
 
-配色：自動（跟系統）／淺／深，右上角切換並記住。
+配色：自動（跟系統）／淺／深，右上角切換並記住；深色時色場改用深色色階。
 
 ## 加一個新作品
 
@@ -39,8 +40,8 @@
 ```js
 {
   id: 'newthing', no: '07', name: 'New Thing', zh: '中文名',
-  color: '#7A4BD6',            // 作品色；color2 可做漸層（例如 Tidemark）；ink 是淺底上的文字色（太亮的顏色才需要）
-  domains: ['crypto'],         // 對應上方 domains 的 key，可多個；要新領域就在 domains 加一個
+  color: '#7A4BD6',            // 作品色：整片色場的四個色階都從這個顏色算
+  domains: ['crypto'],         // 對應上方 domains 的 key；第一個決定方形裡的符號（要新領域就在 domains 加一個，再到 assets/app.js 的 GLYPH 加圖形）
   kind: '儀表板',
   status: 'live',              // live 已上線／local 本機／private 私人
   cadence: '每日自動更新',
@@ -51,7 +52,6 @@
   site: 'https://north7.github.io/newthing/',   // 沒有線上版就寫 null
   repo: 'https://github.com/North7/newthing',
   cover: 'assets/covers/newthing.jpg',          // 沒有就寫 null（會顯示「私人」封面）
-  logo: '<svg viewBox="0 0 64 64">…</svg>',
   sectionsLabel: '頁面',
   sections: [{ n: '01', t: '總覽', u: '#overview' }],   // u 相對於 site；不寫 u 就只顯示、不連結
   links: [{ t: 'English', u: 'en/', type: 'lang' }],     // type：case lang tool data social repo local legacy archive
@@ -65,12 +65,14 @@
 - `index.html`：頁面骨架
 - `data/lab.js`：所有內容（作品、作品集、里程碑）
 - `assets/app.js`：從資料產生頁面；讀各作品的公開 JSON 顯示即時數據（GitHub Pages 允許跨來源讀取）
-- `assets/app.css`：樣式。暖灰紙面、墨黑、每個作品一個顏色，沿用 Daybreak／Morningbell 的版面語言（Archivo、JetBrains Mono、Noto Sans TC）
+- `assets/app.css`：樣式。色場版：Jost ＋ Noto Sans TC，作品色階用 `color-mix()` 從 `--pc` 算，深色模式只換底色
 - `assets/covers/`：作品與作品集封面
 - `assets/media/<作品>/`：宣傳素材的網頁版（圖片轉 JPEG、影片轉成 720×1280 H.264，原始檔留在各作品的 release）
 - `tools/covers.sh`：用 Chrome 無頭模式重拍線上作品的封面
 
-本機預覽：`python3 -m http.server 8765` 後開 <http://127.0.0.1:8765/>（直接雙擊 `index.html` 也能看）。
+本機預覽：`python3 -m http.server 8765` 後開 <http://127.0.0.1:8765/>。
+
+舊版（暖灰報紙風）在 git 歷史裡：`git show 26b3600:index.html`。
 
 ## 隱私
 

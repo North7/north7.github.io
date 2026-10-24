@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Aron Lab · 作品索引</title>
 <meta name="description" content="Aron Song 的個人產品實驗室：Tidemark、Daybreak、Morningbell、Market Ticker、OneStroke、Baseline，所有作品的入口、分頁索引與作品集。">
-<meta name="theme-color" content="#EEECE6" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0C0C0D" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#E3EFEA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Aron Lab · 作品索引">
 <meta property="og:description" content="自己每天要用的，就自己做成產品。所有作品的入口、分頁索引與作品集。">
@@ -18,158 +18,83 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
 <link rel="stylesheet" href="assets/app.css">
 <script>try { var t = localStorage.getItem('lab.theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}</script>
 </head>
 <body>
 
-<div class="tape" aria-label="各作品即時狀態">
-  <div class="tape-track" id="tape"></div>
-</div>
-
-<header class="top">
-  <div class="wrap top-in">
-    <a class="brand" href="#top" aria-label="Aron Lab 回到頂端">
-      <span class="mark" id="mark" aria-hidden="true"></span>
-      <span class="brand-txt"><b>ARON LAB</b><small>產品實驗室</small></span>
-    </a>
-    <nav class="nav" aria-label="章節">
-      <a href="#works" data-nav="works"><i>01</i>作品</a>
-      <a href="#index" data-nav="index"><i>02</i>索引</a>
-      <a href="#cases" data-nav="cases"><i>03</i>作品集</a>
-      <a href="#media" data-nav="media"><i>04</i>宣傳素材</a>
-      <a href="#log" data-nav="log"><i>05</i>時間軸</a>
-    </nav>
-    <div class="seg" role="group" aria-label="配色">
-      <button type="button" data-theme-set="auto">自動</button>
-      <button type="button" data-theme-set="light">淺</button>
-      <button type="button" data-theme-set="dark">深</button>
-    </div>
+<header class="top" id="top">
+  <a class="brand" href="#hero" aria-label="Aron Lab 回到頂端"><span class="mark" id="mark" aria-hidden="true"></span>ARON LAB</a>
+  <nav class="nav" aria-label="章節">
+    <a href="#works" data-nav="works">作品</a>
+    <a href="#index" data-nav="index">索引</a>
+    <a href="#cases" data-nav="cases">作品集</a>
+    <a href="#media" data-nav="media">宣傳素材</a>
+    <a href="#log" data-nav="log">時間軸</a>
+  </nav>
+  <div class="seg" role="group" aria-label="配色">
+    <button type="button" data-theme-set="auto">自動</button><button type="button" data-theme-set="light">淺</button><button type="button" data-theme-set="dark">深</button>
   </div>
 </header>
 
-<main id="top">
-
-  <section class="hero wrap">
-    <div class="rule-thick"></div>
-    <div class="kicker">
-      <span class="chip-ink">LAB</span>
-      <span class="mono">ARON LAB · INDEX <span id="k-count">No.000</span></span>
-      <hr>
-      <span class="mono" id="k-date">—</span>
+<main>
+  <!-- 首屏：向方形致敬，配色依序換成每個作品 -->
+  <section class="hero" id="hero">
+    <a class="stage" id="stage" href="#works" aria-label="看目前展示的作品">
+      <div class="sq s1"><div class="sq s2"><div class="sq s3"><h1>ARON<br>LAB<small>個人產品實驗室</small></h1></div></div></div>
+    </a>
+    <div class="hero-bar">
+      <div class="cap"><p>自己每天要用的，<br>就自己做成產品。</p><span>Homage to the Product, 2026 — after Josef Albers</span></div>
+      <dl class="stats" id="stats"></dl>
+      <div class="now"><span class="k">Now showing</span><b id="now-name">—</b><span class="live-line" id="now-live"></span><div class="dots" id="dots" role="group" aria-label="選擇作品"></div></div>
     </div>
-    <div class="hero-grid">
-      <h1 class="headline"><span class="ln">自己每天要用的，</span><br><span class="ln">就自己<span class="hl">做成產品</span>。</span></h1>
-      <div class="hero-side">
-        <p class="lede">Aron Lab 收錄我做的每一個作品：比特幣週期訊號、比特幣與美股台股日報、行情看板、網球揮拍分析、私人健康日報。每個都從自己的一個問題開始，和 AI 協作、一個人做到上線。這裡是它們的入口、索引與展示。</p>
-        <div class="cta">
-          <a class="btn btn-ink" href="#works">看全部作品 <span aria-hidden="true">↓</span></a>
-          <a class="btn" href="#index">分頁索引</a>
-          <a class="btn" href="#cases">作品集</a>
-        </div>
-      </div>
-    </div>
-    <div class="stats" id="stats"></div>
   </section>
 
-  <section class="sec wrap" id="works" aria-labelledby="h-works">
-    <div class="sec-head">
-      <span class="sec-no">01</span>
-      <h2 id="h-works">作品</h2>
-      <span class="sec-en">WORKS</span>
-      <hr>
-      <div class="filters" id="domain-filter" role="group" aria-label="依領域篩選"></div>
-    </div>
-    <div class="prods" id="prods"></div>
-  </section>
+  <div id="works"></div>
 
-  <section class="sec wrap" id="index" aria-labelledby="h-index">
-    <div class="sec-head">
-      <span class="sec-no">02</span>
-      <h2 id="h-index">分頁索引</h2>
-      <span class="sec-en">DIRECTORY</span>
-      <hr>
-      <span class="mono dim" id="idx-count"></span>
-    </div>
+  <section class="sec idx-sec" id="index" aria-labelledby="h-index">
+    <div class="sec-h"><span class="no">02</span><h2 id="h-index">分頁索引</h2><span class="en">Directory</span><span class="count" id="idx-count"></span></div>
     <div class="idx-tools">
-      <label class="search">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-        <input id="q" type="search" placeholder="搜尋入口、網址、說明…" autocomplete="off" aria-label="搜尋入口">
-        <kbd>/</kbd>
-      </label>
-      <div class="filters" id="idx-prod" role="group" aria-label="依作品篩選"></div>
-      <div class="filters" id="idx-type" role="group" aria-label="依類型篩選"></div>
+      <label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="搜尋入口、網址、說明…" autocomplete="off" aria-label="搜尋入口"><kbd>/</kbd></label>
+      <div class="chips" id="idx-prod" role="group" aria-label="依作品篩選"></div>
+      <div class="chips" id="idx-type" role="group" aria-label="依類型篩選"></div>
     </div>
     <div class="idx" id="idx" role="table" aria-label="所有入口"></div>
   </section>
 
-  <section class="sec wrap" id="cases" aria-labelledby="h-cases">
-    <div class="sec-head">
-      <span class="sec-no">03</span>
-      <h2 id="h-cases">作品集</h2>
-      <span class="sec-en">CASE STUDIES</span>
-      <hr>
-    </div>
+  <section class="sec cases-sec" id="cases" aria-labelledby="h-cases">
+    <div class="sec-h"><span class="no">03</span><h2 id="h-cases">作品集</h2><span class="en">Case studies</span></div>
     <div class="cases" id="case-list"></div>
   </section>
 
-  <section class="sec wrap" id="media" aria-labelledby="h-media">
-    <div class="sec-head">
-      <span class="sec-no">04</span>
-      <h2 id="h-media">宣傳素材</h2>
-      <span class="sec-en">MEDIA</span>
-      <hr>
-    </div>
+  <section class="sec media-sec" id="media" aria-labelledby="h-media">
+    <div class="sec-h"><span class="no">04</span><h2 id="h-media">宣傳素材</h2><span class="en">Media</span></div>
     <div id="media-list"></div>
   </section>
 
-  <section class="sec wrap" id="log" aria-labelledby="h-log">
-    <div class="sec-head">
-      <span class="sec-no">05</span>
-      <h2 id="h-log">時間軸</h2>
-      <span class="sec-en">LOG</span>
-      <hr>
-    </div>
+  <section class="sec log-sec" id="log" aria-labelledby="h-log">
+    <div class="sec-h"><span class="no">05</span><h2 id="h-log">時間軸</h2><span class="en">Log</span></div>
     <div class="gantt" id="gantt"></div>
     <ol class="log" id="log-list"></ol>
   </section>
-
 </main>
 
 <footer class="foot">
-  <div class="wrap">
-    <div class="foot-word" aria-hidden="true">ARON LAB</div>
-    <div class="foot-strip" id="foot-strip"></div>
-    <div class="foot-grid">
-      <div>
-        <h3>作品</h3>
-        <ul id="foot-prods"></ul>
-      </div>
-      <div>
-        <h3>作品集</h3>
-        <ul id="foot-cases"></ul>
-      </div>
-      <div>
-        <h3>聯絡</h3>
-        <ul>
-          <li><a href="https://github.com/North7" target="_blank" rel="noopener">GitHub · North7 ↗</a></li>
-          <li><a href="https://x.com/songpu717" target="_blank" rel="noopener">X · @songpu717 ↗</a></li>
-        </ul>
-      </div>
-      <div class="foot-note">
-        <p>市場相關作品的所有內容僅供參考，不構成投資建議。</p>
-        <p class="mono dim" id="foot-upd"></p>
-      </div>
-    </div>
+  <div class="foot-top">
+    <h2>Next:<br>No.<span id="next-no">07</span></h2>
+    <div class="foot-tray" id="foot-tray" aria-hidden="true"></div>
+  </div>
+  <div class="foot-grid">
+    <div><h3>作品</h3><ul id="foot-prods"></ul></div>
+    <div><h3>作品集</h3><ul id="foot-cases"></ul></div>
+    <div><h3>聯絡</h3><ul><li><a href="https://github.com/North7" target="_blank" rel="noopener">GitHub · North7 ↗</a></li><li><a href="https://x.com/songpu717" target="_blank" rel="noopener">X · @songpu717 ↗</a></li></ul></div>
+    <div class="foot-note"><p>市場相關作品的所有內容僅供參考，不構成投資建議。</p><p id="foot-upd"></p></div>
   </div>
 </footer>
 
 <dialog class="lb" id="lb" aria-label="放大檢視">
-  <figure>
-    <img id="lb-img" alt="">
-    <figcaption><span id="lb-cap"></span><span class="mono" id="lb-n"></span></figcaption>
-  </figure>
+  <figure><img id="lb-img" alt=""><figcaption><span id="lb-cap"></span><span id="lb-n"></span></figcaption></figure>
   <button type="button" class="lb-btn lb-prev" data-lb="-1" aria-label="上一張">←</button>
   <button type="button" class="lb-btn lb-next" data-lb="1" aria-label="下一張">→</button>
   <button type="button" class="lb-btn lb-close" data-lb="x" aria-label="關閉">✕</button>
