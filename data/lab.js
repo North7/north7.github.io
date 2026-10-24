@@ -190,10 +190,10 @@ window.LAB = {
       // 宣傳素材：會出現在「宣傳素材」章節與索引。原始檔在私人 repo 的 release，這裡放網頁用的副本
       promo: {
         date: '2026-10-24',
-        note: '深色介面，畫面中的人臉已模糊。素材取自 2026-10-20 那場練習（158 拍）。',
+        note: '深色介面，主要畫面中的人臉已模糊。素材取自 2026-10-20 那場練習（158 拍）。',
         release: 'https://github.com/North7/onestroke/releases/tag/promo-2026-10-24',
         dir: 'assets/media/onestroke/',
-        video: null, // 待確認後加入：{ src: 'promo.mp4', poster: 'promo-poster.jpg', t: '宣傳影片 · 直式 47 秒' }
+        video: { src: 'promo.mp4', poster: 'promo-poster.jpg', t: '宣傳影片 · 直式 47 秒' },
         poster: { src: 'poster.jpg', thumb: 'poster-s.jpg', t: '總覽海報', ar: '1600 / 2600' },
         pdf: { src: 'onestroke-slides.pdf', t: '產品說明圖 PDF（9 頁）' },
         slidesAr: '1080 / 1350',
@@ -282,7 +282,7 @@ window.LAB = {
     { d: '2026-10-22', p: 'onestroke', t: '揮拍分析流程完成：切拍、姿態、評分、自動寫分析' },
     { d: '2026-10-23', p: 'daybreak', t: '頭版新增「今日發現」：每日自動偵測異動與關鍵節點' },
     { d: '2026-10-24', p: 'onestroke', t: '球員分開管理；產品案例頁上線' },
-    { d: '2026-10-24', p: 'onestroke', t: '宣傳素材：9 張產品說明圖與總覽海報' },
+    { d: '2026-10-24', p: 'onestroke', t: '宣傳素材：直式宣傳影片、9 張產品說明圖與總覽海報' },
     { d: '2026-10-24', p: null, t: 'Aron Lab 上線：所有作品的入口與索引' },
   ],
 };
