@@ -71,7 +71,7 @@ window.LAB = {
         { n: '09', t: '方法', u: '#method' },
       ],
       links: [
-        { t: '產品案例：每天 08:30 出刊的比特幣簡報', u: 'https://north7.github.io/portfolio/daybreak/', type: 'case' },
+        { t: '產品案例：每天 08:30 出刊的比特幣簡報', u: 'https://north7.github.io/daybreak/case-study/', type: 'case' },
         { t: 'X 發文小幫手', u: 'post.html', type: 'tool' },
         { t: '今日分享圖（中文）', u: 'data/share.png', type: 'data' },
         { t: '今日分享圖（English）', u: 'data/share-en.png', type: 'data' },
@@ -290,7 +290,7 @@ window.LAB = {
       sub: 'Daybreak 產品案例',
       desc: '把 15 個免費資料源變成每日簡報：程式算數字、AI 只負責解釋、出場規則寫死；「今日發現」寫下可檢驗的判斷，隔天自動對答案。18 期連續出刊，資料與主機成本 0 元。',
       meta: [['角色', '產品負責人（個人專案）'], ['期間', '2026/09/22 – 10/23'], ['實作', 'Claude Code 實作 · GitHub Actions 資料管線']],
-      url: 'https://north7.github.io/portfolio/daybreak/',
+      url: 'https://north7.github.io/daybreak/case-study/',
       cover: 'assets/covers/daybreak-case.jpg',
       chapters: [
         ['一頁看完', '#tldr'], ['問題與使用者', '#problem'], ['產品原則', '#principles'], ['三層分工', '#system'],

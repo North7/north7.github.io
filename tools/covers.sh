@@ -14,7 +14,7 @@ SHOTS=(
   ticker         "https://north7.github.io/market-ticker/#signal"
   signals        "https://north7.github.io/signals/"
   tidemark-case  "https://north7.github.io/tidemark/case-study/"
-  daybreak-case  "https://north7.github.io/portfolio/daybreak/"
+  daybreak-case  "https://north7.github.io/daybreak/case-study/"
   onestroke-case "https://north7.github.io/portfolio/onestroke/"
   portfolio      "https://north7.github.io/portfolio/"
 )
