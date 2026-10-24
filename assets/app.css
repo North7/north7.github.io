@@ -162,9 +162,8 @@ a.ir:hover .go2 { transform: translate(3px, -3px); }
 
 /* ── 作品集（赭黃色場） ── */
 .cases-sec { background: var(--cases-bg); }
-.cases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
-.case { background: var(--t1); border-right: 3px solid var(--cases-bg); display: flex; flex-direction: column; }
-.case:last-child { border-right: 0; }
+.cases { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 3px; }
+.case { background: var(--t1); display: flex; flex-direction: column; }
 .case .cv { display: block; aspect-ratio: 16/10; background: var(--t2); overflow: hidden; position: relative; }
 .case .cv img { width: 100%; height: 100%; object-fit: cover; object-position: left top; mix-blend-mode: multiply; filter: grayscale(.6); transition: filter .6s, mix-blend-mode .6s; }
 .case:hover .cv img { filter: none; mix-blend-mode: normal; }
@@ -272,7 +271,6 @@ button.m-item:hover img { transform: scale(1.02); }
 @media (max-width: 1100px) {
   .ir { grid-template-columns: 170px minmax(0, 1.4fr) 96px minmax(0, 1fr) 20px; }
   .cases { grid-template-columns: 1fr; }
-  .case { border-right: 0; border-bottom: 3px solid var(--cases-bg); }
 }
 @media (max-width: 860px) {
   :root { --gut: 20px; }

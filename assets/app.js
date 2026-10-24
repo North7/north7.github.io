@@ -190,6 +190,9 @@
   renderIndex();
 
   // ── 作品集 ──
+  // 欄數：3 篇以內一排放完；4 篇排成 2×2，避免最後一排只剩一張
+  const nw = L.works.length;
+  $('case-list').style.setProperty('--cols', nw <= 3 ? nw : nw % 3 === 1 ? 2 : 3);
   $('case-list').innerHTML = L.works.map((w) => {
     const p = byId[w.product] || ME;
     const ch = (w.chapters || []).map(([t, h]) => `<a href="${abs(w.url, h)}" target="_blank" rel="noopener">${esc(t)}</a>`).join('');
