@@ -12,6 +12,7 @@
 | 04 | [Market Ticker](https://north7.github.io/market-ticker/) | 副螢幕行情看板，7 個主題 | 已上線 · 即時 |
 | 05 | OneStroke 一拍 | 網球揮拍分析（[產品案例](https://north7.github.io/portfolio/onestroke/)） | 自用 · 本機 |
 | 06 | Baseline 身體日報 | 私人健康日報 | 只在本機，不公開 |
+| 07 | [Signal Tower](https://north7.github.io/signals/) | BTC 策略帳戶的紙上交易：S1 突破 × D 趨勢 | 已上線 · 每 4 小時更新 |
 
 ## 頁面
 

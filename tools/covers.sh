@@ -12,6 +12,7 @@ SHOTS=(
   daybreak       "https://north7.github.io/daybreak/#overview"
   morningbell    "https://north7.github.io/morningbell/#overview"
   ticker         "https://north7.github.io/market-ticker/#signal"
+  signals        "https://north7.github.io/signals/"
   tidemark-case  "https://north7.github.io/tidemark/case-study/"
   onestroke-case "https://north7.github.io/portfolio/onestroke/"
   portfolio      "https://north7.github.io/portfolio/"
