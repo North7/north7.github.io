@@ -51,8 +51,9 @@
   // ── 所有入口 ──
   const TYPES = {
     site: '首頁', section: '分頁', case: '作品集', lang: '語言版本', tool: '工具', data: '資料',
-    social: '社群', repo: '原始碼', local: '本機', legacy: '舊版', archive: '封存', private: '私人',
+    media: '宣傳素材', social: '社群', repo: '原始碼', local: '本機', legacy: '舊版', archive: '封存', private: '私人',
   };
+  const promoUrl = (p, f) => new URL(p.promo.dir + f, location.href).href;
   const entries = [];
   P.forEach((p) => {
     if (p.site) entries.push({ p, t: `${p.name} 首頁`, u: p.site, type: 'site' });
@@ -61,6 +62,13 @@
     });
     p.links.forEach((l) => entries.push({ p, t: l.t, u: abs(p.site, l.u), type: l.type }));
     (p.archive || []).forEach((l) => entries.push({ p, t: l.t, u: abs(p.site, l.u), type: l.type }));
+    if (p.promo) {
+      const m = p.promo;
+      if (m.video) entries.push({ p, t: m.video.t, u: promoUrl(p, m.video.src), type: 'media' });
+      if (m.pdf) entries.push({ p, t: m.pdf.t, u: promoUrl(p, m.pdf.src), type: 'media' });
+      if (m.poster) entries.push({ p, t: m.poster.t, u: promoUrl(p, m.poster.src), type: 'media' });
+      if (m.release) entries.push({ p, t: `宣傳素材原始檔（GitHub release${p.repoPrivate ? '，私人' : ''}）`, u: m.release, type: 'media' });
+    }
     L.works.filter((w) => w.product === p.id && w.chapters).forEach((w) => {
       w.chapters.forEach(([t, h]) => entries.push({ p, t: `作品集 › ${t}`, u: abs(w.url, h), type: 'case' }));
     });
@@ -125,6 +133,7 @@
         : `<span class="btn" aria-disabled="true">只在本機開啟</span>`;
     const second = [
       p.site && caseUrl ? `<a class="btn sm" href="${caseUrl}" target="_blank" rel="noopener">作品集</a>` : '',
+      p.promo ? `<a class="btn sm" href="#media-${p.id}">宣傳素材</a>` : '',
       p.repo ? `<a class="btn sm" href="${p.repo}" target="_blank" rel="noopener">原始碼${p.repoPrivate ? '（私人）' : ''}</a>` : '',
     ].join('');
     const domains = p.domains.map((d) => L.domains[d]).join('・');
@@ -274,6 +283,105 @@
     </article>`;
   }).join('');
 
+  // ── 宣傳素材 ──
+  const promoted = P.filter((p) => p.promo);
+  const shots = []; // 可放大檢視的圖：{ src, t, n }
+  if (!promoted.length) {
+    $('media').hidden = true;
+    document.querySelector('[data-nav="media"]').hidden = true;
+  }
+  $('media-list').innerHTML = promoted.map((p) => {
+    const m = p.promo, u = (f) => m.dir + f;
+    const fig = (inner, cap, ar) => `<figure class="m-fig" style="--ar:${ar}">${inner}<figcaption>${cap}</figcaption></figure>`;
+    const shot = (src, thumb, t, n, ar) => {
+      const i = shots.push({ src: u(src), t, n }) - 1;
+      return fig(`<button type="button" class="m-item" data-shot="${i}" aria-label="放大：${esc(t)}"><img src="${u(thumb)}" alt="${esc(t)}" loading="lazy" decoding="async"></button>`,
+        `${n ? `<i>${n}</i>` : ''}${esc(t)}`, ar);
+    };
+    const items = [];
+    if (m.video) {
+      items.push(fig(`<div class="m-item m-video">
+          <video muted loop playsinline preload="none" poster="${u(m.video.poster)}" aria-label="${esc(p.name)} ${esc(m.video.t)}"><source src="${u(m.video.src)}" type="video/mp4"></video>
+          <button type="button" class="m-play" aria-label="播放／暫停"><span></span></button>
+        </div>`, esc(m.video.t), '9 / 16'));
+    }
+    if (m.poster) items.push(shot(m.poster.src, m.poster.thumb, m.poster.t, 'POSTER', m.poster.ar));
+    m.slides.forEach((t, i) => {
+      const n = pad(i + 1, 2);
+      items.push(shot(`slide-${n}.jpg`, `slide-${n}-s.jpg`, t, `${n} / ${pad(m.slides.length, 2)}`, m.slidesAr));
+    });
+    const dl = [
+      m.video ? `<a class="btn sm" href="${u(m.video.src)}" download>影片 MP4 ↓</a>` : '',
+      m.pdf ? `<a class="btn sm" href="${u(m.pdf.src)}" target="_blank" rel="noopener">說明圖 PDF ↓</a>` : '',
+      m.poster ? `<a class="btn sm" href="${u(m.poster.src)}" download>海報 ↓</a>` : '',
+    ].join('');
+    const kinds = [m.video && '影片', m.poster && '海報', m.slides.length && `${m.slides.length} 張說明圖`].filter(Boolean).join(' · ');
+    return `
+    <article class="mk" id="media-${p.id}" style="--pc:${p.color}">
+      <div class="mk-head">
+        <span class="logo" aria-hidden="true">${p.logo}</span>
+        <div class="mk-t">
+          <h3>${esc(p.name)}<small>${esc(p.zh)}</small></h3>
+          <span class="mono dim">${dotted(m.date)} · ${kinds}</span>
+        </div>
+        <div class="mk-dl">${dl}</div>
+        <div class="mk-nav" aria-hidden="true"><button type="button" data-strip="-1">←</button><button type="button" data-strip="1">→</button></div>
+      </div>
+      ${m.note ? `<p class="mk-note">${esc(m.note)}</p>` : ''}
+      <div class="strip" tabindex="0" aria-label="${esc(p.name)} 宣傳素材">${items.join('')}</div>
+    </article>`;
+  }).join('');
+
+  // 左右捲動
+  document.addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-strip]');
+    if (!b) return;
+    const s = b.closest('.mk').querySelector('.strip');
+    s.scrollBy({ left: Math.sign(+b.dataset.strip) * s.clientWidth * 0.8, behavior: reduced ? 'auto' : 'smooth' });
+  });
+
+  // 影片：捲到畫面裡才自動播放（無聲）；減少動態時只在按下時播放
+  document.querySelectorAll('.m-video').forEach((box) => {
+    const v = box.querySelector('video');
+    const sync = () => box.classList.toggle('playing', !v.paused);
+    v.addEventListener('play', sync);
+    v.addEventListener('pause', sync);
+    box.querySelector('.m-play').addEventListener('click', () => (v.paused ? v.play() : v.pause()));
+    if (!reduced) {
+      new IntersectionObserver(([en]) => {
+        if (en.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      }, { threshold: 0.6 }).observe(box);
+    }
+  });
+
+  // 放大檢視
+  const lb = $('lb');
+  let cur = 0;
+  const show = (i) => {
+    cur = (i + shots.length) % shots.length;
+    const s = shots[cur];
+    $('lb-img').src = s.src;
+    $('lb-img').alt = s.t;
+    $('lb-cap').textContent = s.t;
+    $('lb-n').textContent = `${cur + 1} / ${shots.length}`;
+  };
+  document.addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-shot]');
+    if (!b) return;
+    show(+b.dataset.shot);
+    lb.showModal();
+  });
+  lb.addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-lb]');
+    if (b) b.dataset.lb === 'x' ? lb.close() : show(cur + +b.dataset.lb);
+    else if (ev.target === lb) lb.close();
+  });
+  lb.addEventListener('keydown', (ev) => {
+    if (ev.key === 'ArrowLeft') show(cur - 1);
+    if (ev.key === 'ArrowRight') show(cur + 1);
+  });
+
   // ── 時間軸 ──
   const startISO = first.slice(0, 8) + '01';
   const span = Math.max(dayDiff(startISO, todayISO) + 3, 14);
@@ -323,7 +431,7 @@
       if (en.isIntersecting) navLinks.forEach((a) => a.classList.toggle('on', a.dataset.nav === en.target.id));
     });
   }, { rootMargin: '-35% 0px -60% 0px' });
-  ['works', 'index', 'cases', 'log'].forEach((id) => io.observe($(id)));
+  ['works', 'index', 'cases', 'media', 'log'].forEach((id) => io.observe($(id)));
 
   // ── 即時數據 ──
   const fmtNum = (v, d = 0) => (v == null || isNaN(v) ? '—' : Number(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }));

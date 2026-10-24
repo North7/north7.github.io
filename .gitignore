@@ -1,3 +1,5 @@
-raw/
-.claude/
 .DS_Store
+.claude/
+_hold/
+_review/
+raw/

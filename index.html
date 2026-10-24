@@ -38,7 +38,8 @@
       <a href="#works" data-nav="works"><i>01</i>作品</a>
       <a href="#index" data-nav="index"><i>02</i>索引</a>
       <a href="#cases" data-nav="cases"><i>03</i>作品集</a>
-      <a href="#log" data-nav="log"><i>04</i>時間軸</a>
+      <a href="#media" data-nav="media"><i>04</i>宣傳素材</a>
+      <a href="#log" data-nav="log"><i>05</i>時間軸</a>
     </nav>
     <div class="seg" role="group" aria-label="配色">
       <button type="button" data-theme-set="auto">自動</button>
@@ -113,9 +114,19 @@
     <div class="cases" id="case-list"></div>
   </section>
 
-  <section class="sec wrap" id="log" aria-labelledby="h-log">
+  <section class="sec wrap" id="media" aria-labelledby="h-media">
     <div class="sec-head">
       <span class="sec-no">04</span>
+      <h2 id="h-media">宣傳素材</h2>
+      <span class="sec-en">MEDIA</span>
+      <hr>
+    </div>
+    <div id="media-list"></div>
+  </section>
+
+  <section class="sec wrap" id="log" aria-labelledby="h-log">
+    <div class="sec-head">
+      <span class="sec-no">05</span>
       <h2 id="h-log">時間軸</h2>
       <span class="sec-en">LOG</span>
       <hr>
@@ -153,6 +164,16 @@
     </div>
   </div>
 </footer>
+
+<dialog class="lb" id="lb" aria-label="放大檢視">
+  <figure>
+    <img id="lb-img" alt="">
+    <figcaption><span id="lb-cap"></span><span class="mono" id="lb-n"></span></figcaption>
+  </figure>
+  <button type="button" class="lb-btn lb-prev" data-lb="-1" aria-label="上一張">←</button>
+  <button type="button" class="lb-btn lb-next" data-lb="1" aria-label="下一張">→</button>
+  <button type="button" class="lb-btn lb-close" data-lb="x" aria-label="關閉">✕</button>
+</dialog>
 
 <script src="data/lab.js"></script>
 <script src="assets/app.js"></script>

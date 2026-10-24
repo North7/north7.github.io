@@ -22,7 +22,8 @@
 | 01 | 作品 | 每個作品一列：封面、狀態、簡介、即時數據、所有版面／分頁的直達連結；可依領域篩選 |
 | 02 | 分頁索引 | 所有入口（首頁、分頁、作品集章節、語言版本、資料、工具、原始碼、本機、舊版、封存主題），可搜尋、依作品或類型篩選；按 `/` 直接搜尋 |
 | 03 | 作品集 | 案例研究：Tidemark 作品集、OneStroke 產品案例、個人作品集 |
-| 04 | 時間軸 | 每個作品從開工到今天的甘特圖，加上里程碑紀錄 |
+| 04 | 宣傳素材 | 有 `promo` 的作品會出現在這裡：影片（捲到畫面裡自動無聲播放）、海報、說明圖橫向捲動，點圖放大（← → 切換、Esc 關閉），附下載 |
+| 05 | 時間軸 | 每個作品從開工到今天的甘特圖，加上里程碑紀錄 |
 
 配色：自動（跟系統）／淺／深，右上角切換並記住。
 
@@ -54,6 +55,7 @@
   sectionsLabel: '頁面',
   sections: [{ n: '01', t: '總覽', u: '#overview' }],   // u 相對於 site；不寫 u 就只顯示、不連結
   links: [{ t: 'English', u: 'en/', type: 'lang' }],     // type：case lang tool data social repo local legacy archive
+  promo: null,  // 宣傳素材，格式見 OneStroke：dir 底下放 slide-01.jpg（1080 寬）＋slide-01-s.jpg（640 寬）…、poster、pdf、video
   live: null,   // 要在頁面上顯示即時數據，到 assets/app.js 的 FEEDS 加一個讀取器，這裡填它的 key
 }
 ```
@@ -65,6 +67,7 @@
 - `assets/app.js`：從資料產生頁面；讀各作品的公開 JSON 顯示即時數據（GitHub Pages 允許跨來源讀取）
 - `assets/app.css`：樣式。暖灰紙面、墨黑、每個作品一個顏色，沿用 Daybreak／Morningbell 的版面語言（Archivo、JetBrains Mono、Noto Sans TC）
 - `assets/covers/`：作品與作品集封面
+- `assets/media/<作品>/`：宣傳素材的網頁版（圖片轉 JPEG、影片轉成 720×1280 H.264，原始檔留在各作品的 release）
 - `tools/covers.sh`：用 Chrome 無頭模式重拍線上作品的封面
 
 本機預覽：`python3 -m http.server 8765` 後開 <http://127.0.0.1:8765/>（直接雙擊 `index.html` 也能看）。
