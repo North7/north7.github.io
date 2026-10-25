@@ -72,7 +72,7 @@
 
 - `index.html`：頁面骨架
 - `data/lab.js`：所有內容（作品、作品集、里程碑）
-- `404.html`：找不到頁面時的頁面（獨立的 HTML，路徑都從根目錄寫）
+- `404.html`：找不到頁面時的頁面（獨立的 HTML，路徑都從根目錄寫）。同一份也放在 daybreak、tidemark/docs、morningbell、market-ticker/public、signals/paper/web、portfolio，改這裡要一起更新
 - `assets/app.js`：從資料產生頁面；讀各作品的公開 JSON 顯示即時數據（GitHub Pages 允許跨來源讀取）
 - `assets/app.css`：樣式。色場版：Jost ＋ Noto Sans TC，作品色階用 `color-mix()` 從 `--pc` 算，深色模式只換底色
 - `assets/covers/`：作品與作品集封面
