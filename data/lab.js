@@ -1,7 +1,7 @@
 // Aron Lab 的全部內容都在這裡。加新作品：在 products 最後加一筆（no 接著編），頁面、索引、時間軸會自動長出來。
 // 欄位說明見 README.md。網址可以寫完整網址，或寫相對於 site 的路徑（例如 '#news'、'en/'）。
 window.LAB = {
-  updated: '2026-10-24',
+  updated: '2026-10-25',
   owner: {
     name: 'Aron Song',
     github: 'https://github.com/North7',
@@ -161,7 +161,7 @@ window.LAB = {
       started: '2026-10-20',
       tagline: '上傳一段練球影片，自動切出每一拍、打分數，像教練一樣診斷。',
       desc: '2D／3D 姿態、每拍 0–100 分、SAM 3D 重建、Claude 寫教練式分析，產出手機可看的報告與分享影片。支援教練與學員分開管理。',
-      facts: ['5 天從想法到可試賣', '手機直接上傳', 'PDF 報告與分享影片'],
+      facts: ['可試賣的 MVP', '手機直接上傳', 'PDF 報告與分享影片'],
       site: null,
       repo: 'https://github.com/North7/onestroke',
       repoPrivate: true,
@@ -302,19 +302,21 @@ window.LAB = {
       id: 'onestroke-case', product: 'onestroke',
       title: '用手機影片看懂每一拍',
       sub: 'OneStroke 產品案例',
-      desc: '市面上的分析工具給了分數，卻說不出差在哪、下一步練什麼。用 5 天把它做成可以拿去試賣的網球分析產品。',
-      meta: [['角色', '產品負責人（定義、研究、驗證、設計決策）'], ['期間', '2026/10/20 – 10/24'], ['形態', '手機網頁＋本機運算']],
+      desc: '市面上的分析工具給了分數，卻說不出差在哪、下一步練什麼。我把這個困擾做成一個可以拿去試賣的網球分析產品。',
+      meta: [['角色', '產品負責人（定義、研究、驗證、設計決策）'], ['階段', '可試賣的 MVP'], ['形態', '手機網頁＋本機運算']],
       url: 'https://north7.github.io/portfolio/onestroke/',
       cover: 'assets/covers/onestroke-case.jpg',
     },
     {
-      id: 'portfolio', product: null,
-      title: 'Beyond Logic. Pure Intuition.',
-      sub: 'Aron Song 個人作品集',
-      desc: '產品架構師，13 年 Web3 與 AI 領域，專注於 0 到 1 的架構設計與商業落地。',
-      meta: [['角色', 'Product Architect'], ['領域', 'Web3 · AI 產品 · DeFi'], ['內容', '理念、作品、經歷']],
+      id: 'portfolio', product: null, type: 'site', go: '前往主頁',
+      title: 'Complex systems. Intuitive products.',
+      sub: 'Aron Song 個人主頁',
+      desc: '從複雜的代碼到直觀的產品體驗。13 年產品與工程經驗（11 年產品管理），橫跨 Web3 金融科技與 AI 醫療，專注於 0 到 1 的架構設計與商業落地。',
+      meta: [['角色', 'Product Architect · 產品架構師'], ['領域', 'Web3 FinTech · AI MedTech'], ['內容', '方法、作品、職涯更新紀錄、能力、履歷']],
       url: 'https://north7.github.io/portfolio/',
       cover: 'assets/covers/portfolio.jpg',
+      chaptersLabel: '個人主頁',
+      chapters: [['方法', '#approach'], ['作品', '#work'], ['更新紀錄', '#changelog'], ['能力', '#stack'], ['聯絡', '#contact'], ['履歷', 'resume/']],
     },
   ],
 

@@ -60,7 +60,10 @@
     L.works.filter((w) => w.product === p.id && w.chapters).forEach((w) => w.chapters.forEach(([t, h]) => entries.push({ p, t: `作品集 › ${t}`, u: abs(w.url, h), type: 'case' })));
     if (!p.site && !p.links.some((l) => l.type === 'local')) entries.push({ p, t: `${p.name} ${p.zh}（只在自己的 Mac 上開啟）`, u: null, type: 'private' });
   });
-  L.works.filter((w) => !w.product).forEach((w) => entries.push({ p: ME, t: w.sub, u: w.url, type: 'case' }));
+  L.works.filter((w) => !w.product).forEach((w) => {
+    entries.push({ p: ME, t: w.sub, u: w.url, type: w.type || 'case' });
+    (w.chapters || []).forEach(([t, h]) => entries.push({ p: ME, t, u: abs(w.url, h), type: 'section', label: w.chaptersLabel }));
+  });
   entries.push({ p: ME, t: 'GitHub · North7', u: L.owner.github, type: 'social' });
   entries.push({ p: ME, t: `X ${L.owner.xHandle}`, u: L.owner.x, type: 'social' });
   const countFor = (p) => entries.filter((e) => e.p === p).length;
@@ -81,7 +84,7 @@
   const first = P.map((p) => p.started).sort()[0];
   $('stats').innerHTML = [
     [pad(P.length), '個作品'], [pad(P.filter((p) => p.status === 'live').length), '個每天自動更新'],
-    [entries.length, '個入口'], [dayDiff(first, todayISO) + 1, `天，從 ${md(first)} 開工`],
+    [entries.length, '個入口'],
   ].map(([n, t]) => `<div><dt>${n}</dt><dd>${t}</dd></div>`).join('');
 
   // ── 首屏：每 4.2 秒換成下一個作品的配色 ──
@@ -230,14 +233,14 @@
     const p = byId[w.product] || ME;
     const ch = (w.chapters || []).map(([t, h]) => `<a href="${abs(w.url, h)}" target="_blank" rel="noopener">${esc(t)}</a>`).join('');
     return `<article class="case pc" style="--pc:${p.color}">
-      <a class="cv" href="${w.url}" target="_blank" rel="noopener" aria-label="閱讀 ${esc(w.sub)}"><img src="${asset(w.cover)}" alt="${esc(w.sub)} 封面" loading="lazy"></a>
+      <a class="cv" href="${w.url}" target="_blank" rel="noopener" aria-label="${esc(w.go || '閱讀')} ${esc(w.sub)}"><img src="${asset(w.cover)}" alt="${esc(w.sub)} 封面" loading="lazy"></a>
       <div class="b">
         <div class="sub"><i></i>${esc(w.sub)}</div>
         <h3>${esc(w.title)}</h3>
         <p>${esc(w.desc)}</p>
         <dl>${w.meta.map(([k2, v]) => `<dt>${esc(k2)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
         ${ch ? `<div class="ch">${ch}</div>` : ''}
-        <div class="go"><a href="${w.url}" target="_blank" rel="noopener">閱讀全文 ↗</a></div>
+        <div class="go"><a href="${w.url}" target="_blank" rel="noopener">${esc(w.go || '閱讀全文')} ↗</a></div>
       </div>
     </article>`;
   }).join('');
