@@ -45,9 +45,9 @@
       <div class="sq s1"><div class="sq s2"><div class="sq s3"><h1>ARON<br>LAB<small>個人產品實驗室</small></h1></div></div></div>
     </a>
     <div class="hero-bar">
-      <div class="cap"><p>自己每天要用的，<br>就自己做成產品。</p><span>Homage to the Product, 2026 — after Josef Albers</span></div>
+      <div class="cap"><p>自己每天要用的，<br>就自己做成產品。</p><span>Homage to the Product, 2026 — after <button type="button" class="egg-link" data-egg>Josef Albers</button></span></div>
       <dl class="stats" id="stats"></dl>
-      <div class="now"><span class="k">Now showing</span><b id="now-name">—</b><span class="live-line" id="now-live"></span><div class="dots" id="dots" role="group" aria-label="選擇作品"></div></div>
+      <div class="now"><span class="k" id="now-k">Now showing</span><b id="now-name">—</b><span class="live-line" id="now-live"></span><div class="dots" id="dots" role="group" aria-label="選擇作品"></div></div>
     </div>
   </section>
 
@@ -83,13 +83,13 @@
 <footer class="foot">
   <div class="foot-top">
     <h2>Next:<br>No.<span id="next-no">07</span></h2>
-    <div class="foot-tray" id="foot-tray" aria-hidden="true"></div>
+    <div class="foot-tray" id="foot-tray" role="group" aria-label="作品色票，點一下複製色碼"></div>
   </div>
   <div class="foot-grid">
     <div><h3>作品</h3><ul id="foot-prods"></ul></div>
     <div><h3>作品集</h3><ul id="foot-cases"></ul></div>
     <div><h3>聯絡</h3><ul><li><a href="https://github.com/North7" target="_blank" rel="noopener">GitHub · North7 ↗</a></li><li><a href="https://x.com/songpu717" target="_blank" rel="noopener">X · @songpu717 ↗</a></li></ul></div>
-    <div class="foot-note"><p>市場相關作品的所有內容僅供參考，不構成投資建議。</p><p id="foot-upd"></p></div>
+    <div class="foot-note"><p>市場相關作品的所有內容僅供參考，不構成投資建議。</p><p id="foot-upd"></p><p class="keys-link"><button type="button" data-keys>鍵盤快捷鍵 <kbd>?</kbd></button></p></div>
   </div>
 </footer>
 
@@ -99,6 +99,25 @@
   <button type="button" class="lb-btn lb-next" data-lb="1" aria-label="下一張">→</button>
   <button type="button" class="lb-btn lb-close" data-lb="x" aria-label="關閉">✕</button>
 </dialog>
+
+<!-- 彩蛋：Albers《色彩互動》的同色錯覺 -->
+<dialog class="pop egg" id="egg" aria-labelledby="egg-h"><div class="pop-in">
+  <p class="pop-k">Interaction of Color · after Josef Albers</p>
+  <h2 id="egg-h">這兩個小方形，是同一個顏色嗎？</h2>
+  <div class="egg-pair" id="egg-pair"><div class="egg-g"><i></i></div><div class="egg-g"><i></i></div></div>
+  <p class="egg-a" id="egg-a"></p>
+  <div class="pop-act"><button type="button" class="pri" id="egg-reveal">拿掉底色</button><button type="button" data-pop-close>關閉</button></div>
+</div></dialog>
+
+<dialog class="pop keys" id="keys" aria-labelledby="keys-h"><div class="pop-in">
+  <p class="pop-k">Keyboard</p>
+  <h2 id="keys-h">鍵盤快捷鍵</h2>
+  <dl id="keys-list"></dl>
+  <p class="keys-hint">另外還藏了一個，跟 Albers 有關。</p>
+  <div class="pop-act"><button type="button" class="pri" data-pop-close>知道了</button></div>
+</div></dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="data/lab.js"></script>
 <script src="assets/app.js"></script>

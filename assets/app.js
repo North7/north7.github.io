@@ -90,20 +90,45 @@
   // ── 首屏：每 4.2 秒換成下一個作品的配色 ──
   const hero = $('hero'), topBar = $('top');
   hero.classList.add('pc'); topBar.classList.add('pc');
-  let k = 0, timer = null;
+  // 先放「台北現在這個時間」該看的作品，時刻照各作品的排程：
+  // Morningbell 晨刊 07:00（週二到週六）、午後刊 16:00（週一到週五）；Tidemark 08:15、Daybreak 08:30；Signal Tower 每根 4 小時 K 線收盤時檢查
+  const tpeNow = () => {
+    const t = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Taipei', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()).map((x) => [x.type, x.value]));
+    return { h: +t.hour, m: +t.minute, dow: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(t.weekday), hm: `${t.hour}:${t.minute}` };
+  };
+  const SLOTS = [ // [從幾點開始（分鐘）, 作品, 說明, 只在星期幾（0 = 週日）]
+    [0, 'market-ticker', () => 'BTC 不收盤，行情一直在跳'],
+    [7 * 60, 'morningbell', () => '07:00 晨刊：美股收盤', [2, 3, 4, 5, 6]],
+    [8 * 60 + 15, 'tidemark', () => '08:15 更新頂部與底部訊號'],
+    [8 * 60 + 30, 'daybreak', () => '08:30 出刊的比特幣簡報'],
+    [12 * 60, 'signals', (t) => `4 小時 K 線 ${pad(Math.floor(t.h / 4) * 4)}:00 收盤`],
+    [16 * 60, 'morningbell', () => '16:00 午後刊：台股收盤', [1, 2, 3, 4, 5]],
+    [20 * 60, 'market-ticker', () => 'BTC 不收盤，行情一直在跳'],
+  ];
+  const pickNow = () => {
+    const t = tpeNow(), min = t.h * 60 + t.m;
+    const s = SLOTS.filter(([from, id, , days]) => from <= min && byId[id] && (!days || days.includes(t.dow))).pop();
+    return s ? { i: P.indexOf(byId[s[1]]), line: `台北 ${t.hm} · ${s[2](t)}` } : { i: 0, line: '' };
+  };
+  // 頂欄左上角 7 個小方塊 = 7 個作品：正在看哪一個，其他的就變空心
+  const markAt = (i) => [...$('mark').children].forEach((m, j) => m.classList.toggle('off', i >= 0 && j !== i));
+  let k = 0, timer = null, onHeroNow = true;
   const show = (i) => {
     k = (i + P.length) % P.length;
-    const p = P[k];
+    const p = P[k], now = pickNow(), line = now.i === k ? now.line : '';
     hero.style.setProperty('--pc', p.color);
     topBar.style.setProperty('--pc', p.color);
+    if (onHeroNow) markAt(k);
     $('stage').href = `#w-${p.id}`;
+    $('now-k').textContent = line || 'Now showing';
+    $('now-k').classList.toggle('t', !!line);
     $('now-name').textContent = `${p.name} ${p.zh}`;
     $('now-live').innerHTML = p.live && live[p.live] ? liveLine(live[p.live]) : esc(p.tagline);
     document.querySelectorAll('#dots button').forEach((b, j) => b.classList.toggle('on', j === k));
   };
   $('dots').innerHTML = P.map((p) => `<button type="button" aria-label="${esc(p.name)}"></button>`).join('');
   $('dots').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; clearInterval(timer); timer = null; show([...b.parentNode.children].indexOf(b)); });
-  show(0);
+  show(pickNow().i);
   if (!reduced) timer = setInterval(() => show(k + 1), 4200);
 
   // ── 手機頂欄：跟著正在頂欄底下的色場換底色與字色（桌機仍用混色模式，這些變數不會用到） ──
@@ -111,9 +136,12 @@
   let painting = false;
   const paintTop = () => {
     painting = false;
-    const y = topBar.offsetHeight / 2;
-    const s = [...layers()].find((el) => { const r = el.getBoundingClientRect(); return r.top <= y && r.bottom > y; });
+    const at = (y) => [...layers()].find((el) => { const r = el.getBoundingClientRect(); return r.top <= y && r.bottom > y; });
+    // 頂欄底色看頂欄正下方；左上角的作品方塊看畫面 40% 高的地方（眼睛正在看的那一段）
+    const s = at(topBar.offsetHeight / 2), cur = at(innerHeight * .4);
     const onHero = !s || s === hero;
+    onHeroNow = !cur || cur === hero;
+    markAt(onHeroNow ? k : cur.classList.contains('field') ? P.findIndex((p) => cur.id === `w-${p.id}`) : -1);
     topBar.classList.toggle('over-hero', onHero);
     if (onHero) { topBar.style.removeProperty('--top-bg'); topBar.style.removeProperty('--top-fg'); return; }
     const cs = getComputedStyle(s);
@@ -145,7 +173,7 @@
     return `<section class="field pc" id="w-${p.id}" style="--pc:${p.color}" aria-label="${esc(p.name)}">
       <a class="stage" ${url ? `href="${url}"${ext(url)}` : `href="#w-${p.id}"`} aria-label="開啟 ${esc(p.name)}"><div class="sq s0"><div class="sq s1"><div class="sq s2">${pic}<span class="glyph">${GLYPH[p.domains[0]] || GLYPH.stocks}</span></div></div></div></a>
       <div class="info">
-        <div class="no"><i></i><span>No.${p.no} · ${esc(domains)} · ${esc(p.kind)}</span><span class="st">${STATUS[p.status]} · ${esc(p.cadence)}</span></div>
+        <div class="no"><button type="button" class="hex" data-hex="${p.color}" title="複製色碼 ${p.color}" aria-label="複製 ${esc(p.name)} 的色碼 ${p.color}"></button><span>No.${p.no} · ${esc(domains)} · ${esc(p.kind)}</span><span class="st">${STATUS[p.status]} · ${esc(p.cadence)}</span></div>
         <h2>${esc(p.name)}<small>${esc(p.zh)}</small></h2>
         <p class="tag">${esc(p.tagline)}</p>
         <p class="desc">${esc(p.desc)}</p>
@@ -245,6 +273,13 @@
     $('index').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
   });
   renderIndex();
+  // 404 頁的搜尋框會帶 ?q= 過來
+  const q0 = new URLSearchParams(location.search).get('q');
+  if (q0) {
+    $('q').value = q0; state.q = q0; renderIndex();
+    const go = () => $('index').scrollIntoView({ behavior: 'instant' });
+    document.readyState === 'complete' ? go() : addEventListener('load', go, { once: true });
+  }
 
   // ── 作品集 ──
   // 欄數：3 篇以內一排放完；4 篇排成 2×2，避免最後一排只剩一張
@@ -339,7 +374,8 @@
 
   // ── 頁尾 ──
   $('next-no').textContent = pad(P.length + 1);
-  $('foot-tray').innerHTML = P.map((p) => `<i style="background:${p.color}"></i>`).join('') + '<i></i>';
+  $('foot-tray').innerHTML = P.map((p) => `<button type="button" data-hex="${p.color}" style="background:${p.color}" title="${esc(p.name)} ${p.color}" aria-label="複製 ${esc(p.name)} 的色碼 ${p.color}"></button>`).join('') +
+    `<button type="button" class="nx" id="next-sq" title="幫 No.${pad(P.length + 1)} 挑個顏色" aria-label="幫下一個作品隨機挑個顏色"></button>`;
   $('foot-prods').innerHTML = P.map((p) => `<li><a href="#w-${p.id}"><i style="background:${p.color}"></i>${esc(p.name)} ${esc(p.zh)}</a></li>`).join('');
   $('foot-cases').innerHTML = L.works.map((w) => `<li><a href="${w.url}" target="_blank" rel="noopener">${esc(w.sub)} ↗</a></li>`).join('');
   $('foot-upd').textContent = `ARON LAB · 內容更新 ${L.updated} · ${P.length} 個作品 · ${entries.length} 個入口`;
@@ -351,6 +387,60 @@
   ['index', 'cases', 'media', 'log'].forEach((id) => { $(id).dataset.sec = id; io2.observe($(id)); });
 
   // ── 讀即時數據 ──
+  // ── 小細節：複製色碼、幫下一個作品挑顏色 ──
+  const toast = (msg) => {
+    const t = $('toast'); t.textContent = msg; t.classList.add('on');
+    clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('on'), 2000);
+  };
+  document.addEventListener('click', async (e) => {
+    const b = e.target.closest('[data-hex]'); if (!b) return;
+    try { await navigator.clipboard.writeText(b.dataset.hex); toast(`已複製 ${b.dataset.hex}`); } catch (err) { toast(b.dataset.hex); }
+  });
+  const hslHex = (h, s, l) => {
+    s /= 100; l /= 100;
+    const f = (n) => { const q = (n + h / 30) % 12, a = s * Math.min(l, 1 - l); return Math.round(255 * (l - a * Math.max(-1, Math.min(q - 3, 9 - q, 1)))).toString(16).padStart(2, '0'); };
+    return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
+  };
+  $('next-sq').addEventListener('click', () => {
+    const c = hslHex(Math.random() * 360, 55 + Math.random() * 30, 42 + Math.random() * 16);
+    $('next-sq').style.background = c; $('next-sq').classList.add('on'); $('next-no').style.color = c;
+    toast(`No.${pad(P.length + 1)} 會是這個顏色嗎？${c}`);
+  });
+
+  // ── 彩蛋：Albers《色彩互動》的同色錯覺。點首屏的「Josef Albers」，或在頁面上打 albers ──
+  const egg = $('egg'), EGG = '#8C7B6B';
+  const syncEgg = () => {
+    const r = $('egg-pair').classList.contains('reveal');
+    $('egg-reveal').textContent = r ? '放回底色' : '拿掉底色';
+    $('egg-a').textContent = r ? `是同一個顏色（${EGG}）。放在亮的底色上看起來偏暗，放在暗的底色上就偏亮。`
+      : 'Albers 在《色彩互動》裡示範過：顏色會被旁邊的顏色改變。先猜猜看，再拿掉底色。';
+  };
+  const openEgg = () => { $('egg-pair').classList.remove('reveal'); syncEgg(); if (!egg.open) egg.showModal(); };
+  $('egg-reveal').addEventListener('click', () => { $('egg-pair').classList.toggle('reveal'); syncEgg(); });
+  document.querySelectorAll('dialog.pop').forEach((d) => d.addEventListener('click', (e) => { if (e.target === d || e.target.closest('[data-pop-close]')) d.close(); }));
+  document.addEventListener('click', (e) => { if (e.target.closest('[data-egg]')) openEgg(); else if (e.target.closest('[data-keys]')) $('keys').showModal(); });
+
+  // ── 鍵盤：1–7 跳到作品、t 切換深淺色、? 看說明、打 albers 開彩蛋（/ 搜尋在索引那段） ──
+  $('keys-list').innerHTML = [['/', '搜尋所有入口'], [['1', String(P.length)], '跳到第幾號作品'], ['t', '切換深淺色'], ['?', '打開這個說明'], ['Esc', '關閉視窗']]
+    .map(([k2, t]) => `<dt>${[].concat(k2).map((x) => `<kbd>${esc(x)}</kbd>`).join(' – ')}</dt><dd>${t}</dd>`).join('');
+  let typed = '';
+  document.addEventListener('keydown', (ev) => {
+    if (ev.metaKey || ev.ctrlKey || ev.altKey || /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) || document.querySelector('dialog[open]')) return;
+    typed = (typed + (ev.key.length === 1 ? ev.key.toLowerCase() : '')).slice(-6);
+    if (typed === 'albers') { typed = ''; openEgg(); return; }
+    const n = +ev.key, f = n >= 1 && P[n - 1] && $(`w-${P[n - 1].id}`);
+    if (f) f.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+    else if (ev.key === 't') {
+      const cur = root.dataset.theme === 'auto' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : root.dataset.theme;
+      setTheme(cur === 'dark' ? 'light' : 'dark'); requestAnimationFrame(paintTop);
+    } else if (ev.key === '?') $('keys').showModal();
+  });
+
+  // ── 給打開主控台的人 ──
+  console.log(P.map(() => '%c   ').join(''), ...P.map((p) => `background:${p.color};font-size:16px;line-height:26px`));
+  console.log('%cARON LAB%c  自己每天要用的，就自己做成產品。', 'font:700 15px Jost,sans-serif;letter-spacing:.14em', 'font:13px sans-serif');
+  console.log(`全部內容都在 data/lab.js，原始碼：https://github.com/North7/north7.github.io\n按 ? 看鍵盤快捷鍵；還有一個彩蛋：在頁面上打 albers。\n個人主頁：${L.owner.portfolio}`);
+
   const loadAll = () => Object.entries(FEEDS).forEach(async ([key, [url, read]]) => {
     try {
       const r = await fetch(url, { cache: 'no-cache' });
