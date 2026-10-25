@@ -152,23 +152,56 @@
   const typeKeys = Object.keys(TYPES).filter((t) => entries.some((e) => e.type === t));
   idxType.innerHTML = `<button type="button" class="on" data-t="all">全部類型</button>` + typeKeys.map((t) => `<button type="button" data-t="${t}">${TYPES[t]}<span class="n">${entries.filter((e) => e.type === t).length}</span></button>`).join('');
   const hl = (s, q) => { const t = esc(s); if (!q) return t; const i = s.toLowerCase().indexOf(q); return i < 0 ? t : esc(s.slice(0, i)) + '<mark>' + esc(s.slice(i, i + q.length)) + '</mark>' + esc(s.slice(i + q.length)); };
+  // 預設每個作品只露出第一列，其餘收在「＋ 其餘 N 個入口」；搜尋或只看單一作品時全部攤開
+  const open = new Set();
+  const tyName = (e) => (e.type === 'section' ? e.label : TYPES[e.type]);
+  const row = (e, grp, q) => {
+    const cells = `<span class="pn${grp ? '' : ' rep'}" role="cell"><span class="sw" style="background:${e.p.color}"></span>${esc(e.p.name)}<small>${esc(e.p.zh)}</small></span>
+      <span class="t" role="cell">${e.n ? `<i>${esc(e.n)}</i>` : ''}${hl(e.t, q)}</span>
+      <span class="ty ${e.type}" role="cell">${esc(tyName(e))}</span>
+      <span class="u" role="cell">${e.u ? hl(shortUrl(e.u), q) : '—'}</span><span class="go2" aria-hidden="true">↗</span>`;
+    return e.u ? `<a class="ir${grp ? ' grp' : ''}" role="row" href="${e.u}"${ext(e.u)}>${cells}</a>` : `<div class="ir nolink${grp ? ' grp' : ''}" role="row">${cells}</div>`;
+  };
+  const foldRow = (p, rest, isOpen) => {
+    const by = new Map(); rest.forEach((e) => by.set(tyName(e), (by.get(tyName(e)) || 0) + 1));
+    return `<div class="ir fold-row" role="row"><button type="button" role="cell" data-fold="${p.id}" aria-expanded="${isOpen}">` +
+      (isOpen ? `<b>− 收合 ${esc(p.name)}</b>` : `<b>＋ 其餘 ${rest.length} 個入口</b><span>${[...by].map(([k, n]) => `<i>${esc(k)} ${n}</i>`).join(' · ')}</span>`) + '</button></div>';
+  };
+  let foldable = [];
   const renderIndex = () => {
     const q = state.q.trim().toLowerCase();
     const rows = entries.filter((e) => (state.prod === 'all' || e.p.id === state.prod) && (state.type === 'all' || e.type === state.type) &&
       (!q || [e.t, e.u || '', e.p.name, e.p.zh, TYPES[e.type], e.label || ''].join(' ').toLowerCase().includes(q)));
     $('idx-count').textContent = rows.length === entries.length ? `共 ${entries.length} 個入口` : `顯示 ${rows.length} / ${entries.length}`;
+    const byP = new Map(); rows.forEach((e) => byP.set(e.p, [...(byP.get(e.p) || []), e]));
+    foldable = !q && state.prod === 'all' ? [...byP].filter(([, list]) => list.length > 3).map(([p]) => p.id) : [];
+    const fa = $('idx-fold');
+    fa.hidden = !foldable.length;
+    fa.textContent = foldable.every((id) => open.has(id)) ? '全部收合' : '全部展開';
     if (!rows.length) { $('idx').innerHTML = '<div class="idx-empty">沒有符合的入口。換個關鍵字，或清除篩選。</div>'; return; }
-    let last = null;
     $('idx').innerHTML = '<div class="ir head" role="row"><span role="columnheader">作品</span><span role="columnheader">入口</span><span role="columnheader">類型</span><span role="columnheader">網址</span><span></span></div>' +
-      rows.map((e) => {
-        const grp = e.p !== last; last = e.p;
-        const cells = `<span class="pn${grp ? '' : ' rep'}" role="cell"><span class="sw" style="background:${e.p.color}"></span>${esc(e.p.name)}<small>${esc(e.p.zh)}</small></span>
-          <span class="t" role="cell">${e.n ? `<i>${esc(e.n)}</i>` : ''}${hl(e.t, q)}</span>
-          <span class="ty ${e.type}" role="cell">${esc(e.type === 'section' ? e.label : TYPES[e.type])}</span>
-          <span class="u" role="cell">${e.u ? hl(shortUrl(e.u), q) : '—'}</span><span class="go2" aria-hidden="true">↗</span>`;
-        return e.u ? `<a class="ir${grp ? ' grp' : ''}" role="row" href="${e.u}"${ext(e.u)}>${cells}</a>` : `<div class="ir nolink${grp ? ' grp' : ''}" role="row">${cells}</div>`;
+      [...byP].map(([p, list]) => {
+        if (!foldable.includes(p.id)) return list.map((e, i) => row(e, i === 0, q)).join('');
+        const isOpen = open.has(p.id);
+        return (isOpen ? list : list.slice(0, 1)).map((e, i) => row(e, i === 0, q)).join('') + foldRow(p, list.slice(1), isOpen);
       }).join('');
   };
+  $('idx').addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-fold]'); if (!b) return;
+    const id = b.dataset.fold, closing = open.has(id), top = b.getBoundingClientRect().top;
+    closing ? open.delete(id) : open.add(id);
+    renderIndex();
+    const nb = $('idx').querySelector(`[data-fold="${id}"]`);
+    if (!nb) return;
+    // 收合時讓按鈕留在原本的位置，不然畫面會跳到下一個作品之後
+    if (closing) window.scrollBy({ top: nb.getBoundingClientRect().top - top, behavior: 'instant' });
+    nb.focus({ preventScroll: true });
+  });
+  $('idx-fold').addEventListener('click', () => {
+    const all = foldable.every((id) => open.has(id));
+    foldable.forEach((id) => (all ? open.delete(id) : open.add(id)));
+    renderIndex();
+  });
   const pick = (box, attr, key) => box.addEventListener('click', (ev) => {
     const b = ev.target.closest(`[data-${attr}]`); if (!b) return;
     state[key] = b.dataset[attr];

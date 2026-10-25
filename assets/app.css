@@ -159,6 +159,14 @@ a.ir:hover .go2 { transform: translate(3px, -3px); }
 .ir.nolink .go2 { visibility: hidden; }
 .ir mark { background: #F4C918; color: #161616; }
 .idx-empty { padding: 40px 10px; text-align: center; color: var(--idx-tx2); }
+.ir.fold-row { display: block; min-height: 0; padding: 0; }
+.fold-row button { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px; width: 100%; padding: 13px 10px 13px 228px; border: 0; background: transparent; color: var(--idx-tx); text-align: left; font: 700 13.5px/1.3 var(--cjk); cursor: pointer; }
+.fold-row button:hover { background: var(--idx-hi); }
+.fold-row button[aria-expanded="true"] { color: var(--idx-tx2); }
+.fold-row span { font: 500 12.5px/1.3 var(--cjk); color: var(--idx-tx2); }
+.fold-row i { font-style: normal; white-space: nowrap; }
+.fold-all { align-self: center; height: 32px; padding: 0 14px; border: 0; background: var(--idx-hi); color: var(--idx-tx); font: 500 13px/1 var(--cjk); cursor: pointer; }
+.fold-all:hover { background: rgba(241,238,231,.16); }
 
 /* ── 作品集（赭黃色場） ── */
 .cases-sec { background: var(--cases-bg); }
@@ -270,6 +278,7 @@ button.m-item:hover img { transform: scale(1.02); }
 
 @media (max-width: 1100px) {
   .ir { grid-template-columns: 170px minmax(0, 1.4fr) 96px minmax(0, 1fr) 20px; }
+  .fold-row button { padding-left: 198px; }
   .cases { grid-template-columns: 1fr; }
 }
 @media (max-width: 860px) {
@@ -297,6 +306,7 @@ button.m-item:hover img { transform: scale(1.02); }
   .ir .pn { grid-area: pn; } .ir .pn.rep { display: none; }
   .ir:not(.grp) { grid-template-areas: "t ty go" "u u u"; }
   .ir .t { grid-area: t; padding: 0; } .ir .ty { grid-area: ty; } .ir .go2 { grid-area: go; } .ir .u { grid-area: u; }
+  .fold-row button { padding: 13px 6px; }
   .mk { --sh: 340px; }
   .mk-dl { margin-left: 0; width: 100%; }
   .mk-nav { display: none; }
