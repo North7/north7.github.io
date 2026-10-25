@@ -29,6 +29,8 @@
 
 配色：自動（跟系統）／淺／深，右上角切換並記住；深色時色場改用深色色階。
 
+語言：中文／English，右上角切換並記住（手機上只顯示另一種語言，按一下就切）。第一次來看網址的 `?lang=en|zh`，沒有就看瀏覽器語言：有中文就用中文，其他都用英文。英文版的作品連結會直接連到各作品的英文版（Tidemark 的 `en/`、Daybreak 產品案例的 `en/`），只有中文的頁面標「(Chinese)」。404 頁跟著同一個設定。
+
 小細節：
 - 左上角 7 個小方塊對應 7 個作品，正在看哪一個，其他就變空心
 - 點作品名稱旁的小色塊、或頁尾色票，複製那個作品的色碼；頁尾最後的空方塊點一下，幫下一個作品隨機挑顏色
@@ -43,7 +45,8 @@
 1. 在 `products` 最後加一筆，`no` 接著編（`'07'`）
 2. 有封面就放 `assets/covers/<名稱>.jpg`（1200×750，16:10）；線上網站可以把網址加進 `tools/covers.sh` 再執行
 3. 想記錄里程碑就加到 `milestones`
-4. 改 `updated` 日期，推上 main
+4. 英文版：每一筆都加 `en`（見下面的例子），沒加的地方英文版會直接顯示中文
+5. 改 `updated` 日期，推上 main
 
 ```js
 {
@@ -65,6 +68,10 @@
   links: [{ t: 'English', u: 'en/', type: 'lang' }],     // type：case lang tool data social repo local legacy archive
   promo: null,  // 宣傳素材，格式見 OneStroke：dir 底下放 slide-01.jpg（1080 寬）＋slide-01-s.jpg（640 寬）…、poster、pdf、video
   live: null,   // 要在頁面上顯示即時數據，到 assets/app.js 的 FEEDS 加一個讀取器，這裡填它的 key
+  // 英文版：en 是物件就換掉裡面列出的欄位；zh 在英文版當成副標（例如 'Cycle Signals'）
+  // open：英文版的「Open」連到哪裡（相對於 site）；ui: 'zh' 代表網站只有中文，按鈕會標 (Chinese)；cover 可以換成英文版的封面
+  en: { zh: 'English subtitle', kind: 'Dashboard', cadence: 'Updates daily', tagline: '…', desc: '…', facts: ['…'], sectionsLabel: 'Page' },
+  // sections、links、milestones 每一筆也可以帶 en：字串＝英文標題；物件＝{ t, u } 連英文版網址
 }
 ```
 
@@ -77,7 +84,7 @@
 - `assets/app.css`：樣式。色場版：Jost ＋ Noto Sans TC，作品色階用 `color-mix()` 從 `--pc` 算，深色模式只換底色
 - `assets/covers/`：作品與作品集封面
 - `assets/media/<作品>/`：宣傳素材的網頁版（圖片轉 JPEG、影片轉成 720×1280 H.264，原始檔留在各作品的 release）
-- `tools/covers.sh`：用 Chrome 無頭模式重拍線上作品的封面
+- `tools/covers.sh`：用 Chrome 無頭模式重拍線上作品的封面（一律淺色；名稱結尾 `-en` 的用英文瀏覽器語言拍，給英文版用）
 
 本機預覽：`python3 -m http.server 8765` 後開 <http://127.0.0.1:8765/>。
 

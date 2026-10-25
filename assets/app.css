@@ -52,6 +52,11 @@ button { font: inherit; color: inherit; }
 .seg button { padding: 5px 10px; border: 0; background: none; color: #fff; font: 500 12px/1 var(--cjk); cursor: pointer; }
 .seg button + button { border-left: 1.5px solid #fff; }
 .seg button.on { background: #fff; color: #000; }
+.seg.lang { margin-right: -16px; }
+.seg.lang button { font-family: var(--geo); font-weight: 600; }
+/* 英文版：app.js 換好字之前先藏起來，避免中文閃一下 */
+html[data-lang="en"]:not(.i18n) [data-en], html[data-lang="en"]:not(.i18n) [data-en-html] { visibility: hidden; }
+html[lang="en"] .hero h1 small { letter-spacing: .3em; }
 
 /* ── 首屏 ── */
 .hero { --pc: #22A57F; position: relative; height: 100svh; min-height: 660px; background: var(--t1); overflow: hidden; transition: background-color 1.4s cubic-bezier(.4,0,.2,1); }
@@ -325,6 +330,12 @@ button.m-item:hover img { transform: scale(1.02); }
 @media (max-width: 860px) {
   :root { --gut: 20px; }
   .top { padding: 0 16px; gap: 12px; height: 54px; }
+  .brand { white-space: nowrap; }
+  .seg button { padding: 5px 8px; }
+  /* 手機上語言只留「另一種」，按一下就切過去，省下頂欄的寬度 */
+  .seg.lang { margin-right: -4px; }
+  .seg.lang button.on { display: none; }
+  .seg.lang button { border-left: 0; }
   /* iOS 捲動時 mix-blend-mode 會留殘影；手機上改成實色頂欄，顏色跟著底下的色場（app.js 設定） */
   .top { mix-blend-mode: normal; background: var(--top-bg, var(--base)); color: var(--top-fg, var(--tx)); transition: background-color .25s, color .25s; }
   .top.over-hero { --top-bg: var(--t1); --top-fg: var(--tx); transition: background-color 1.4s cubic-bezier(.4,0,.2,1); }
@@ -368,4 +379,8 @@ button.m-item:hover img { transform: scale(1.02); }
   .foot-grid { grid-template-columns: 1fr 1fr; }
   .foot-note { grid-column: 1 / -1; }
   .lb-prev, .lb-next { top: auto; bottom: 20px; margin-top: 0; }
+}
+
+@media (max-width: 400px) {
+  .brand { gap: 10px; font-size: 15px; letter-spacing: .12em; }
 }
