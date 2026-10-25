@@ -88,13 +88,14 @@
   ].map(([n, t]) => `<div><dt>${n}</dt><dd>${t}</dd></div>`).join('');
 
   // ── 首屏：每 4.2 秒換成下一個作品的配色 ──
-  const hero = $('hero');
-  hero.classList.add('pc');
+  const hero = $('hero'), topBar = $('top');
+  hero.classList.add('pc'); topBar.classList.add('pc');
   let k = 0, timer = null;
   const show = (i) => {
     k = (i + P.length) % P.length;
     const p = P[k];
     hero.style.setProperty('--pc', p.color);
+    topBar.style.setProperty('--pc', p.color);
     $('stage').href = `#w-${p.id}`;
     $('now-name').textContent = `${p.name} ${p.zh}`;
     $('now-live').innerHTML = p.live && live[p.live] ? liveLine(live[p.live]) : esc(p.tagline);
@@ -104,6 +105,26 @@
   $('dots').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; clearInterval(timer); timer = null; show([...b.parentNode.children].indexOf(b)); });
   show(0);
   if (!reduced) timer = setInterval(() => show(k + 1), 4200);
+
+  // ── 手機頂欄：跟著正在頂欄底下的色場換底色與字色（桌機仍用混色模式，這些變數不會用到） ──
+  const layers = () => document.querySelectorAll('.hero, .field, .sec, .foot');
+  let painting = false;
+  const paintTop = () => {
+    painting = false;
+    const y = topBar.offsetHeight / 2;
+    const s = [...layers()].find((el) => { const r = el.getBoundingClientRect(); return r.top <= y && r.bottom > y; });
+    const onHero = !s || s === hero;
+    topBar.classList.toggle('over-hero', onHero);
+    if (onHero) { topBar.style.removeProperty('--top-bg'); topBar.style.removeProperty('--top-fg'); return; }
+    const cs = getComputedStyle(s);
+    topBar.style.setProperty('--top-bg', cs.backgroundColor);
+    topBar.style.setProperty('--top-fg', cs.color);
+  };
+  addEventListener('scroll', () => { if (!painting) { painting = true; requestAnimationFrame(paintTop); } }, { passive: true });
+  addEventListener('resize', paintTop);
+  document.querySelectorAll('[data-theme-set]').forEach((b) => b.addEventListener('click', () => requestAnimationFrame(paintTop)));
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => requestAnimationFrame(paintTop));
+  requestAnimationFrame(paintTop);
 
   // ── 作品色場 ──
   const GLYPH = {
@@ -292,6 +313,21 @@
     const dots = L.milestones.filter((m) => m.p === p.id).map((m) => `<span class="g-dot" style="left:${x(m.d)}%" title="${md(m.d)} ${esc(m.t)}"></span>`).join('');
     return `<div class="g-row pc" style="--pc:${p.color}"><div class="l"><i></i>${esc(p.name)}</div><div class="g-track"><a class="g-bar${p.status === 'private' ? ' private' : ''}" href="#w-${p.id}" style="left:${x(p.started)}%;width:${Math.max(x(todayISO) - x(p.started), 1)}%" title="${esc(p.name)}：${md(p.started)} 開工至今"></a>${dots}</div></div>`;
   }).join('');
+  // 窄螢幕上「今天」的標籤會壓到旁邊的日期，壓到的就先藏起來
+  const fitTicks = () => {
+    const labels = [...$('gantt').querySelectorAll('.g-tick span')];
+    const today = labels.pop().getBoundingClientRect();
+    let edge = -Infinity;
+    labels.forEach((s) => {
+      s.style.visibility = '';
+      const r = s.getBoundingClientRect();
+      const hit = r.left < edge + 8 || (r.right + 8 > today.left && r.left < today.right + 8);
+      s.style.visibility = hit ? 'hidden' : '';
+      if (!hit) edge = r.right;
+    });
+  };
+  new ResizeObserver(fitTicks).observe($('gantt'));
+  document.fonts.ready.then(fitTicks);
   const events = [
     ...P.map((p) => ({ d: p.started, p, start: true, t: `<b>${esc(p.name)} ${esc(p.zh)}</b>：${esc(p.tagline)}` })),
     ...L.milestones.map((m) => ({ d: m.d, p: byId[m.p] || null, t: esc(m.t) })),
