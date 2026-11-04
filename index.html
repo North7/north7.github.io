@@ -19,6 +19,7 @@
 <link rel="alternate" hreflang="en" href="https://north7.github.io/?lang=en">
 <link rel="alternate" hreflang="x-default" href="https://north7.github.io/">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
@@ -36,9 +37,12 @@ try { var t = localStorage.getItem('lab.theme'); if (t === 'light' || t === 'dar
 </head>
 <body>
 
+<!-- Aron 的 logo（A＋橫槓），用 <use href="#logo"> 重複使用；顏色由 --logo-a、--logo-bar 決定 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="logo" viewBox="0 0 478.25 321"><path style="fill:var(--logo-a,currentColor)" fill-rule="evenodd" d="M80.25 0H151.25L231.5 321H176.45L159.05 243H72.45L55.05 321H0ZM115.75 48.6L149.15 198.5H82.35Z"/><rect style="fill:var(--logo-bar,#F5801C)" x="259.25" y="259" width="219" height="62"/></symbol></svg>
+
 <!-- 英文版：有 data-en 的元素由 app.js 換成英文（data-en-html 可含標籤；data-en-label、-ph、-title 換屬性） -->
 <header class="top" id="top">
-  <a class="brand" href="#hero" aria-label="Aron Lab 回到頂端" data-en-label="Aron Lab, back to top"><span class="mark" id="mark" aria-hidden="true"></span>ARON LAB</a>
+  <a class="brand" href="#hero" aria-label="Aron Lab 回到頂端" data-en-label="Aron Lab, back to top"><svg class="logo" viewBox="0 0 478.25 321" aria-hidden="true"><use href="#logo" width="478.25" height="321"/></svg>ARON LAB</a>
   <nav class="nav" aria-label="章節" data-en-label="Sections">
     <a href="#works" data-nav="works" data-en="Works">作品</a>
     <a href="#index" data-nav="index" data-en="Index">索引</a>
@@ -58,7 +62,7 @@ try { var t = localStorage.getItem('lab.theme'); if (t === 'light' || t === 'dar
   <!-- 首屏：向方形致敬，配色依序換成每個作品 -->
   <section class="hero" id="hero">
     <a class="stage" id="stage" href="#works" aria-label="看目前展示的作品" data-en-label="See the work on show">
-      <div class="sq s1"><div class="sq s2"><div class="sq s3"><h1>ARON<br>LAB<small data-en="Personal product lab">個人產品實驗室</small></h1></div></div></div>
+      <div class="sq s1"><div class="sq s2"><div class="sq s3"><h1><svg class="logo" viewBox="0 0 478.25 321" aria-hidden="true"><use href="#logo" width="478.25" height="321"/></svg><span class="wm">ARON LAB</span><small data-en="Personal product lab">個人產品實驗室</small></h1></div></div></div>
     </a>
     <div class="hero-bar">
       <div class="cap"><p data-en-html="What I need every day,<br>I build into a product.">自己每天要用的，<br>就自己做成產品。</p><span>Homage to the Product, 2026 — after <button type="button" class="egg-link" data-egg>Josef Albers</button></span></div>
@@ -108,6 +112,7 @@ try { var t = localStorage.getItem('lab.theme'); if (t === 'light' || t === 'dar
     <div><h3 data-en="Contact">聯絡</h3><ul><li><a href="https://github.com/North7" target="_blank" rel="noopener">GitHub · North7 ↗</a></li><li><a href="https://x.com/songpu717" target="_blank" rel="noopener">X · @songpu717 ↗</a></li></ul></div>
     <div class="foot-note"><p data-en="Everything in the market-related works is for reference only and is not investment advice.">市場相關作品的所有內容僅供參考，不構成投資建議。</p><p id="foot-upd"></p><p class="keys-link"><button type="button" data-keys data-en-html="Keyboard shortcuts <kbd>?</kbd>">鍵盤快捷鍵 <kbd>?</kbd></button></p></div>
   </div>
+  <div class="foot-sign"><svg class="logo" viewBox="0 0 478.25 321" aria-hidden="true"><use href="#logo" width="478.25" height="321"/></svg><span>Aron Song</span><span class="c">© 2026</span></div>
 </footer>
 
 <dialog class="lb" id="lb" aria-label="放大檢視" data-en-label="Enlarged view">

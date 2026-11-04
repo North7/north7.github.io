@@ -31,8 +31,10 @@
 
 語言：中文／English，右上角切換並記住（手機上只顯示另一種語言，按一下就切）。第一次來看網址的 `?lang=en|zh`，沒有就看瀏覽器語言：有中文就用中文，其他都用英文。英文版的作品連結會直接連到各作品的英文版（Tidemark 的 `en/`、Daybreak 產品案例的 `en/`），只有中文的頁面標「(Chinese)」。404 頁跟著同一個設定。
 
+Logo：Aron 的「A_」（黑色 A＋橘色橫槓，`assets/logo.svg`）。頂欄、首屏、頁尾、404 頁、網站圖示都用它；頁面裡用 `<use href="#logo">` 重複使用，顏色由 `--logo-a`、`--logo-bar` 決定。品牌色：墨 #0B0B0C、橘 #F5801C（`--brand`）、紙 #F2F0EA。
+
 小細節：
-- 左上角 7 個小方塊對應 7 個作品，正在看哪一個，其他就變空心
+- 頂欄 logo 的橫槓像游標：看到哪個作品就換成那個作品的顏色，其他地方是品牌橘
 - 點作品名稱旁的小色塊、或頁尾色票，複製那個作品的色碼；頁尾最後的空方塊點一下，幫下一個作品隨機挑顏色
 - 鍵盤：`/` 搜尋、`1`–`7` 跳到作品、`t` 切換深淺色、`?` 看說明
 - 彩蛋：點首屏的「Josef Albers」或在頁面上打 `albers`，看《色彩互動》的同色錯覺；開發者主控台也有一段話
@@ -82,6 +84,7 @@
 - `404.html`：找不到頁面時的頁面（獨立的 HTML，路徑都從根目錄寫）。同一份也放在 daybreak、tidemark/docs、morningbell、market-ticker/public、signals/paper/web、portfolio，改這裡要一起更新
 - `assets/app.js`：從資料產生頁面；讀各作品的公開 JSON 顯示即時數據（GitHub Pages 允許跨來源讀取）
 - `assets/app.css`：樣式。色場版：Jost ＋ Noto Sans TC，作品色階用 `color-mix()` 從 `--pc` 算，深色模式只換底色
+- `assets/logo.svg`：Aron 的 logo（向量，照原圖量出來的）；`assets/favicon.svg`、`assets/apple-touch-icon.png`：網站圖示
 - `assets/covers/`：作品與作品集封面
 - `assets/media/<作品>/`：宣傳素材的網頁版（圖片轉 JPEG、影片轉成 720×1280 H.264，原始檔留在各作品的 release）
 - `tools/covers.sh`：用 Chrome 無頭模式重拍線上作品的封面（一律淺色；名稱結尾 `-en` 的用英文瀏覽器語言拍，給英文版用）

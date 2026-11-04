@@ -84,7 +84,6 @@
   };
   document.querySelectorAll('[data-theme-set]').forEach((b) => b.addEventListener('click', () => setTheme(b.dataset.themeSet)));
   setTheme(root.dataset.theme || 'auto');
-  $('mark').innerHTML = P.map(() => '<i></i>').join('');
 
   // ── 所有入口（和正式首頁的索引同一套算法） ──
   const TYPES = tr(
@@ -158,8 +157,8 @@
     const s = SLOTS.filter(([from, id, , days]) => from <= min && byId[id] && (!days || days.includes(t.dow))).pop();
     return s ? { i: P.indexOf(byId[s[1]]), line: `${tr('台北', 'Taipei')} ${t.hm} · ${s[2](t)}` } : { i: 0, line: '' };
   };
-  // 頂欄左上角 7 個小方塊 = 7 個作品：正在看哪一個，其他的就變空心
-  const markAt = (i) => [...$('mark').children].forEach((m, j) => m.classList.toggle('off', i >= 0 && j !== i));
+  // 頂欄 logo 的橫槓像游標：正在看哪個作品就換成那個作品的顏色，其他地方是品牌橘
+  const markAt = (i) => (i >= 0 ? topBar.style.setProperty('--cursor', P[i].color) : topBar.style.removeProperty('--cursor'));
   let k = 0, timer = null, onHeroNow = true;
   const show = (i) => {
     k = (i + P.length) % P.length;
