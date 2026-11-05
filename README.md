@@ -13,6 +13,7 @@
 | 05 | OneStroke 一拍 | 網球揮拍分析（[產品案例](https://north7.github.io/portfolio/onestroke/)） | 自用 · 本機 |
 | 06 | Baseline 身體日報 | 私人健康日報 | 只在本機，不公開 |
 | 07 | [Signal Tower](https://north7.github.io/signals/) | BTC 策略帳戶的紙上交易：S1 突破 × D 趨勢 | 已上線 · 每 4 小時更新 |
+| 08 | [PayPulse 薪跳](https://north7.github.io/paypulse/) | 上班鼓勵器：即時顯示今天已經賺了多少 | 已上線 · 每秒跳動 |
 
 ## 頁面
 
@@ -20,8 +21,8 @@
 
 | # | 章節 | 內容 |
 |---|---|---|
-| — | 首屏 | 先放台北現在這個時間該看的作品（照各作品排程：Morningbell 晨刊 07:00／午後刊 16:00、Tidemark 08:15、Daybreak 08:30、Signal Tower 4 小時 K 線、其餘時間 Market Ticker；排程在 `assets/app.js` 的 `SLOTS`），接著每 4.2 秒換下一個作品的配色；右下角顯示那個作品的即時數據（Tidemark 訊號、Daybreak BTC 收盤、Morningbell S&P／加權、Market Ticker 版本）；底部是作品數、每天自動更新數、入口數 |
-| 01 | 作品 | 每個作品一整片色場：方形裡是領域符號（加密＝圓、股市＝方、運動＝三角、健康＝半圓），滑過顯示畫面；旁邊是簡介、即時數據、所有版面／分頁色塊、按鈕與「全部 N 個入口」 |
+| — | 首屏 | 先放台北現在這個時間該看的作品（照各作品排程：Morningbell 晨刊 07:00／午後刊 16:00、Tidemark 08:15、Daybreak 08:30、Signal Tower 4 小時 K 線、平日 17:00 PayPulse 倒數下班、其餘時間 Market Ticker；排程在 `assets/app.js` 的 `SLOTS`），接著每 4.2 秒換下一個作品的配色；右下角顯示那個作品的即時數據（Tidemark 訊號、Daybreak BTC 收盤、Morningbell S&P／加權、Market Ticker 版本）；底部是作品數、已上線數、入口數 |
+| 01 | 作品 | 每個作品一整片色場：方形裡是領域符號（加密＝圓、股市＝方、運動＝三角、健康＝半圓、職場＝菱形），滑過顯示畫面；旁邊是簡介、即時數據、所有版面／分頁色塊、按鈕與「全部 N 個入口」 |
 | 02 | 分頁索引 | 所有入口（首頁、分頁、作品集章節、語言版本、資料、工具、原始碼、本機、舊版、封存主題），預設每個作品只露出第一列、其餘折疊（搜尋或只看單一作品時全部攤開）；可搜尋、依作品或類型篩選；按 `/` 直接搜尋 |
 | 03 | 作品集 | 案例研究：Tidemark 作品集、Daybreak 與 OneStroke 產品案例，以及個人主頁 |
 | 04 | 宣傳素材 | 有 `promo` 的作品會出現在這裡：影片（捲到畫面裡自動無聲播放）、海報、說明圖橫向捲動，點圖放大（← → 切換、Esc 關閉），附下載 |
@@ -81,13 +82,13 @@ Logo：Aron 的「A_」（黑色 A＋橘色橫槓，`assets/logo.svg`）。頂�
 
 - `index.html`：頁面骨架
 - `data/lab.js`：所有內容（作品、作品集、里程碑）
-- `404.html`：找不到頁面時的頁面（獨立的 HTML，路徑都從根目錄寫）。同一份也放在 daybreak、tidemark/docs、morningbell、market-ticker/public、signals/paper/web、portfolio，改這裡要一起更新
+- `404.html`：找不到頁面時的頁面（獨立的 HTML，路徑都從根目錄寫）。同一份也放在 daybreak、tidemark/docs、morningbell、market-ticker/public、signals/paper/web、portfolio、paypulse，改這裡要一起更新
 - `assets/app.js`：從資料產生頁面；讀各作品的公開 JSON 顯示即時數據（GitHub Pages 允許跨來源讀取）
 - `assets/app.css`：樣式。色場版：Jost ＋ Noto Sans TC，作品色階用 `color-mix()` 從 `--pc` 算，深色模式只換底色
 - `assets/logo.svg`：Aron 的 logo（向量，照原圖量出來的）；`assets/favicon.svg`、`assets/apple-touch-icon.png`：網站圖示
 - `assets/covers/`：作品與作品集封面
 - `assets/media/<作品>/`：宣傳素材的網頁版（圖片轉 JPEG、影片轉成 720×1280 H.264，原始檔留在各作品的 release）
-- `tools/covers.sh`：用 Chrome 無頭模式重拍線上作品的封面（一律淺色；名稱結尾 `-en` 的用英文瀏覽器語言拍，給英文版用）
+- `tools/covers.sh`：用 Chrome 無頭模式重拍線上作品的封面（一律淺色；名稱結尾 `-en` 的用英文瀏覽器語言拍，給英文版用；需要先準備的頁面寫在 `PREP`：PayPulse 從旁邊的本機 checkout 讀，塞進示範薪資設定和固定時間「平日 15:42」再拍）
 
 本機預覽：`python3 -m http.server 8765` 後開 <http://127.0.0.1:8765/>。
 

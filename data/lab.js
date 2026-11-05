@@ -2,7 +2,7 @@
 // 欄位說明見 README.md。網址可以寫完整網址，或寫相對於 site 的路徑（例如 '#news'、'en/'）。
 // 英文版：每一筆都可以帶 en。字串＝英文標題；物件＝要換成英文的欄位（例如 { tagline, desc }，網址也可以換）。沒寫的就沿用中文。
 window.LAB = {
-  updated: '2026-10-25',
+  updated: '2026-11-05',
   owner: {
     name: 'Aron Song',
     github: 'https://github.com/North7',
@@ -11,8 +11,8 @@ window.LAB = {
     portfolio: 'https://north7.github.io/portfolio/',
   },
 
-  domains: { crypto: '加密貨幣', stocks: '股市', sport: '運動', health: '健康' },
-  en: { domains: { crypto: 'Crypto', stocks: 'Stocks', sport: 'Sport', health: 'Health' } },
+  domains: { crypto: '加密貨幣', stocks: '股市', sport: '運動', health: '健康', work: '職場' },
+  en: { domains: { crypto: 'Crypto', stocks: 'Stocks', sport: 'Sport', health: 'Health', work: 'Work' } },
 
   products: [
     {
@@ -329,6 +329,39 @@ window.LAB = {
         { t: '紙上交易評估與停用規則 RULES.md', u: 'https://github.com/North7/signals/blob/main/RULES.md', type: 'data', en: 'Paper-trading review and shutdown rules RULES.md' },
         { t: '本機版（記錄成交、切換正式資金）', u: 'http://127.0.0.1:8787/', type: 'local', en: 'Local version (record fills, switch to real money)' },
         { t: '原始碼', u: 'https://github.com/North7/signals', type: 'repo', en: 'Source code' },
+      ],
+    },
+    {
+      id: 'paypulse', no: '08', name: 'PayPulse', zh: '薪跳',
+      color: '#E2BD68',
+      domains: ['work'], kind: '小工具',
+      status: 'live', cadence: '每秒跳動',
+      started: '2026-11-04',
+      tagline: '上班鼓勵器，每一秒都在為你入帳。',
+      desc: '填好月薪或時薪和上下班時間，畫面就即時跳出今天已經賺了多少，算到小數點後四位。旁邊有下班倒數、本月累計、今天的薪水換得到幾杯珍奶，還會算帶薪摸魚賺了多少；按 B 是老闆鍵，金額全部模糊。資料只存在自己的瀏覽器。',
+      facts: ['資料只留在瀏覽器', '按 B 一鍵隱藏金額', '下班瞬間放彩帶'],
+      en: {
+        zh: 'Workday Motivator', kind: 'Widget', cadence: 'Ticks every second', sectionsLabel: 'Feature', ui: 'zh',
+        tagline: 'Every second of the workday, money comes in.',
+        desc: "Enter a monthly or hourly wage and your working hours, and it shows what you've earned so far today, live to four decimal places. Alongside: a countdown to clocking off, the month so far, how many bubble teas today's pay already covers, and what your slacking-off time earned. Press B for the boss key, which blurs every amount. Your data stays in your own browser.",
+        facts: ['Data stays in your browser', 'Press B to hide every amount', 'Confetti the second you clock off'],
+      },
+      site: 'https://north7.github.io/paypulse/',
+      repo: 'https://github.com/North7/paypulse',
+      cover: 'assets/covers/paypulse.jpg',
+      logo: '<svg viewBox="0 0 64 64"><defs><linearGradient id="lg-pp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8e6b0"/><stop offset="1" stop-color="#c8973f"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="#09090b"/><path d="M8 34h12l5-12 8 22 6-16 4 6h13" fill="none" stroke="url(#lg-pp)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      sectionsLabel: '功能',
+      // 單頁小工具：只有「今日已入帳」和「帶薪摸魚」有錨點，其他功能只列名稱
+      sections: [
+        { n: '01', t: '今日已入帳', u: '#hero', en: 'Earned today' },
+        { n: '02', t: '下班倒數', en: 'Countdown to clocking off' },
+        { n: '03', t: '本月累計', en: 'Month to date' },
+        { n: '04', t: '今日戰利品', en: "Today's haul" },
+        { n: '05', t: '帶薪摸魚', u: '#fish', en: 'Paid slacking' },
+        { n: '06', t: '老闆鍵', en: 'Boss key' },
+      ],
+      links: [
+        { t: '原始碼', u: 'https://github.com/North7/paypulse', type: 'repo', en: 'Source code' },
       ],
     },
   ],

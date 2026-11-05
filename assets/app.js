@@ -130,7 +130,7 @@
   // ── 首屏數字 ──
   const first = P.map((p) => p.started).sort()[0];
   $('stats').innerHTML = [
-    [pad(P.length), tr('個作品', 'works')], [pad(P.filter((p) => p.status === 'live').length), tr('個每天自動更新', 'update daily')],
+    [pad(P.length), tr('個作品', 'works')], [pad(P.filter((p) => p.status === 'live').length), tr('個已上線', 'live')],
     [entries.length, tr('個入口', 'entries')],
   ].map(([n, t]) => `<div><dt>${n}</dt><dd>${t}</dd></div>`).join('');
 
@@ -138,7 +138,8 @@
   const hero = $('hero'), topBar = $('top');
   hero.classList.add('pc'); topBar.classList.add('pc');
   // 先放「台北現在這個時間」該看的作品，時刻照各作品的排程：
-  // Morningbell 晨刊 07:00（週二到週六）、午後刊 16:00（週一到週五）；Tidemark 08:15、Daybreak 08:30；Signal Tower 每根 4 小時 K 線收盤時檢查
+  // Morningbell 晨刊 07:00（週二到週六）、午後刊 16:00（週一到週五）；Tidemark 08:15、Daybreak 08:30；Signal Tower 每根 4 小時 K 線收盤時檢查；
+  // 平日 17:00 起換 PayPulse 倒數下班（照它的預設工時 09:00–18:00），20:00 再回到行情
   const tpeNow = () => {
     const t = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Taipei', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()).map((x) => [x.type, x.value]));
     return { h: +t.hour, m: +t.minute, dow: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(t.weekday), hm: `${t.hour}:${t.minute}` };
@@ -150,6 +151,7 @@
     [8 * 60 + 30, 'daybreak', () => tr('08:30 出刊的比特幣簡報', 'the Bitcoin brief, out at 08:30')],
     [12 * 60, 'signals', (t) => { const hh = pad(Math.floor(t.h / 4) * 4); return tr(`4 小時 K 線 ${hh}:00 收盤`, `4-hour candle closed at ${hh}:00`); }],
     [16 * 60, 'morningbell', () => tr('16:00 午後刊：台股收盤', '16:00 afternoon edition: the Taiwan close'), [1, 2, 3, 4, 5]],
+    [17 * 60, 'paypulse', (t) => (t.h < 18 ? tr(`離 18:00 下班還有 ${60 - t.m} 分鐘`, `${60 - t.m} min until clocking off at 18:00`) : tr('下班了，今天的薪水全數入帳', "clocked off: today's pay is all in")), [1, 2, 3, 4, 5]],
     [20 * 60, 'market-ticker', () => tr('BTC 不收盤，行情一直在跳', 'BTC never closes; the price keeps moving')],
   ];
   const pickNow = () => {
@@ -207,6 +209,7 @@
     stocks: '<svg viewBox="0 0 100 100"><rect width="100" height="100"/></svg>',
     sport: '<svg viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>',
     health: '<svg viewBox="0 0 100 100"><path d="M0 100 A50 50 0 0 1 100 100 Z"/></svg>',
+    work: '<svg viewBox="0 0 100 100"><polygon points="50,0 100,50 50,100 0,50"/></svg>',
   };
   const STATUS = tr({ live: '已上線', local: '本機', private: '私人' }, { live: 'Live', local: 'Local', private: 'Private' });
   const inZh = tr('', ' (Chinese)');
