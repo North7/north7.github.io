@@ -8,25 +8,25 @@ cd "${0:A:h}/.."
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 typeset -A SHOTS
 SHOTS=(
-  tidemark       "https://north7.github.io/tidemark/"
-  tidemark-en    "https://north7.github.io/tidemark/en/"
-  daybreak       "https://north7.github.io/daybreak/"
-  daybreak-en    "https://north7.github.io/daybreak/"
+  tidemark       "https://tidemark.aronlab.dev/"
+  tidemark-en    "https://tidemark.aronlab.dev/en/"
+  daybreak       "https://daybreak.aronlab.dev/"
+  daybreak-en    "https://daybreak.aronlab.dev/"
   morningbell    "https://north7.github.io/morningbell/#overview"
-  ticker         "https://north7.github.io/market-ticker/#signal"
-  signals        "https://north7.github.io/signals/"
-  tidemark-case  "https://north7.github.io/tidemark/case-study/"
-  daybreak-case  "https://north7.github.io/daybreak/case-study/"
-  daybreak-case-en "https://north7.github.io/daybreak/case-study/en/"
-  onestroke-case "https://north7.github.io/portfolio/onestroke/"
-  portfolio      "https://north7.github.io/portfolio/"
-  paypulse       "https://north7.github.io/paypulse/"
+  ticker         "https://ticker.aronlab.dev/#signal"
+  signals        "https://signals.aronlab.dev/"
+  tidemark-case  "https://tidemark.aronlab.dev/case-study/"
+  daybreak-case  "https://daybreak.aronlab.dev/case-study/"
+  daybreak-case-en "https://daybreak.aronlab.dev/case-study/en/"
+  onestroke-case "https://portfolio.aronlab.dev/onestroke/"
+  portfolio      "https://portfolio.aronlab.dev/"
+  paypulse       "https://paypulse.aronlab.dev/"
 )
 # PayPulse 第一次打開會先跳出薪資設定，畫面也跟著現在幾點走：
 # 拿它的頁面塞進示範設定（月薪 50,000、09:00–18:00、午休不計薪）和固定時間（平日週四 15:42），再拍
 typeset -A PREP
 PREP=(
-  paypulse "<base href=\"https://north7.github.io/paypulse/\"><script>localStorage.setItem('paypulse.settings.v1',JSON.stringify({mode:'monthly',salary:50000,currency:'TWD',start:'09:00',end:'18:00',lunch:true,lunchStart:'12:00',lunchEnd:'13:00',lunchPaid:false,workdays:[1,2,3,4,5]}));(function(R){var off=new R('2026-11-05T15:42:00+08:00')-R.now();function D(){return arguments.length?new (Function.prototype.bind.apply(R,[null].concat([].slice.call(arguments))))():new R(R.now()+off)}D.prototype=R.prototype;D.now=function(){return R.now()+off};D.UTC=R.UTC;D.parse=R.parse;window.Date=D})(Date);</script>"
+  paypulse "<base href=\"https://paypulse.aronlab.dev/\"><script>localStorage.setItem('paypulse.settings.v1',JSON.stringify({mode:'monthly',salary:50000,currency:'TWD',start:'09:00',end:'18:00',lunch:true,lunchStart:'12:00',lunchEnd:'13:00',lunchPaid:false,workdays:[1,2,3,4,5]}));(function(R){var off=new R('2026-11-05T15:42:00+08:00')-R.now();function D(){return arguments.length?new (Function.prototype.bind.apply(R,[null].concat([].slice.call(arguments))))():new R(R.now()+off)}D.prototype=R.prototype;D.now=function(){return R.now()+off};D.UTC=R.UTC;D.parse=R.parse;window.Date=D})(Date);</script>"
 )
 TMP=$(mktemp -d)
 for name in ${@:-${(k)SHOTS}}; do
