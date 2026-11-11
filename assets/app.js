@@ -29,7 +29,7 @@
     milestones: D.milestones.map(loc),
   };
   const P = L.products;
-  const ME = { id: 'me', name: 'Aron Song', zh: tr('個人', 'Personal'), color: '#8A8A8A' };
+  const ME = { id: 'me', name: 'Aron', zh: tr('個人', 'Personal'), color: '#8A8A8A' };
   const byId = Object.fromEntries(P.map((p) => [p.id, p]));
   const asset = (path) => (path ? ROOT + path : null);
 
@@ -119,10 +119,10 @@
   const num = (v, d = 0) => (v == null || isNaN(v) ? '—' : Number(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }));
   const pct = (v, tw) => (v == null || isNaN(v) ? '' : `<em class="${(v >= 0) !== !!tw ? 'up' : 'down'}" style="font-style:normal">${v >= 0 ? '+' : ''}${Number(v).toFixed(2)}%</em>`);
   const FEEDS = {
-    tidemark: ['https://north7.github.io/tidemark/latest.json', (d) => ({ when: d.date, items: [[tr('底部訊號', 'Bottom signal'), num(d.bottom_signal)], [tr('頂部訊號', 'Top signal'), num(d.top_signal)], ['BTC', '$' + num(d.price_usd)]] })],
-    daybreak: ['https://north7.github.io/daybreak/data/latest.json', (d) => ({ when: d.meta.bar_date, items: [[tr('BTC 收盤', 'BTC close'), '$' + num(d.price.bar.c)], ['', pct(d.price.bar.chg_pct)]] })],
+    tidemark: ['https://tidemark.aronlab.dev/latest.json', (d) => ({ when: d.date, items: [[tr('底部訊號', 'Bottom signal'), num(d.bottom_signal)], [tr('頂部訊號', 'Top signal'), num(d.top_signal)], ['BTC', '$' + num(d.price_usd)]] })],
+    daybreak: ['https://daybreak.aronlab.dev/data/latest.json', (d) => ({ when: d.meta.bar_date, items: [[tr('BTC 收盤', 'BTC close'), '$' + num(d.price.bar.c)], ['', pct(d.price.bar.chg_pct)]] })],
     morningbell: ['https://north7.github.io/morningbell/data/latest.json', (d) => ({ when: d.meta.us_date, items: [['S&amp;P 500', `${num(d.quotes.SPX.c, 2)} ${pct(d.quotes.SPX.chg_pct, true)}`], [tr('加權', 'TAIEX'), `${num(d.quotes.TW_TAIEX.c)} ${pct(d.quotes.TW_TAIEX.chg_pct, true)}`]] })],
-    ticker: ['https://north7.github.io/market-ticker/version.json', (d) => ({ when: d.built + tr(' 部署', ' deployed'), items: [[tr('線上版本', 'Live version'), esc(d.version)]] })],
+    ticker: ['https://ticker.aronlab.dev/version.json', (d) => ({ when: d.built + tr(' 部署', ' deployed'), items: [[tr('線上版本', 'Live version'), esc(d.version)]] })],
   };
   const live = {};
   const liveLine = (v) => v.items.filter(([k, val]) => val).map(([k, val]) => `${k ? k + ' ' : ''}<b>${val}</b>`).join(' · ');
