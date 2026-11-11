@@ -8,7 +8,7 @@
 |---|---|---|---|
 | 01 | [Tidemark](https://tidemark.aronlab.dev/) | BTC 週期頂部／底部訊號儀表板 | 已上線 · 每日更新 |
 | 02 | [Daybreak 破曉](https://daybreak.aronlab.dev/) | 每天清晨的比特幣簡報 | 已上線 · 每日出刊 |
-| 03 | [Morningbell 晨鐘](https://north7.github.io/morningbell/) | 給長期投資人的美股、台股日報 | 已上線 · 每天兩刊 |
+| 03 | [Morningbell 晨鐘](https://morningbell.aronlab.dev/) | 給長期投資人的美股、台股日報 | 已上線 · 每天兩刊 |
 | 04 | [Market Ticker](https://ticker.aronlab.dev/) | 副螢幕行情看板，7 個主題 | 已上線 · 即時 |
 | 05 | OneStroke 一拍 | 網球揮拍分析（[產品案例](https://portfolio.aronlab.dev/onestroke/)） | 自用 · 本機 |
 | 06 | Baseline 身體日報 | 私人健康日報 | 只在本機，不公開 |
