@@ -125,7 +125,7 @@ window.LAB = {
         desc: "Both markets' closes, the news with analysis, drawdowns and where to add, macro, sentiment, sector rotation and Taiwan institutional flows. The morning edition covers US stocks and the afternoon edition covers Taiwan. A sister title to Daybreak.",
         facts: ['Morning 07:00 / afternoon 16:00', 'Red for up, green for down', 'Back-tested plan for adding on dips'],
       },
-      site: 'https://north7.github.io/morningbell/',
+      site: 'https://morningbell.aronlab.dev/',
       repo: 'https://github.com/North7/morningbell',
       cover: 'assets/covers/morningbell.jpg',
       live: 'morningbell',

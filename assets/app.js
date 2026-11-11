@@ -121,7 +121,7 @@
   const FEEDS = {
     tidemark: ['https://tidemark.aronlab.dev/latest.json', (d) => ({ when: d.date, items: [[tr('底部訊號', 'Bottom signal'), num(d.bottom_signal)], [tr('頂部訊號', 'Top signal'), num(d.top_signal)], ['BTC', '$' + num(d.price_usd)]] })],
     daybreak: ['https://daybreak.aronlab.dev/data/latest.json', (d) => ({ when: d.meta.bar_date, items: [[tr('BTC 收盤', 'BTC close'), '$' + num(d.price.bar.c)], ['', pct(d.price.bar.chg_pct)]] })],
-    morningbell: ['https://north7.github.io/morningbell/data/latest.json', (d) => ({ when: d.meta.us_date, items: [['S&amp;P 500', `${num(d.quotes.SPX.c, 2)} ${pct(d.quotes.SPX.chg_pct, true)}`], [tr('加權', 'TAIEX'), `${num(d.quotes.TW_TAIEX.c)} ${pct(d.quotes.TW_TAIEX.chg_pct, true)}`]] })],
+    morningbell: ['https://morningbell.aronlab.dev/data/latest.json', (d) => ({ when: d.meta.us_date, items: [['S&amp;P 500', `${num(d.quotes.SPX.c, 2)} ${pct(d.quotes.SPX.chg_pct, true)}`], [tr('加權', 'TAIEX'), `${num(d.quotes.TW_TAIEX.c)} ${pct(d.quotes.TW_TAIEX.chg_pct, true)}`]] })],
     ticker: ['https://ticker.aronlab.dev/version.json', (d) => ({ when: d.built + tr(' 部署', ' deployed'), items: [[tr('線上版本', 'Live version'), esc(d.version)]] })],
   };
   const live = {};

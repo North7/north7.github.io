@@ -12,7 +12,7 @@ SHOTS=(
   tidemark-en    "https://tidemark.aronlab.dev/en/"
   daybreak       "https://daybreak.aronlab.dev/"
   daybreak-en    "https://daybreak.aronlab.dev/"
-  morningbell    "https://north7.github.io/morningbell/#overview"
+  morningbell    "https://morningbell.aronlab.dev/#overview"
   ticker         "https://ticker.aronlab.dev/#signal"
   signals        "https://signals.aronlab.dev/"
   tidemark-case  "https://tidemark.aronlab.dev/case-study/"
