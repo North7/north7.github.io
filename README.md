@@ -2,18 +2,18 @@
 
 **自己每天要用的，就自己做成產品。** 我所有作品的入口、分頁索引與作品集。
 
-網站：<https://north7.github.io/>
+網站：<https://aronlab.dev/>
 
 | # | 作品 | 是什麼 | 狀態 |
 |---|---|---|---|
-| 01 | [Tidemark](https://north7.github.io/tidemark/) | BTC 週期頂部／底部訊號儀表板 | 已上線 · 每日更新 |
-| 02 | [Daybreak 破曉](https://north7.github.io/daybreak/) | 每天清晨的比特幣簡報 | 已上線 · 每日出刊 |
+| 01 | [Tidemark](https://tidemark.aronlab.dev/) | BTC 週期頂部／底部訊號儀表板 | 已上線 · 每日更新 |
+| 02 | [Daybreak 破曉](https://daybreak.aronlab.dev/) | 每天清晨的比特幣簡報 | 已上線 · 每日出刊 |
 | 03 | [Morningbell 晨鐘](https://north7.github.io/morningbell/) | 給長期投資人的美股、台股日報 | 已上線 · 每天兩刊 |
-| 04 | [Market Ticker](https://north7.github.io/market-ticker/) | 副螢幕行情看板，7 個主題 | 已上線 · 即時 |
-| 05 | OneStroke 一拍 | 網球揮拍分析（[產品案例](https://north7.github.io/portfolio/onestroke/)） | 自用 · 本機 |
+| 04 | [Market Ticker](https://ticker.aronlab.dev/) | 副螢幕行情看板，7 個主題 | 已上線 · 即時 |
+| 05 | OneStroke 一拍 | 網球揮拍分析（[產品案例](https://portfolio.aronlab.dev/onestroke/)） | 自用 · 本機 |
 | 06 | Baseline 身體日報 | 私人健康日報 | 只在本機，不公開 |
-| 07 | [Signal Tower](https://north7.github.io/signals/) | BTC 策略帳戶的紙上交易：S1 突破 × D 趨勢 | 已上線 · 每 4 小時更新 |
-| 08 | [PayPulse 薪跳](https://north7.github.io/paypulse/) | 上班鼓勵器：即時顯示今天已經賺了多少 | 已上線 · 每秒跳動 |
+| 07 | [Signal Tower](https://signals.aronlab.dev/) | BTC 策略帳戶的紙上交易：S1 突破 × D 趨勢 | 已上線 · 每 4 小時更新 |
+| 08 | [PayPulse 薪跳](https://paypulse.aronlab.dev/) | 上班鼓勵器：即時顯示今天已經賺了多少 | 已上線 · 每秒跳動 |
 
 ## 頁面
 
@@ -63,7 +63,7 @@ Logo：Aron 的「A_」（黑色 A＋橘色橫槓，`assets/logo.svg`）。頂�
   tagline: '一句話。',
   desc: '兩三句說明。',
   facts: ['重點一', '重點二'],
-  site: 'https://north7.github.io/newthing/',   // 沒有線上版就寫 null
+  site: 'https://aronlab.dev/newthing/',   // 沒有線上版就寫 null
   repo: 'https://github.com/North7/newthing',
   cover: 'assets/covers/newthing.jpg',          // 沒有就寫 null（會顯示「私人」封面）
   sectionsLabel: '頁面',
