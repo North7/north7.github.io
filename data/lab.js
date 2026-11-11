@@ -2,7 +2,7 @@
 // 欄位說明見 README.md。網址可以寫完整網址，或寫相對於 site 的路徑（例如 '#news'、'en/'）。
 // 英文版：每一筆都可以帶 en。字串＝英文標題；物件＝要換成英文的欄位（例如 { tagline, desc }，網址也可以換）。沒寫的就沿用中文。
 window.LAB = {
-  updated: '2026-11-05',
+  updated: '2026-11-11',
   owner: {
     name: 'Aron Song',
     github: 'https://github.com/North7',
@@ -60,34 +60,37 @@ window.LAB = {
       status: 'live', cadence: '每日 08:30 出刊',
       started: '2026-10-08',
       tagline: '每天清晨的第一份比特幣簡報。',
-      desc: '今日要聞與解讀、市場數據、週期位置，以及「週期頂部分批出場」的框架與距離。九個版面，桌面捲動、手機左右滑。',
-      facts: ['中文／English', '日刊／夜刊', '可加到手機主畫面'],
+      desc: '七頁各回答一個問題：今天發生什麼、在週期的哪裡、價格站在哪些成本上、賣壓出清了沒、誰在買、槓桿擠不擠、那我該怎麼做。近百張圖都附一句白話讀數和「我們的看法」，每張都能下載成分享圖；舊版的十個版面搬到 classic.html，照常每天更新。',
+      facts: ['中文／English · 日刊／夜刊', '近百張圖，一張一句結論', '每張圖可下載成分享圖'],
       en: {
-        zh: 'Bitcoin Daily', kind: 'Daily brief', cadence: 'Out daily at 08:30', sectionsLabel: 'Page',
+        zh: 'Bitcoin Daily', kind: 'Daily brief', cadence: 'Out daily at 08:30', sectionsLabel: 'Page', cover: 'assets/covers/daybreak-en.jpg',
         tagline: 'The first Bitcoin brief of every morning.',
-        desc: "Today's news with analysis, market data, where we are in the cycle, and a plan for selling in stages near the cycle top, with how far away it is. Nine pages: scroll on desktop, swipe on mobile.",
-        facts: ['Chinese / English', 'Day and night editions', 'Add it to your home screen'],
+        desc: 'Seven pages, each answering one question: what happened today, where we are in the cycle, which cost bases price is standing on, whether the selling has been worked through, who is buying, how crowded leverage is, and so what do I do. Nearly 100 charts each come with a plain-language reading and "our view", and any chart downloads as a share image. The old ten-page layout moved to classic.html and still updates daily.',
+        facts: ['Chinese / English · day and night editions', 'Nearly 100 charts, one line each', 'Any chart downloads as a share image'],
       },
       site: 'https://north7.github.io/daybreak/',
       repo: 'https://github.com/North7/daybreak',
       cover: 'assets/covers/daybreak.jpg',
       live: 'daybreak',
       logo: '<svg viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#F2F0EA"/><path d="M18 40a14 14 0 0 1 28 0" fill="none" stroke="#FF3B1F" stroke-width="5.5"/><path d="M6 40h52" stroke="#0A0A0A" stroke-width="5.5"/></svg>',
-      sectionsLabel: '版面',
-      // 英文名稱照 Daybreak 自己的英文版
+      sectionsLabel: '頁面',
+      // 2026-11-11 起的新版首頁：七頁，一律從「今天」開，沒有各頁自己的網址，所以只列名稱；英文名稱照 Daybreak 自己的英文版
       sections: [
-        { n: '01', t: '頭版', u: '#overview', en: 'Front page' },
-        { n: '02', t: '消息', u: '#news', en: 'News' },
-        { n: '03', t: '週期', u: '#cycle', en: 'Cycle' },
-        { n: '04', t: '價格', u: '#market', en: 'Price' },
-        { n: '05', t: '衍生品', u: '#deriv', en: 'Derivatives' },
-        { n: '06', t: '資金', u: '#flows', en: 'Flows' },
-        { n: '07', t: '鏈上', u: '#onchain', en: 'On-chain' },
-        { n: '08', t: '出場框架', u: '#exit', en: 'Exit plan' },
-        { n: '09', t: '方法', u: '#method', en: 'Method' },
+        { n: '01', t: '今天', en: 'Today' },
+        { n: '02', t: '週期', en: 'Cycle' },
+        { n: '03', t: '價位', en: 'Levels' },
+        { n: '04', t: '賣壓', en: 'Selling' },
+        { n: '05', t: '買盤', en: 'Demand' },
+        { n: '06', t: '槓桿', en: 'Leverage' },
+        { n: '07', t: '出場', en: 'Exit' },
       ],
       links: [
         { t: '產品案例：每天 08:30 出刊的比特幣簡報', u: 'https://north7.github.io/daybreak/case-study/', type: 'case', en: { t: 'Case study: the Bitcoin brief out every day at 08:30', u: 'https://north7.github.io/daybreak/case-study/en/' } },
+        { t: '舊版：十個版面（照常每天更新）', u: 'classic.html', type: 'legacy', en: 'Classic layout: ten pages (still updated daily)' },
+        // 舊版每個版面都有自己的網址（首頁收到舊網址也會轉過去）
+        ...[['頭版', 'overview', 'Front page'], ['消息', 'news', 'News'], ['週期', 'cycle', 'Cycle'], ['鏈上', 'onchain', 'On-chain'], ['價格', 'market', 'Price'],
+          ['資金', 'flows', 'Flows'], ['衍生品', 'deriv', 'Derivatives'], ['出場框架', 'exit', 'Exit plan'], ['往期', 'archive', 'Back issues'], ['方法', 'method', 'Method'],
+        ].map(([t, h, e]) => ({ t: '舊版 · ' + t, u: 'classic.html#' + h, type: 'legacy', en: 'Classic · ' + e })),
         { t: 'X 發文小幫手', u: 'post.html', type: 'tool', en: 'X post helper' },
         { t: '今日分享圖（中文）', u: 'data/share.png', type: 'data', en: "Today's share image (Chinese)" },
         { t: '今日分享圖（English）', u: 'data/share-en.png', type: 'data', en: "Today's share image (English)" },
@@ -95,6 +98,17 @@ window.LAB = {
         { t: 'X @songpu717', u: 'https://x.com/songpu717', type: 'social' },
         { t: '原始碼', u: 'https://github.com/North7/daybreak', type: 'repo', en: 'Source code' },
       ],
+      // 宣傳素材：原始檔在 daybreak 的 ops/video/showcase/（沒進 git），這裡放網頁用的那一版（-small，畫質一樣、檔案小一半）
+      promo: {
+        date: '2026-11-11',
+        note: '新版首頁的展示影片，英文字幕附中文，有配樂（預設靜音，右上角開聲音）；出場框架的數字已模糊。',
+        dir: 'assets/media/daybreak/',
+        video: { src: 'showcase-v3.mp4', poster: 'showcase-v3-poster.jpg', t: '新版首頁展示影片 · 橫式 78 秒', ar: '16 / 9', sound: true },
+        en: {
+          note: 'Showcase video for the new homepage, with English captions plus Chinese subtitles and a music track (muted by default; turn sound on at the top right). Numbers in the exit plan are blurred.',
+          video: 'New homepage showcase · landscape, 78 s',
+        },
+      },
     },
     {
       id: 'morningbell', no: '03', name: 'Morningbell', zh: '晨鐘',
@@ -474,5 +488,8 @@ window.LAB = {
     { d: '2026-10-24', p: 'onestroke', t: '球員分開管理；產品案例頁上線', en: 'Players managed separately; case study page live' },
     { d: '2026-10-24', p: 'onestroke', t: '宣傳素材：直式宣傳影片、9 張產品說明圖與總覽海報', en: 'Promo kit: a vertical promo video, 9 product slides and an overview poster' },
     { d: '2026-10-24', p: null, t: 'Aron Lab 上線：所有作品的入口與索引', en: 'Aron Lab live: one entry point and index for every work' },
+    { d: '2026-11-05', p: 'daybreak', t: '圖表加上「我們的看法」：傾向、理由，以及什麼情況會改變看法', en: 'Charts add "our view": the lean, the reasons, and what would change it' },
+    { d: '2026-11-11', p: 'daybreak', t: '首頁改版：七頁各回答一個問題、近百張圖各附一句結論；舊版搬到 classic.html', en: 'New homepage: seven pages that each answer one question, nearly 100 charts with a one-line read each; the old layout moved to classic.html' },
+    { d: '2026-11-11', p: 'daybreak', t: '新版首頁展示影片（橫式 78 秒）', en: 'Showcase video for the new homepage (landscape, 78 s)' },
   ],
 };

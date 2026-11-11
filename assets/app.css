@@ -239,6 +239,15 @@ button.m-item:hover img { transform: scale(1.02); }
 .m-video.playing .m-play span { opacity: 0; }
 .m-video.playing:hover .m-play span { opacity: 1; }
 .m-video.playing .m-play span::after { left: 21px; top: 20px; width: 6px; height: 20px; border: 0; border-left: 6px solid #111; border-right: 6px solid #111; box-sizing: content-box; }
+/* 橫式影片：高度最多 --sh，螢幕窄的時候縮到剛好放得下整個寬度 */
+.m-fig.wide { --vh: min(var(--sh), calc((100vw - 2 * var(--gut)) / (var(--ar)))); width: calc(var(--vh) * (var(--ar))); }
+.m-fig.wide .m-item { height: var(--vh); }
+.m-snd { position: absolute; top: 12px; right: 12px; z-index: 1; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; background: var(--t3); color: #111; cursor: pointer; }
+.m-snd:hover { background: #F1EEE7; }
+.m-snd svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.m-snd .spk { fill: currentColor; }
+.m-snd .on, .m-snd[aria-pressed="true"] .off { display: none; }
+.m-snd[aria-pressed="true"] .on { display: inline; }
 
 .lb { width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; color: #F1EEE7; }
 .lb::backdrop { background: rgba(10,10,10,.94); }

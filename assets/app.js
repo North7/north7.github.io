@@ -363,16 +363,21 @@
   if (!promoted.length) { $('media').hidden = true; document.querySelector('[data-nav="media"]').hidden = true; }
   $('media-list').innerHTML = promoted.map((p) => {
     const m = p.promo, u = (f) => asset(m.dir + f);
-    const fig = (inner, cap, ar) => `<figure class="m-fig" style="--ar:${ar}">${inner}<figcaption>${cap}</figcaption></figure>`;
+    const fig = (inner, cap, ar, cls = '') => `<figure class="m-fig${cls}" style="--ar:${ar}">${inner}<figcaption>${cap}</figcaption></figure>`;
     const shot = (src, thumb, t, n, ar) => { const i = shots.push({ src: u(src), t }) - 1; return fig(`<button type="button" class="m-item" data-shot="${i}" aria-label="${tr('放大：', 'Enlarge: ')}${esc(t)}"><img src="${u(thumb)}" alt="${esc(t)}" loading="lazy" decoding="async"></button>`, `<i>${esc(n)}</i>${esc(t)}`, ar); };
     const items = [];
-    if (m.video) items.push(fig(`<div class="m-item m-video"><video muted loop playsinline preload="none" poster="${u(m.video.poster)}"><source src="${u(m.video.src)}" type="video/mp4"></video><button type="button" class="m-play" aria-label="${tr('播放／暫停', 'Play / pause')}"><span></span></button></div>`, `<i>VIDEO</i>${esc(m.video.t)}`, '9 / 16'));
+    // 影片預設直式；橫式寫 ar: '16 / 9'（手機上縮到螢幕寬）。有配樂的寫 sound: true，右上角多一個開聲音的鈕（自動播放一律靜音）
+    if (m.video) {
+      const ar = m.video.ar || '9 / 16', [aw, ah] = ar.split('/').map(Number), wide = aw > ah;
+      const snd = m.video.sound ? `<button type="button" class="m-snd" aria-pressed="false" aria-label="${tr('開啟聲音', 'Turn sound on')}"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path class="off" d="M15.5 9.5l5 5M20.5 9.5l-5 5"/><path class="on" d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg></button>` : '';
+      items.push(fig(`<div class="m-item m-video"><video muted loop playsinline preload="none" poster="${u(m.video.poster)}"><source src="${u(m.video.src)}" type="video/mp4"></video><button type="button" class="m-play" aria-label="${tr('播放／暫停', 'Play / pause')}"><span></span></button>${snd}</div>`, `<i>VIDEO</i>${esc(m.video.t)}`, ar, wide ? ' wide' : ''));
+    }
     if (m.poster) items.push(shot(m.poster.src, m.poster.thumb, m.poster.t, 'POSTER', m.poster.ar));
-    m.slides.forEach((t, i) => { const n = pad(i + 1); items.push(shot(`slide-${n}.jpg`, `slide-${n}-s.jpg`, t, `${n} / ${pad(m.slides.length)}`, m.slidesAr)); });
+    (m.slides || []).forEach((t, i) => { const n = pad(i + 1); items.push(shot(`slide-${n}.jpg`, `slide-${n}-s.jpg`, t, `${n} / ${pad(m.slides.length)}`, m.slidesAr)); });
     const dl = [m.video && `<a href="${u(m.video.src)}" download>${tr('影片 MP4', 'Video MP4')} ↓</a>`, m.pdf && `<a href="${u(m.pdf.src)}" target="_blank" rel="noopener">${tr('說明圖 PDF', 'Slides PDF')} ↓</a>`, m.poster && `<a href="${u(m.poster.src)}" download>${tr('海報', 'Poster')} ↓</a>`].filter(Boolean).join('');
     return `<article class="mk pc" id="media-${p.id}" style="--pc:${p.color}">
-      <div class="mk-head"><span class="sq1" aria-hidden="true"></span><div><h3>${esc(p.name)}<small>${esc(p.zh)}</small></h3><span class="meta">${dotted(m.date)} · ${[m.video && tr('影片', 'video'), m.poster && tr('海報', 'poster'), tr(`${m.slides.length} 張說明圖`, `${m.slides.length} slides`)].filter(Boolean).join(' · ')}</span></div>
-        <div class="mk-dl">${dl}</div><div class="mk-nav" aria-hidden="true"><button type="button" data-strip="-1">←</button><button type="button" data-strip="1">→</button></div></div>
+      <div class="mk-head"><span class="sq1" aria-hidden="true"></span><div><h3>${esc(p.name)}<small>${esc(p.zh)}</small></h3><span class="meta">${dotted(m.date)} · ${[m.video && tr('影片', 'video'), m.poster && tr('海報', 'poster'), m.slides && tr(`${m.slides.length} 張說明圖`, `${m.slides.length} slides`)].filter(Boolean).join(' · ')}</span></div>
+        <div class="mk-dl">${dl}</div>${items.length > 1 ? '<div class="mk-nav" aria-hidden="true"><button type="button" data-strip="-1">←</button><button type="button" data-strip="1">→</button></div>' : ''}</div>
       ${m.note ? `<p class="mk-note">${esc(m.note)}</p>` : ''}
       <div class="strip" tabindex="0" aria-label="${esc(p.name)} ${tr('宣傳素材', 'media')}">${items.join('')}</div>
     </article>`;
@@ -382,6 +387,13 @@
     const v = box.querySelector('video'), sync = () => box.classList.toggle('playing', !v.paused);
     v.addEventListener('play', sync); v.addEventListener('pause', sync);
     box.querySelector('.m-play').addEventListener('click', () => (v.paused ? v.play() : v.pause()));
+    const snd = box.querySelector('.m-snd');
+    if (snd) snd.addEventListener('click', () => {
+      v.muted = !v.muted;
+      snd.setAttribute('aria-pressed', String(!v.muted));
+      snd.setAttribute('aria-label', v.muted ? tr('開啟聲音', 'Turn sound on') : tr('關閉聲音', 'Turn sound off'));
+      if (!v.muted && v.paused) v.play().catch(() => {});
+    });
     if (!reduced) new IntersectionObserver(([en]) => { if (en.isIntersecting) v.play().catch(() => {}); else v.pause(); }, { threshold: .6 }).observe(box);
   });
   const lb = $('lb'); let cur = 0;

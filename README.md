@@ -25,7 +25,7 @@
 | 01 | 作品 | 每個作品一整片色場：方形裡是領域符號（加密＝圓、股市＝方、運動＝三角、健康＝半圓、職場＝菱形），滑過顯示畫面；旁邊是簡介、即時數據、所有版面／分頁色塊、按鈕與「全部 N 個入口」 |
 | 02 | 分頁索引 | 所有入口（首頁、分頁、作品集章節、語言版本、資料、工具、原始碼、本機、舊版、封存主題），預設每個作品只露出第一列、其餘折疊（搜尋或只看單一作品時全部攤開）；可搜尋、依作品或類型篩選；按 `/` 直接搜尋 |
 | 03 | 作品集 | 案例研究：Tidemark 作品集、Daybreak 與 OneStroke 產品案例，以及個人主頁 |
-| 04 | 宣傳素材 | 有 `promo` 的作品會出現在這裡：影片（捲到畫面裡自動無聲播放）、海報、說明圖橫向捲動，點圖放大（← → 切換、Esc 關閉），附下載 |
+| 04 | 宣傳素材 | 有 `promo` 的作品會出現在這裡：影片（捲到畫面裡自動靜音播放；有配樂的右上角可以開聲音）、海報、說明圖橫向捲動，點圖放大（← → 切換、Esc 關閉），附下載。目前有 Daybreak 新版首頁展示影片、OneStroke 影片／海報／說明圖 |
 | 05 | 時間軸 | 每個作品從開工到今天的甘特圖，加上里程碑紀錄 |
 
 配色：自動（跟系統）／淺／深，右上角切換並記住；深色時色場改用深色色階。
@@ -69,7 +69,8 @@ Logo：Aron 的「A_」（黑色 A＋橘色橫槓，`assets/logo.svg`）。頂�
   sectionsLabel: '頁面',
   sections: [{ n: '01', t: '總覽', u: '#overview' }],   // u 相對於 site；不寫 u 就只顯示、不連結
   links: [{ t: 'English', u: 'en/', type: 'lang' }],     // type：case lang tool data social repo local legacy archive
-  promo: null,  // 宣傳素材，格式見 OneStroke：dir 底下放 slide-01.jpg（1080 寬）＋slide-01-s.jpg（640 寬）…、poster、pdf、video
+  promo: null,  // 宣傳素材，格式見 OneStroke：dir 底下放 slide-01.jpg（1080 寬）＋slide-01-s.jpg（640 寬）…、poster、pdf、video；
+                // 都可以省略。video 預設直式，橫式加 ar: '16 / 9'，有配樂加 sound: true（見 Daybreak）
   live: null,   // 要在頁面上顯示即時數據，到 assets/app.js 的 FEEDS 加一個讀取器，這裡填它的 key
   // 英文版：en 是物件就換掉裡面列出的欄位；zh 在英文版當成副標（例如 'Cycle Signals'）
   // open：英文版的「Open」連到哪裡（相對於 site）；ui: 'zh' 代表網站只有中文，按鈕會標 (Chinese)；cover 可以換成英文版的封面
@@ -87,7 +88,7 @@ Logo：Aron 的「A_」（黑色 A＋橘色橫槓，`assets/logo.svg`）。頂�
 - `assets/app.css`：樣式。色場版：Jost ＋ Noto Sans TC，作品色階用 `color-mix()` 從 `--pc` 算，深色模式只換底色
 - `assets/logo.svg`：Aron 的 logo（向量，照原圖量出來的）；`assets/favicon.svg`、`assets/apple-touch-icon.png`：網站圖示
 - `assets/covers/`：作品與作品集封面
-- `assets/media/<作品>/`：宣傳素材的網頁版（圖片轉 JPEG、影片轉成 720×1280 H.264，原始檔留在各作品的 release）
+- `assets/media/<作品>/`：宣傳素材的網頁版（圖片轉 JPEG、影片用 H.264；原始檔留在各作品那邊：OneStroke 在 release，Daybreak 在 daybreak 的 ops/video/showcase/）
 - `tools/covers.sh`：用 Chrome 無頭模式重拍線上作品的封面（一律淺色；名稱結尾 `-en` 的用英文瀏覽器語言拍，給英文版用；需要先準備的頁面寫在 `PREP`：PayPulse 從旁邊的本機 checkout 讀，塞進示範薪資設定和固定時間「平日 15:42」再拍）
 
 本機預覽：`python3 -m http.server 8765` 後開 <http://127.0.0.1:8765/>。

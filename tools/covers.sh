@@ -10,7 +10,8 @@ typeset -A SHOTS
 SHOTS=(
   tidemark       "https://north7.github.io/tidemark/"
   tidemark-en    "https://north7.github.io/tidemark/en/"
-  daybreak       "https://north7.github.io/daybreak/#overview"
+  daybreak       "https://north7.github.io/daybreak/"
+  daybreak-en    "https://north7.github.io/daybreak/"
   morningbell    "https://north7.github.io/morningbell/#overview"
   ticker         "https://north7.github.io/market-ticker/#signal"
   signals        "https://north7.github.io/signals/"
