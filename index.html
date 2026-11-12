@@ -24,6 +24,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
 <link rel="stylesheet" href="assets/app.css">
+<link rel="expect" href="#lab-ready" blocking="render">
 <script>
 try { var t = localStorage.getItem('lab.theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
 // 語言：網址的 ?lang= → 自己選過的 → 瀏覽器語言（有中文就用中文，其他都用英文）
@@ -143,5 +144,7 @@ try { var t = localStorage.getItem('lab.theme'); if (t === 'light' || t === 'dar
 
 <script src="data/lab.js"></script>
 <script src="assets/app.js"></script>
+<!-- head 裡的 rel="expect"：第一個畫面等到這裡（app.js 跑完）才畫，不會先閃一下空的版面；切語言時舊頁停在方塊，新頁一出來也已經是方塊，直接接上 -->
+<i id="lab-ready" hidden></i>
 </body>
 </html>

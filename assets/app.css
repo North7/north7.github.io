@@ -351,6 +351,22 @@ html[lang="en"] .log li.start .lt::before { content: 'Started'; font-family: var
 .foot-sign .logo { width: 48px; height: 32px; --logo-a: #F1EEE7; }
 .foot-sign .c { font-weight: 400; opacity: .5; }
 
+/* ── 深淺切換（參考 Daybreak 的日夜開關，app.js 的 switchTheme）──
+   Daybreak 是一圈晨昏色的光從開關擴散出去；這裡換成 Albers 的方形：新配色是一個方形，從按下的按鈕往外長，
+   舊配色留在方形外，中間露出兩圈平面色帶（外圈 --vc 作品色、內圈 --vc2 往新配色調深或調淺），邊緣不做漸層 */
+@property --vr { syntax: '<length>'; inherits: false; initial-value: 0px; }
+:root[data-vt] { --vb: clamp(14px, 2vw, 30px); }
+:root[data-vt]::view-transition-old(root), :root[data-vt]::view-transition-new(root), :root[data-vt]::view-transition-image-pair(root) { mix-blend-mode: normal; animation: vtSq 1.15s cubic-bezier(.45, 0, .15, 1) both; }
+:root[data-vt]::view-transition-new(root) { clip-path: inset(calc(var(--vy) - var(--vr)) calc(100% - var(--vx) - var(--vr)) calc(100% - var(--vy) - var(--vr)) calc(var(--vx) - var(--vr))); }
+:root[data-vt]::view-transition-old(root) { clip-path: polygon(evenodd, 0 0, 100% 0, 100% 100%, 0 100%, 0 0,
+  calc(var(--vx) - var(--vr) - 2 * var(--vb)) calc(var(--vy) - var(--vr) - 2 * var(--vb)), calc(var(--vx) + var(--vr) + 2 * var(--vb)) calc(var(--vy) - var(--vr) - 2 * var(--vb)),
+  calc(var(--vx) + var(--vr) + 2 * var(--vb)) calc(var(--vy) + var(--vr) + 2 * var(--vb)), calc(var(--vx) - var(--vr) - 2 * var(--vb)) calc(var(--vy) + var(--vr) + 2 * var(--vb)),
+  calc(var(--vx) - var(--vr) - 2 * var(--vb)) calc(var(--vy) - var(--vr) - 2 * var(--vb))); }
+/* 兩圈色帶：底色是外圈，上面再畫一個比新配色大一圈的方形當內圈 */
+:root[data-vt]::view-transition-image-pair(root) { background: linear-gradient(var(--vc2), var(--vc2)) no-repeat var(--vc);
+  background-position: calc(var(--vx) - var(--vr) - var(--vb)) calc(var(--vy) - var(--vr) - var(--vb)); background-size: calc(2 * (var(--vr) + var(--vb))) calc(2 * (var(--vr) + var(--vb))); }
+@keyframes vtSq { from { --vr: 0px; } to { --vr: calc(var(--vR, 2000px) + 2 * var(--vb)); } }
+
 @media (prefers-reduced-motion: reduce) { .sq, .hero, .hero *, .top { transition: none !important; } html { scroll-behavior: auto; } }
 
 @media (max-width: 1100px) {

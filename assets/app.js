@@ -9,6 +9,38 @@
   const pad = (n, w = 2) => String(n).padStart(w, '0');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // ── 語言切換的字（參考 Daybreak）：畫面上的字先從左到右碎成小方塊，換頁後再從左到右拼回另一種語言。
+  // Daybreak 用點字（它的網點），這裡用方塊（色場）：中日文一個字換一個全形方塊，英文和數字換半格的方塊，版面不太會跳 ──
+  const GL_W = '■□▣▤▥▦▧▨▩', GL_N = '▖▗▘▝▚▞▙▛▜▟';
+  const rgl = (g) => g[(Math.random() * g.length) | 0];
+  // 中文換成方塊後後面補一個零寬空格：方塊之間本來不能斷行，整段中文會擠成一行超出畫面
+  const mixg = (s, k, out) => { let o = ''; for (let i = 0; i < s.length; i++) { const ch = s[i]; o += (out ? i >= k : i < k) || /\s/.test(ch) ? ch : ch.charCodeAt(0) > 0x2E7F ? rgl(GL_W) + '\u200B' : rgl(GL_N); } return o; };
+  // 畫面裡看得到的字（不含頂欄的切換鈕、視窗、圖示），d 是它在畫面的左右位置（0–1），拿來排先後
+  const visibleText = () => {
+    const out = [], w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let n;
+    while ((n = w.nextNode())) {
+      const pe = n.parentElement;
+      if (!n.nodeValue.trim() || !pe || pe.closest('.seg, script, style, svg, dialog, .toast')) continue;
+      const r = pe.getBoundingClientRect();
+      if (!r.width || r.bottom < 0 || r.top > innerHeight) continue;
+      out.push({ n, s: n.nodeValue, d: Math.max(0, Math.min(1, r.left / innerWidth)) });
+    }
+    return out;
+  };
+  // 每個字串花 dur 毫秒碎掉（out）或拼回來；左邊的先開始，右邊的最多晚 wave 毫秒
+  const glyphRun = (list, dur, wave, out, done) => {
+    const t0 = performance.now(); let last = -99;
+    const step = (now) => {
+      const t = now - t0, end = t >= dur + wave;
+      if (now - last > 40 || end) {
+        last = now;
+        list.forEach((o) => { if (!o.n.isConnected) return; const p = Math.max(0, Math.min(1, (t - o.d * wave) / dur)); o.n.nodeValue = end && !out ? o.s : mixg(o.s, Math.round(p * o.s.length), out); });
+      }
+      if (end) { if (done) done(); } else requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
   // ── 語言：index.html 開頭已決定 data-lang；介面文字寫成 tr('中文', 'English') ──
   const EN = root.dataset.lang === 'en';
   const tr = (zh, en) => (EN ? en : zh);
@@ -42,17 +74,22 @@
     document.querySelectorAll('[data-en-ph]').forEach((el) => { el.placeholder = el.dataset.enPh; });
   }
   root.classList.add('i18n');
+  let leaving = false;
   // 切換語言：記住選擇、網址帶 ?lang=（無痕模式存不了也能切），重新載入後回到原本捲到的位置
   document.querySelectorAll('[data-lang-set]').forEach((b) => {
     const mine = (b.dataset.langSet === 'en') === EN;
     b.classList.toggle('on', mine);
     b.setAttribute('aria-pressed', String(mine));
     b.addEventListener('click', () => {
-      if (mine) return;
+      if (mine || leaving) return;
       // 兩種語言的段落高度不同，所以記「捲到哪一段、在那一段的幾成」，不記像素
       const el = [...layers()].find((s) => s.getBoundingClientRect().bottom > 0), r = el && el.getBoundingClientRect();
-      try { localStorage.setItem('lab.lang', b.dataset.langSet); if (el) sessionStorage.setItem('lab.y', JSON.stringify({ id: el.id, f: -r.top / r.height })); } catch (e) { /* 無痕模式 */ }
-      const u = new URL(location.href); u.searchParams.set('lang', b.dataset.langSet); location.replace(u);
+      try { localStorage.setItem('lab.lang', b.dataset.langSet); if (el) sessionStorage.setItem('lab.y', JSON.stringify({ id: el.id, f: -r.top / r.height })); if (!reduced) sessionStorage.setItem('lab.lx', '1'); } catch (e) { /* 無痕模式 */ }
+      const u = new URL(location.href); u.searchParams.set('lang', b.dataset.langSet);
+      if (reduced) { location.replace(u); return; }
+      leaving = true;
+      b.closest('.seg').querySelectorAll('button').forEach((x) => { const on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', String(on)); });
+      glyphRun(visibleText(), 200, 220, true, () => location.replace(u));
     });
   });
 
@@ -82,8 +119,31 @@
     try { t === 'auto' ? localStorage.removeItem('lab.theme') : localStorage.setItem('lab.theme', t); } catch (e) { /* 無痕模式 */ }
     document.querySelectorAll('[data-theme-set]').forEach((b) => b.classList.toggle('on', b.dataset.themeSet === t));
   };
-  document.querySelectorAll('[data-theme-set]').forEach((b) => b.addEventListener('click', () => setTheme(b.dataset.themeSet)));
   setTheme(root.dataset.theme || 'auto');
+  // 深淺切換（參考 Daybreak 的日夜開關）：新的配色是一個方形，從按下的按鈕往外長；舊配色留在方形外。
+  // 中間露出兩圈色帶：外圈是正在看的作品顏色（沒有就是品牌橘），內圈往新配色的方向調深或調淺，像 Albers 的套疊方形
+  const effTheme = (t) => (t === 'auto' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : t);
+  // 連按的時候以最後一下為準：還沒換好的轉場在畫面更新時才換配色，所以換的是「最後想要的」，不是當初按的那個
+  let wantTheme = null, vtN = 0;
+  const switchTheme = (t, from) => {
+    const was = effTheme(wantTheme || root.dataset.theme || 'auto'), to = effTheme(t);
+    wantTheme = t;
+    const go = () => { setTheme(wantTheme); paintTop(); };
+    if (to === was || reduced || !document.startViewTransition || !from) { go(); return; }
+    const r = from.getBoundingClientRect(), vx = r.left + r.width / 2, vy = r.top + r.height / 2;
+    const c = topBar.style.getPropertyValue('--cursor') || '#F5801C';
+    [['--vx', vx + 'px'], ['--vy', vy + 'px'], ['--vR', Math.max(vx, innerWidth - vx, vy, innerHeight - vy) + 'px'],
+      ['--vc', c], ['--vc2', `color-mix(in oklab, ${c} 58%, ${to === 'dark' ? '#0E0E0E' : '#F4F1EA'})`]].forEach(([k2, v]) => root.style.setProperty(k2, v));
+    root.dataset.vt = 'theme';
+    const my = ++vtN;
+    let vt = null;
+    try { vt = document.startViewTransition(go); } catch (e) { go(); }
+    // 轉場被跳過（例如分頁在背景、連按兩下）時配色照樣換好，只是不播動畫；把那幾個 promise 接住，主控台不報錯。
+    // 被下一次切換蓋掉的轉場結束時不能拿掉 data-vt，不然正在播的那一個會失去方形的樣式
+    const done = () => { if (my === vtN) { delete root.dataset.vt; wantTheme = null; } }, quiet = () => {};
+    if (vt && vt.finished) { vt.ready.catch(quiet); vt.updateCallbackDone.catch(quiet); vt.finished.then(done, done); } else done();
+  };
+  document.querySelectorAll('[data-theme-set]').forEach((b) => b.addEventListener('click', () => switchTheme(b.dataset.themeSet, b)));
 
   // ── 所有入口（和正式首頁的索引同一套算法） ──
   const TYPES = tr(
@@ -206,7 +266,6 @@
   };
   addEventListener('scroll', () => { if (!painting) { painting = true; requestAnimationFrame(paintTop); } }, { passive: true });
   addEventListener('resize', paintTop);
-  document.querySelectorAll('[data-theme-set]').forEach((b) => b.addEventListener('click', () => requestAnimationFrame(paintTop)));
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => requestAnimationFrame(paintTop));
   requestAnimationFrame(paintTop);
 
@@ -339,6 +398,8 @@
   // 404 頁的搜尋框會帶 ?q= 過來；切換語言前捲到哪裡，重新載入後回到那裡
   const atLoad = (fn) => (document.readyState === 'complete' ? fn() : addEventListener('load', fn, { once: true }));
   const q0 = new URLSearchParams(location.search).get('q');
+  let lx = false; // 是不是按語言切換過來的
+  try { lx = sessionStorage.getItem('lab.lx') === '1'; sessionStorage.removeItem('lab.lx'); } catch (e) { /* 無痕模式 */ }
   if (q0) {
     $('q').value = q0; state.q = q0; renderIndex();
     atLoad(() => $('index').scrollIntoView({ behavior: 'instant' }));
@@ -346,7 +407,10 @@
     let at0 = null;
     try { at0 = JSON.parse(sessionStorage.getItem('lab.y')); sessionStorage.removeItem('lab.y'); } catch (e) { /* 無痕模式 */ }
     const el0 = at0 && at0.id && $(at0.id);
-    if (el0) atLoad(() => { const r = el0.getBoundingClientRect(); window.scrollTo({ top: r.top + scrollY + at0.f * r.height, behavior: 'instant' }); });
+    // 先馬上捲回去（第一個畫面就在原本的位置），字型載完、高度變了再對一次
+    const back = () => { const r = el0.getBoundingClientRect(); window.scrollTo({ top: r.top + scrollY + at0.f * r.height, behavior: 'instant' }); };
+    if (el0) { back(); atLoad(back); }
+    if (lx && !reduced) { const list = visibleText(); list.forEach((o) => { o.n.nodeValue = mixg(o.s, 0, false); }); glyphRun(list, 380, 340, false); }
   }
 
   // ── 作品集 ──
@@ -535,7 +599,7 @@
     if (f) f.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
     else if (ev.key === 't') {
       const cur = root.dataset.theme === 'auto' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : root.dataset.theme;
-      setTheme(cur === 'dark' ? 'light' : 'dark'); requestAnimationFrame(paintTop);
+      const to = cur === 'dark' ? 'light' : 'dark'; switchTheme(to, document.querySelector(`[data-theme-set="${to}"]`));
     } else if (ev.key === '?') $('keys').showModal();
   });
 
