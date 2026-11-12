@@ -2,7 +2,7 @@
 // 欄位說明見 README.md。網址可以寫完整網址，或寫相對於 site 的路徑（例如 '#news'、'en/'）。
 // 英文版：每一筆都可以帶 en。字串＝英文標題；物件＝要換成英文的欄位（例如 { tagline, desc }，網址也可以換）。沒寫的就沿用中文。
 window.LAB = {
-  updated: '2026-11-11',
+  updated: '2026-11-12',
   owner: {
     name: 'Aron',
     github: 'https://github.com/North7',
@@ -456,19 +456,20 @@ window.LAB = {
       id: 'portfolio', product: null, type: 'site', go: '前往主頁',
       title: 'Complex systems. Intuitive products.',
       sub: 'Aron 個人主頁',
-      desc: '從複雜的代碼到直觀的產品體驗。13 年產品與工程經驗（11 年產品管理），橫跨 Web3 金融科技與 AI 醫療，專注於 0 到 1 的架構設計與商業落地。',
-      meta: [['角色', 'Product Architect · 產品架構師'], ['領域', 'Web3 FinTech · AI MedTech'], ['內容', '方法、作品、職涯更新紀錄、能力、履歷']],
+      desc: '13 年產品與工程經驗（11 年產品管理），橫跨 Web3 金融科技與 AI 醫療，多次從 0 到 1。主頁用三個產品故事說明我怎麼做產品：問題、做法、結果各一段，再接到之前的經歷與履歷。',
+      meta: [['角色', 'Product Architect · 產品架構師'], ['領域', 'Web3 FinTech · AI MedTech'], ['內容', '三個產品故事、在那之前的經歷、聯絡、履歷']],
       url: 'https://portfolio.aronlab.dev/',
       cover: 'assets/covers/portfolio.jpg',
       chaptersLabel: '個人主頁',
-      chapters: [['方法', '#approach'], ['作品', '#work'], ['更新紀錄', '#changelog'], ['能力', '#stack'], ['聯絡', '#contact'], ['履歷', 'resume/']],
+      // 2026-11-12 改版成「故事章節」：三個作品各一章，再來是之前的經歷和聯絡
+      chapters: [['OneStroke', '#c1'], ['Daybreak', '#c2'], ['Tidemark', '#c3'], ['在那之前', '#c4'], ['聯絡', '#end'], ['履歷', 'resume/']],
       en: {
         sub: 'Aron homepage',
-        desc: 'From complex code to intuitive product experiences. 13 years in product and engineering (11 in product management), across Web3 fintech and AI medtech, focused on 0-to-1 architecture and bringing products to market.',
-        meta: [['Role', 'Product Architect'], ['Domains', 'Web3 FinTech · AI MedTech'], ['Contents', 'Approach, work, career log, skills, résumé']],
+        desc: '13 years in product and engineering (11 in product management) across Web3 fintech and AI medtech, taking products from 0 to 1 several times. The homepage tells three product stories, each as problem, approach and result, then covers my earlier career and résumé.',
+        meta: [['Role', 'Product Architect'], ['Domains', 'Web3 FinTech · AI MedTech'], ['Contents', 'Three product stories, earlier career, contact, résumé']],
         go: 'Visit homepage (Chinese)',
         chaptersLabel: 'Homepage',
-        chapters: [['Approach', '#approach'], ['Work', '#work'], ['Career log', '#changelog'], ['Skills', '#stack'], ['Contact', '#contact'], ['Résumé', 'resume/']],
+        chapters: [['OneStroke', '#c1'], ['Daybreak', '#c2'], ['Tidemark', '#c3'], ['Before that', '#c4'], ['Contact', '#end'], ['Résumé', 'resume/']],
       },
     },
   ],
@@ -491,5 +492,6 @@ window.LAB = {
     { d: '2026-11-05', p: 'daybreak', t: '圖表加上「我們的看法」：傾向、理由，以及什麼情況會改變看法', en: 'Charts add "our view": the lean, the reasons, and what would change it' },
     { d: '2026-11-11', p: 'daybreak', t: '首頁改版：七頁各回答一個問題、近百張圖各附一句結論；舊版搬到 classic.html', en: 'New homepage: seven pages that each answer one question, nearly 100 charts with a one-line read each; the old layout moved to classic.html' },
     { d: '2026-11-11', p: 'daybreak', t: '新版首頁展示影片（橫式 78 秒）', en: 'Showcase video for the new homepage (landscape, 78 s)' },
+    { d: '2026-11-12', p: null, t: '搬到自己的網域 aronlab.dev，每個作品一個子網域（例如 daybreak.aronlab.dev）', en: 'Moved to its own domain, aronlab.dev, with a subdomain for each work (for example daybreak.aronlab.dev)' },
   ],
 };

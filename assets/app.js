@@ -172,13 +172,20 @@
     $('now-k').textContent = line || 'Now showing';
     $('now-k').classList.toggle('t', !!line);
     $('now-name').textContent = `${p.name} ${p.zh}`;
+    $('now-name').href = `#w-${p.id}`;
     $('now-live').innerHTML = p.live && live[p.live] ? liveLine(live[p.live]) : esc(p.tagline);
-    document.querySelectorAll('#dots button').forEach((b, j) => b.classList.toggle('on', j === k));
+    document.querySelectorAll('#dots button').forEach((b, j) => { b.classList.toggle('on', j === k); b.setAttribute('aria-pressed', String(j === k)); });
   };
   $('dots').innerHTML = P.map((p) => `<button type="button" aria-label="${esc(p.name)}"></button>`).join('');
   $('dots').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; clearInterval(timer); timer = null; show([...b.parentNode.children].indexOf(b)); });
   show(pickNow().i);
-  if (!reduced) timer = setInterval(() => show(k + 1), 4200);
+  // 滑鼠停在方形或右下角的說明上就先不換，讓人看完；分頁在背景時也不換
+  let hold = false;
+  [$('stage'), document.querySelector('.now')].forEach((el) => {
+    el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hold = true; });
+    el.addEventListener('pointerleave', () => { hold = false; });
+  });
+  if (!reduced) timer = setInterval(() => { if (!hold && !document.hidden) show(k + 1); }, 4200);
 
   // ── 手機頂欄：跟著正在頂欄底下的色場換底色與字色（桌機仍用混色模式，這些變數不會用到） ──
   const layers = () => document.querySelectorAll('.hero, .field, .sec, .foot');
@@ -221,7 +228,7 @@
     }).join('');
     const pic = p.cover ? `<img src="${asset(p.cover)}" alt="${esc(p.name)} ${tr('畫面', 'screenshot')}" loading="lazy">` : '';
     const domains = p.domains.map((d) => L.domains[d]).join(tr('・', ' / '));
-    return `<section class="field pc" id="w-${p.id}" style="--pc:${p.color}" aria-label="${esc(p.name)}">
+    return `<section class="field pc${pic ? ' has-pic' : ''}" id="w-${p.id}" style="--pc:${p.color}" aria-label="${esc(p.name)}">
       <a class="stage" ${url ? `href="${url}"${ext(url)}` : `href="#w-${p.id}"`} aria-label="${tr('開啟', 'Open')} ${esc(p.name)}"><div class="sq s0"><div class="sq s1"><div class="sq s2">${pic}<span class="glyph">${GLYPH[p.domains[0]] || GLYPH.stocks}</span></div></div></div></a>
       <div class="info">
         <div class="no"><button type="button" class="hex" data-hex="${p.color}" title="${tr('複製色碼', 'Copy color')} ${p.color}" aria-label="${tr(`複製 ${esc(p.name)} 的色碼`, `Copy the ${esc(p.name)} color`)} ${p.color}"></button><span>No.${p.no} · ${esc(domains)} · ${esc(p.kind)}</span><span class="st">${STATUS[p.status]} · ${esc(p.cadence)}</span></div>
@@ -236,16 +243,16 @@
           ${p.site && cs ? `<a class="alt" href="${cs}"${ext(cs)}>${tr('作品集', 'Case study')}</a>` : ''}
           ${p.promo ? `<a class="alt" href="#media-${p.id}">${tr('宣傳素材', 'Media')}</a>` : ''}
           ${p.repo ? `<a class="alt" href="${p.repo}" target="_blank" rel="noopener">${tr('原始碼', 'Source')}${p.repoPrivate ? tr('（私人）', ' (private)') : ''}</a>` : ''}
-          <button type="button" class="more" data-goto="${p.id}">${tr(`全部 ${countFor(p)} 個入口`, `All ${countFor(p)} entries`)} →</button>
+          ${countFor(p) > 1 ? `<button type="button" class="more" data-goto="${p.id}">${tr(`全部 ${countFor(p)} 個入口`, `All ${countFor(p)} entries`)} →</button>` : ''}
         </div>
       </div>
     </section>`;
   }).join('') + `<section class="field next pc" id="w-next"><div class="stage"><div class="sq s0"><div class="sq s1"><div class="sq s2"></div></div></div></div><div><h2>No.${pad(P.length + 1)} · ${tr('製作中', 'In progress')}</h2><p>${tr('新的作品會依序編號，加進這一頁和索引。', 'New works take the next number and join this page and the index.')}</p></div></section>`;
-  // 手機沒有滑鼠：色場進到畫面中間時直接把畫面顯示出來
-  if (!matchMedia('(hover: hover)').matches) {
-    const io = new IntersectionObserver((list) => list.forEach((en) => en.target.classList.toggle('show', en.isIntersecting)), { rootMargin: '-35% 0px -35% 0px' });
-    document.querySelectorAll('.field').forEach((f) => io.observe(f));
-  }
+  // 手機沒有滑鼠：色場、作品集卡片進到畫面中間時直接把畫面顯示出來（桌機是滑過去才顯示）
+  const touch = !matchMedia('(hover: hover)').matches;
+  const ioShow = touch && new IntersectionObserver((list) => list.forEach((en) => en.target.classList.toggle('show', en.isIntersecting)), { rootMargin: '-35% 0px -35% 0px' });
+  const revealOnTouch = (sel) => ioShow && document.querySelectorAll(sel).forEach((f) => ioShow.observe(f));
+  revealOnTouch('.field');
 
   // ── 索引 ──
   const state = { prod: 'all', type: 'all', q: '' };
@@ -281,7 +288,7 @@
     const fa = $('idx-fold');
     fa.hidden = !foldable.length;
     fa.textContent = foldable.every((id) => open.has(id)) ? tr('全部收合', 'Collapse all') : tr('全部展開', 'Expand all');
-    if (!rows.length) { $('idx').innerHTML = `<div class="idx-empty">${tr('沒有符合的入口。換個關鍵字，或清除篩選。', 'No matching entries. Try another keyword, or clear the filters.')}</div>`; return; }
+    if (!rows.length) { $('idx').innerHTML = `<div class="idx-empty">${tr('沒有符合的入口。換個關鍵字，或清除篩選。', 'No matching entries. Try another keyword, or clear the filters.')}<button type="button" data-reset>${tr('清除搜尋與篩選', 'Clear search and filters')}</button></div>`; return; }
     $('idx').innerHTML = `<div class="ir head" role="row">${tr(['作品', '入口', '類型', '網址'], ['Work', 'Entry', 'Type', 'URL']).map((h) => `<span role="columnheader">${h}</span>`).join('')}<span></span></div>` +
       [...byP].map(([p, list]) => {
         if (!foldable.includes(p.id)) return list.map((e, i) => row(e, i === 0, q)).join('');
@@ -289,7 +296,12 @@
         return (isOpen ? list : list.slice(0, 1)).map((e, i) => row(e, i === 0, q)).join('') + foldRow(p, list.slice(1), isOpen);
       }).join('');
   };
+  const resetIndex = () => {
+    $('q').value = ''; state.q = '';
+    idxProd.querySelector('[data-p="all"]').click(); idxType.querySelector('[data-t="all"]').click();
+  };
   $('idx').addEventListener('click', (ev) => {
+    if (ev.target.closest('[data-reset]')) { resetIndex(); $('q').focus({ preventScroll: true }); return; }
     const b = ev.target.closest('[data-fold]'); if (!b) return;
     const id = b.dataset.fold, closing = open.has(id), top = b.getBoundingClientRect().top;
     closing ? open.delete(id) : open.add(id);
@@ -356,6 +368,7 @@
       </div>
     </article>`;
   }).join('');
+  revealOnTouch('.case');
 
   // ── 宣傳素材 ──
   const promoted = P.filter((p) => p.promo);
@@ -383,6 +396,7 @@
     </article>`;
   }).join('');
   document.addEventListener('click', (e) => { const b = e.target.closest('[data-strip]'); if (!b) return; const s = b.closest('.mk').querySelector('.strip'); s.scrollBy({ left: Math.sign(+b.dataset.strip) * s.clientWidth * .8, behavior: reduced ? 'auto' : 'smooth' }); });
+  const saveData = !!(navigator.connection && navigator.connection.saveData);
   document.querySelectorAll('.m-video').forEach((box) => {
     const v = box.querySelector('video'), sync = () => box.classList.toggle('playing', !v.paused);
     v.addEventListener('play', sync); v.addEventListener('pause', sync);
@@ -394,7 +408,8 @@
       snd.setAttribute('aria-label', v.muted ? tr('開啟聲音', 'Turn sound on') : tr('關閉聲音', 'Turn sound off'));
       if (!v.muted && v.paused) v.play().catch(() => {});
     });
-    if (!reduced) new IntersectionObserver(([en]) => { if (en.isIntersecting) v.play().catch(() => {}); else v.pause(); }, { threshold: .6 }).observe(box);
+    // 捲到畫面裡自動播（靜音）；減少動態或省流量模式就等人按播放
+    if (!reduced && !saveData) new IntersectionObserver(([en]) => { if (en.isIntersecting) v.play().catch(() => {}); else v.pause(); }, { threshold: .6 }).observe(box);
   });
   const lb = $('lb'); let cur = 0;
   const showShot = (i) => { cur = (i + shots.length) % shots.length; $('lb-img').src = shots[cur].src; $('lb-img').alt = shots[cur].t; $('lb-cap').textContent = shots[cur].t; $('lb-n').textContent = `${cur + 1} / ${shots.length}`; };
@@ -414,7 +429,7 @@
   ticks.push(`<span class="g-tick today" style="left:${x(todayISO)}%"><span>${tr('今天', 'Today')} ${md(todayISO)}</span></span>`);
   $('gantt').innerHTML = `<div class="g-axis" aria-hidden="true">${ticks.join('')}</div>` + P.map((p) => {
     const dots = L.milestones.filter((m) => m.p === p.id).map((m) => `<span class="g-dot" style="left:${x(m.d)}%" title="${md(m.d)} ${esc(m.t)}"></span>`).join('');
-    return `<div class="g-row pc" style="--pc:${p.color}"><div class="l"><i></i>${esc(p.name)}</div><div class="g-track"><a class="g-bar${p.status === 'private' ? ' private' : ''}" href="#w-${p.id}" style="left:${x(p.started)}%;width:${Math.max(x(todayISO) - x(p.started), 1)}%" title="${esc(p.name)}${tr(`：${md(p.started)} 開工至今`, `: ${md(p.started)} to today`)}"></a>${dots}</div></div>`;
+    return `<div class="g-row pc" style="--pc:${p.color}"><div class="l"><i></i>${esc(p.name)}</div><div class="g-track"><a class="g-bar${p.status === 'private' ? ' private' : ''}" href="#w-${p.id}" aria-label="${esc(p.name)}" style="left:${x(p.started)}%;width:${Math.max(x(todayISO) - x(p.started), 1)}%" title="${esc(p.name)}${tr(`：${md(p.started)} 開工至今`, `: ${md(p.started)} to today`)}"></a>${dots}</div></div>`;
   }).join('');
   // 窄螢幕上「今天」的標籤會壓到旁邊的日期，壓到的就先藏起來
   const fitTicks = () => {
@@ -435,10 +450,29 @@
     ...P.map((p) => ({ d: p.started, p, start: true, t: `<b>${esc(p.name)} ${esc(p.zh)}</b>${tr('：', ': ')}${esc(p.tagline)}` })),
     ...L.milestones.map((m) => ({ d: m.d, p: byId[m.p] || null, t: esc(m.t) })),
   ].sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : (a.start ? 1 : 0) - (b.start ? 1 : 0)));
-  $('log-list').innerHTML = events.map((e) => `<li class="${e.start ? 'start' : ''}${e.p ? ' pc' : ''}" ${e.p ? `style="--pc:${e.p.color}"` : ''}>
+  // 紀錄只先列最近 10 筆，其餘收在「顯示全部」後面（手機上整串很長）
+  const LOG_N = 10;
+  $('log-list').innerHTML = events.map((e, i) => `<li class="${e.start ? 'start' : ''}${e.p ? ' pc' : ''}${i >= LOG_N ? ' old' : ''}" ${e.p ? `style="--pc:${e.p.color}"` : ''}>
     <time datetime="${e.d}">${dotted(e.d)}${tr(`（${dow(e.d)}）`, ` · ${dow(e.d)}`)}</time>
     <span class="lp">${e.p ? `<i></i><a href="#w-${e.p.id}">${esc(e.p.name)}</a>` : '<i style="background:var(--tx)"></i>Aron Lab'}</span>
     <span class="lt">${e.t}</span></li>`).join('');
+  if (events.length > LOG_N) {
+    const ll = $('log-list');
+    ll.insertAdjacentHTML('afterend', '<button type="button" class="log-more" id="log-more" aria-expanded="false" aria-controls="log-list"></button>');
+    const lm = $('log-more');
+    const label = () => {
+      const all = ll.classList.contains('all');
+      lm.setAttribute('aria-expanded', String(all));
+      lm.innerHTML = all ? tr(`− 只看最近 ${LOG_N} 筆`, `− Show only the latest ${LOG_N}`) : `${tr(`＋ 顯示全部 ${events.length} 筆紀錄`, `+ Show all ${events.length} updates`)}<span>${tr(`還有 ${events.length - LOG_N} 筆，最早到 ${dotted(events[events.length - 1].d)}`, `${events.length - LOG_N} more, back to ${dotted(events[events.length - 1].d)}`)}</span>`;
+    };
+    lm.addEventListener('click', () => {
+      const top = lm.getBoundingClientRect().top, closing = ll.classList.contains('all');
+      ll.classList.toggle('all'); label();
+      // 收合時讓按鈕留在原本的位置，不然畫面會跳到頁尾
+      if (closing) window.scrollBy({ top: lm.getBoundingClientRect().top - top, behavior: 'instant' });
+    });
+    label();
+  }
 
   // ── 頁尾 ──
   $('next-no').textContent = pad(P.length + 1);
@@ -446,7 +480,7 @@
     `<button type="button" class="nx" id="next-sq" title="${tr(`幫 No.${pad(P.length + 1)} 挑個顏色`, `Pick a color for No.${pad(P.length + 1)}`)}" aria-label="${tr('幫下一個作品隨機挑個顏色', 'Pick a random color for the next work')}"></button>`;
   $('foot-prods').innerHTML = P.map((p) => `<li><a href="#w-${p.id}"><i style="background:${p.color}"></i>${esc(p.name)} ${esc(p.zh)}</a></li>`).join('');
   $('foot-cases').innerHTML = L.works.map((w) => `<li><a href="${w.url}" target="_blank" rel="noopener">${esc(w.sub)} ↗</a></li>`).join('');
-  $('foot-upd').textContent = tr(`ARON LAB · 內容更新 ${L.updated} · ${P.length} 個作品 · ${entries.length} 個入口`, `ARON LAB · Updated ${L.updated} · ${P.length} works · ${entries.length} entries`);
+  $('foot-upd').innerHTML = (tr(['ARON LAB', `內容更新 ${L.updated}`, `${P.length} 個作品`, `${entries.length} 個入口`], ['ARON LAB', `Updated ${L.updated}`, `${P.length} works`, `${entries.length} entries`])).map((t) => `<span>${t}</span>`).join(' · ');
 
   // ── 目前章節 ──
   const navLinks = [...document.querySelectorAll('[data-nav]')];
