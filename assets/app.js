@@ -277,6 +277,7 @@
     sport: '<svg viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>',
     health: '<svg viewBox="0 0 100 100"><path d="M0 100 A50 50 0 0 1 100 100 Z"/></svg>',
     work: '<svg viewBox="0 0 100 100"><polygon points="50,0 100,50 50,100 0,50"/></svg>',
+    family: '<svg viewBox="0 0 100 100"><path d="M0 100V50a50 50 0 0 1 100 0v50z"/></svg>',
   };
   const STATUS = tr({ live: '已上線', local: '本機', private: '私人' }, { live: 'Live', local: 'Local', private: 'Private' });
   const inZh = tr('', ' (Chinese)');
