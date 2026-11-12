@@ -27,11 +27,13 @@
 <link rel="expect" href="#lab-ready" blocking="render">
 <script>
 try { var t = localStorage.getItem('lab.theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
-// 語言：網址的 ?lang= → 自己選過的 → 瀏覽器語言（有中文就用中文，其他都用英文）
+// 語言：網址的 ?lang= → 自己選過的 → IP 地區 → 瀏覽器語言（有中文就用中文，其他都用英文）
+// IP 地區由 functions/index.js 在 Cloudflare 寫進 <html data-geo>：台灣、香港、澳門、中國用中文，其他地區用英文
 (function () {
   var q = new URLSearchParams(location.search).get('lang'), s = null, h = document.documentElement;
   try { s = localStorage.getItem('lab.lang'); } catch (e) {}
-  var l = q === 'en' || q === 'zh' ? q : s === 'en' || s === 'zh' ? s : [].concat(navigator.languages || navigator.language || []).some(function (x) { return /^zh/i.test(x); }) ? 'zh' : 'en';
+  var g = h.dataset.geo, geo = /^[A-Z]{2}$/.test(g || '') ? (/^(TW|HK|MO|CN)$/.test(g) ? 'zh' : 'en') : null;
+  var l = q === 'en' || q === 'zh' ? q : s === 'en' || s === 'zh' ? s : geo || ([].concat(navigator.languages || navigator.language || []).some(function (x) { return /^zh/i.test(x); }) ? 'zh' : 'en');
   h.dataset.lang = l; if (l === 'en') h.lang = 'en';
 })();
 </script>
