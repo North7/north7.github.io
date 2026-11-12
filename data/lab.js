@@ -220,7 +220,7 @@ window.LAB = {
       coverFit: 'contain',
       logo: '<svg viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#111"/><circle cx="32" cy="32" r="20" fill="#D7FA4C"/><path d="M15 24c8 3 11 10 9 19M49 40c-8-3-11-10-9-19" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/></svg>',
       sectionsLabel: '產品案例章節',
-      sectionsBase: 'https://portfolio.aronlab.dev/onestroke/',
+      sectionsBase: 'https://aronlab.dev/onestroke/case-study/',
       sections: [
         { n: '01', t: '問題與機會', u: '#problem', en: 'Problem and opportunity' },
         { n: '02', t: '使用者與情境', u: '#users', en: 'Users and context' },
@@ -235,7 +235,7 @@ window.LAB = {
         { n: '11', t: '下一步', u: '#next', en: 'Next steps' },
       ],
       links: [
-        { t: '產品案例：用手機影片看懂每一拍', u: 'https://portfolio.aronlab.dev/onestroke/', type: 'case', en: 'Case study: understanding every stroke from a phone video (Chinese)' },
+        { t: '產品案例：用手機影片看懂每一拍', u: 'https://aronlab.dev/onestroke/case-study/', type: 'case', en: 'Case study: understanding every stroke from a phone video (Chinese)' },
         { t: '本機：上傳影片與訓練紀錄', u: 'http://127.0.0.1:8780/', type: 'local', en: 'Local: upload videos and training history' },
         { t: '原始碼（私人）', u: 'https://github.com/North7/onestroke', type: 'repo', en: 'Source code (private)' },
       ],
@@ -445,7 +445,7 @@ window.LAB = {
       sub: 'OneStroke 產品案例',
       desc: '市面上的分析工具給了分數，卻說不出差在哪、下一步練什麼。我把這個困擾做成一個可以拿去試賣的網球分析產品。',
       meta: [['角色', '產品負責人（定義、研究、驗證、設計決策）'], ['階段', '可試賣的 MVP'], ['形態', '手機網頁＋本機運算']],
-      url: 'https://portfolio.aronlab.dev/onestroke/',
+      url: 'https://aronlab.dev/onestroke/case-study/',
       cover: 'assets/covers/onestroke-case.jpg',
       en: {
         title: 'Understanding every stroke from a phone video',

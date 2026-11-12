@@ -10,7 +10,7 @@
 | 02 | [Daybreak](https://daybreak.aronlab.dev/) | 每天清晨的比特幣簡報 | 已上線 · 每日出刊 |
 | 03 | [Morningbell 晨鐘](https://morningbell.aronlab.dev/) | 給長期投資人的美股、台股日報 | 已上線 · 每天兩刊 |
 | 04 | [Market Ticker](https://ticker.aronlab.dev/) | 副螢幕行情看板，7 個主題 | 已上線 · 即時 |
-| 05 | OneStroke 一拍 | 網球揮拍分析（[產品案例](https://portfolio.aronlab.dev/onestroke/)） | 自用 · 本機 |
+| 05 | OneStroke 一拍 | 網球揮拍分析（[產品案例](https://aronlab.dev/onestroke/case-study/)） | 自用 · 本機 |
 | 06 | Baseline 身體日報 | 私人健康日報 | 只在本機，不公開 |
 | 07 | [Signal Tower](https://signals.aronlab.dev/) | BTC 策略帳戶的紙上交易：S1 突破 × D 趨勢 | 已上線 · 每 4 小時更新 |
 | 08 | [PayPulse 薪跳](https://paypulse.aronlab.dev/) | 上班鼓勵器：即時顯示今天已經賺了多少 | 已上線 · 每秒跳動 |

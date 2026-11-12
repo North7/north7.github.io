@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="canonical" href="https://aronlab.dev/onestroke/case-study/">
+<script>
+  // 2026-11-12 從個人主頁（portfolio.aronlab.dev/onestroke/）搬到 Aron Lab 底下，跟其他作品放一起。
+  // 路徑照其他作品的 <作品>.aronlab.dev/case-study/ 排：OneStroke 之後上線到 onestroke.aronlab.dev 時，
+  // 把這個資料夾搬過去，Aron Lab 加一行 /onestroke/* 轉址就好。
+  // 同一份網站也部署在 GitHub Pages；從 north7.github.io 進來的訪客轉到正式網域，路徑保留
+  if (location.hostname === 'north7.github.io') location.replace('https://aronlab.dev' + location.pathname + location.search + location.hash);
+</script>
+<meta name="description" content="用一段手機影片看懂每一拍的網球揮拍分析產品：問題、原則、架構、決策紀錄、驗證與實際畫面。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OneStroke 一拍｜產品案例 · Aron">
+<meta property="og:description" content="用一段手機影片看懂每一拍的網球揮拍分析產品：問題、原則、架構、決策紀錄、驗證與實際畫面。">
+<meta property="og:url" content="https://aronlab.dev/onestroke/case-study/">
+<meta property="og:image" content="https://aronlab.dev/onestroke/case-study/img/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23D7FA4C'/%3E%3C/svg%3E">
+<title>OneStroke 一拍｜產品案例 · Aron</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* 版面：跟產品同一套「黑夜賽場」——夜場近黑底、炭灰卡片、萊姆綠只當重點與底色、珊瑚紅只標問題；
+   長捲動的案例研究，桌面有側欄目錄；三張架構圖用卡片與箭頭畫成，跟著主題換色 */
+:root {
+  --bg: #0F100F; --card: #1B1C1A; --card2: #232521; --line: #2C2E2A; --fg: #ECEDE8; --muted: #9A9C96;
+  --lime: #D7FA4C; --on-lime: #121412; --accent: #D7FA4C; --coral: #FF6B5B; --ring: #D7FA4C;
+  --display: "Space Grotesk", "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+  --body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --num: "Space Grotesk", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg: #F3F4F0; --card: #FFFFFF; --card2: #F7F8F4; --line: #E1E3DC; --fg: #121412; --muted: #62655E;
+  --accent: #5F7F0E; --coral: #E5483A; --ring: #9DBF1E; color-scheme: light } }
+:root[data-theme="light"] {
+  --bg: #F3F4F0; --card: #FFFFFF; --card2: #F7F8F4; --line: #E1E3DC; --fg: #121412; --muted: #62655E;
+  --accent: #5F7F0E; --coral: #E5483A; --ring: #9DBF1E; color-scheme: light }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 400 16px/1.75 var(--body); margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1160px; margin: 0 auto; padding-block: 48px 96px; display: grid; grid-template-columns: 176px minmax(0, 1fr); gap: 56px; }
+nav.toc { position: sticky; top: calc(24px + env(safe-area-inset-top, 0px)); align-self: start; display: flex; flex-direction: column; gap: 4px; font: 500 13px/1.4 var(--body); }
+.brand { display: flex; align-items: center; gap: 8px; font: 700 17px var(--display); letter-spacing: -.02em; margin-bottom: 4px; }
+.brand svg { width: 26px; height: 26px; flex: none; }
+.brand i { font-style: normal; color: var(--ring); }
+nav.toc .who { font: 500 12px var(--body); color: var(--muted); margin-bottom: 14px; }
+nav.toc a { color: var(--muted); text-decoration: none; padding: 4px 0 4px 12px; border-left: 2px solid var(--line); }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--fg); border-left-color: var(--lime); outline: none; }
+main { min-width: 0; display: flex; flex-direction: column; gap: 84px; }
+section { display: flex; flex-direction: column; gap: 20px; scroll-margin-top: 24px; }
+.eyebrow { display: flex; align-items: center; gap: 8px; font: 700 12px/1 var(--num); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+.eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); }
+h1 { font: 700 clamp(36px, 5.6vw, 60px)/1.1 var(--display); letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+h1 em, h2 em { font-style: normal; color: var(--accent); }
+h2 { font: 700 clamp(26px, 3.4vw, 34px)/1.22 var(--display); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
+h3 { font: 700 17px/1.45 var(--body); margin: 0; }
+p { margin: 0; max-width: 68ch; }
+.lede { font-size: 18.5px; color: var(--muted); max-width: 60ch; }
+.muted { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+
+/* 開頭 */
+.hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 40px; align-items: end; }
+.hero .txt { display: flex; flex-direction: column; gap: 22px; }
+/* 主視覺影片：靜音自動播放、循環；「開聲音」從頭播並打開聲音 */
+.hero .hv { justify-self: end; width: min(100%, 340px); }
+.vwrap { position: relative; aspect-ratio: 9 / 16; border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: #0b0b0b; }
+.vwrap video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.snd { position: absolute; right: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; font: 700 13px/1 var(--body); color: var(--on-lime);
+  background: var(--lime); border: 0; border-radius: 99px; padding: 9px 13px 9px 11px; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.35); }
+.snd svg { width: 16px; height: 16px; }
+.snd[aria-pressed="false"] .w { opacity: .35; }
+.snd[aria-pressed="true"] { background: rgba(16,16,16,.72); color: #ECEDE8; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.snd:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; padding-top: 18px; border-top: 1px solid var(--line); margin: 0; }
+.meta dt { font: 700 11px/1 var(--num); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.meta dd { margin: 0; font-weight: 500; font-size: 15px; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+figure img { width: 100%; height: auto; display: block; border-radius: 18px; border: 1px solid var(--line); }
+figcaption { font-size: 13px; color: var(--muted); }
+
+/* 關鍵數字：跟產品首頁的數字方塊同一個樣子，第一格萊姆綠 */
+.nums { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.nums div { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 6px; }
+.nums div:first-child { background: var(--lime); border-color: var(--lime); color: var(--on-lime); }
+.nums div:first-child span { color: rgba(18,20,18,.7); }
+.nums b { font: 700 clamp(26px, 3.2vw, 36px)/1 var(--display); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.nums span { font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+ul.plain { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; }
+ul.plain li::marker { color: var(--ring); }
+
+/* 產品原則：編號是規格裡規則的順序 */
+.rules { display: flex; flex-direction: column; gap: 10px; }
+.rule { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 24px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px 22px; }
+.rule h3 { font-family: var(--display); }
+
+/* 架構圖共用：節點卡片、分層、箭頭 */
+.diagram { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 14px; overflow-x: auto; }
+.node { background: var(--card2); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.node b { font: 700 15px/1.35 var(--body); }
+.node small { font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.node .path { font: 500 11.5px/1.5 var(--num); color: var(--muted); opacity: .75; margin-top: 2px; }
+.node .path i { font-style: normal; white-space: nowrap; color: var(--fg); opacity: .8; }
+.node.key { background: var(--lime); border-color: var(--lime); color: var(--on-lime); }
+.node.key small { color: rgba(18,20,18,.72); }
+.tag { display: inline-block; font: 700 10.5px/1 var(--num); letter-spacing: .08em; padding: 4px 7px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); margin-top: 4px; align-self: flex-start; }
+.node.key .tag { border-color: rgba(18,20,18,.25); color: rgba(18,20,18,.75); }
+.layer { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 14px; align-items: stretch; }
+.layer > .lab { font: 700 12px/1.4 var(--num); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding-top: 12px; }
+.layer > .lab span { display: block; font: 500 13px var(--body); letter-spacing: 0; text-transform: none; color: var(--fg); margin-top: 4px; }
+.row { display: grid; gap: 10px; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); }
+.down { display: flex; justify-content: center; color: var(--muted); font: 700 14px var(--num); letter-spacing: .1em; }
+.down::before { content: "↓"; color: var(--ring); font-size: 18px; margin-right: 8px; }
+/* 產品閉環：一圈六步，最後一步接回第一步 */
+.loop { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; position: relative; }
+.loop .node { position: relative; }
+.loop .node .n { font: 700 12px var(--num); color: var(--ring); letter-spacing: .1em; }
+.loop .node.key .n { color: var(--on-lime); }
+.loop .node:not(:last-child)::after { content: "→"; position: absolute; right: -10px; top: 50%; transform: translate(50%, -50%); color: var(--ring); font: 700 15px var(--num); z-index: 1; }
+.back { font: 500 13px var(--body); color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.back::before { content: "↺"; color: var(--ring); font: 700 18px var(--num); }
+/* 模型架構：兩條輸入線匯流 */
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.lane { display: flex; flex-direction: column; gap: 8px; border: 1px dashed var(--line); border-radius: 16px; padding: 12px; }
+.lane > .lab { font: 700 11px/1 var(--num); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--muted); }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 4px; vertical-align: -1px; margin-right: 6px; background: var(--card2); border: 1px solid var(--line); }
+.legend i.k { background: var(--lime); border-color: var(--lime); }
+
+/* 決策紀錄 */
+.decs { display: flex; flex-direction: column; gap: 12px; }
+.dec { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px; display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 20px; }
+.dec .when { font: 700 12px/1.5 var(--num); color: var(--ring); letter-spacing: .1em; }
+.dec .when h3 { font: 700 17px/1.4 var(--body); color: var(--fg); letter-spacing: 0; margin-top: 8px; }
+.dec dl { margin: 0; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px 14px; }
+.dec dt { font: 500 12.5px/1.9 var(--body); color: var(--muted); }
+.dec dd { margin: 0; }
+.dec dd.out { font-weight: 500; }
+.dec dd.out::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--lime); margin-right: 8px; vertical-align: 1px; }
+.chip { display: inline-block; font: 500 12.5px/1 var(--body); padding: 6px 10px; border-radius: 99px; background: var(--card2); border: 1px solid var(--line); margin: 2px 4px 2px 0; }
+
+/* 驗證表 */
+.tbl { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 6px 22px; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 15px; }
+th, td { text-align: left; padding: 13px 14px 13px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font: 700 11px/1.4 var(--num); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+td.res { font: 700 15px var(--display); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--accent); }
+
+/* 產品畫面 */
+.screens { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.screens img { border-radius: 22px; }
+/* 產品畫面導覽：五組，每組一列手機框；長圖在框裡捲動 */
+.tour { display: flex; flex-direction: column; gap: 40px; }
+.tg { display: flex; flex-direction: column; gap: 16px; }
+.tgh { display: flex; gap: 14px; align-items: flex-start; }
+.tgh p { font-size: 14.5px; margin-top: 4px; max-width: 62ch; }
+.tn { flex: none; font: 700 13px/1 var(--num); color: var(--on-lime); background: var(--lime); border-radius: 8px; padding: 6px 7px; margin-top: 1px; }
+.cmph h3 .tn { display: inline-block; margin-right: 10px; vertical-align: 2px; }
+.phones { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 14px; align-items: start; }
+.ph { position: relative; }
+.ph .fr { border: 1px solid var(--line); border-radius: 24px; overflow: hidden; background: #0b0b0b; aspect-ratio: 390 / 844; }
+.ph .fr > img { height: 100%; object-fit: contain; }
+.ph.long .fr > img { height: auto; }
+.ph.long .fr { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #444 transparent; }
+.ph .fr img { border: 0; border-radius: 0; }
+.ph .hint { position: absolute; top: 10px; right: 10px; font: 600 11px/1 var(--body); color: var(--on-lime); background: var(--lime); padding: 5px 8px; border-radius: 99px; pointer-events: none; }
+.ph figcaption { font-size: 13px; color: var(--muted); }
+.ph figcaption b { color: var(--fg); font-weight: 700; margin-right: 6px; }
+.cmpk { display: flex; flex-direction: column; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px; }
+.cmpk .cmph { display: flex; flex-direction: column; gap: 4px; }
+.cmpk img { border-radius: 14px; }
+.cmpk figcaption { font-size: 13.5px; color: var(--fg); }
+.cmpk .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; max-width: 760px; }
+.cmpk figcaption b { font-weight: 700; margin-right: 4px; }
+.cmpk .good { color: var(--accent); font-weight: 700; } .cmpk .bad { color: var(--coral); font-weight: 700; }
+.wide { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; max-width: 760px; }
+.wide.solo { grid-template-columns: minmax(0, 1fr); max-width: 360px; }
+
+.close { border-top: 1px solid var(--line); padding-top: 26px; display: flex; flex-direction: column; gap: 10px; }
+
+@media (max-width: 900px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-block: 28px 72px; }
+  nav.toc { position: static; flex-direction: row; flex-wrap: wrap; gap: 6px 14px; }
+  nav.toc .brand, nav.toc .who { width: 100%; }
+  nav.toc .who { margin-bottom: 6px; }
+  nav.toc a { border-left: 0; padding: 0; }
+  .hero .hv { justify-self: center; width: min(100%, 320px); }
+  .hero, .two, .wide, .split, .cmpk .pair { grid-template-columns: minmax(0, 1fr); }
+  .nums { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .screens { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .phones { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding-bottom: 6px; margin-inline: -4px; padding-inline: 4px; }
+  .phones > .ph { flex: none; width: min(62vw, 260px); scroll-snap-align: start; }
+  .rule, .dec, .layer { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .layer > .lab { padding-top: 0; }
+  .row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .loop { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .loop .node::after { display: none; }
+  main { gap: 60px; }
+}
+@media (prefers-reduced-motion: no-preference) { nav.toc a { transition: color .15s, border-color .15s; } }
+nav.toc a.who { border-left: 0; padding: 0; color: var(--muted); }
+nav.toc a.who:hover { color: var(--fg); }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="目錄">
+  <div class="brand"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#D7FA4C"/><path d="M11 43C24 49 42 40 49 16" fill="none" stroke="#121412" stroke-width="6" stroke-linecap="round"/></svg><span>one<i>stroke</i></span></div>
+  <a class="who" href="/#w-onestroke">← Aron Lab</a>
+  <a href="#problem">問題與機會</a><a href="#users">使用者與情境</a><a href="#principles">產品原則</a><a href="#product-arch">產品架構</a><a href="#tech-arch">技術架構</a><a href="#model-arch">模型架構</a>
+  <a href="#decisions">決策紀錄</a><a href="#validation">驗證</a><a href="#product">產品畫面</a><a href="#method">工作方式</a><a href="#next">下一步</a>
+</nav>
+<main>
+
+<section class="hero" aria-labelledby="t">
+  <div class="txt">
+    <div class="eyebrow">Case study · OneStroke 一拍</div>
+    <h1 id="t">用手機影片<br>看懂<em>每一拍</em>的網球分析產品</h1>
+    <p class="lede">我在球機場自主練球，市面的分析工具給了分數，卻說不出差在哪、下一步練什麼。我把這個困擾做成一個可以拿去試賣的產品：上傳一段練習影片，自動切出每一拍、打分數、像教練一樣診斷，再把人還原成 3D。</p>
+    <dl class="meta">
+      <div><dt>角色</dt><dd>產品負責人（定義、研究、驗證、設計決策）</dd></div>
+      <div><dt>階段</dt><dd>可試賣的 MVP</dd></div>
+      <div><dt>團隊</dt><dd>我＋AI 編碼代理（Claude Code）</dd></div>
+      <div><dt>形態</dt><dd>手機網頁＋本機運算，PDF 報告與分享影片</dd></div>
+    </dl>
+  </div>
+  <figure class="hv"><div class="vwrap"><video id="heroVid" src="media/onestroke-promo-web.mp4" poster="media/onestroke-promo-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="48 秒的產品介紹影片：自動切拍、評分、3D 子彈時間、做到與沒做到、練習方案、PDF 報告與教練版"></video><button class="snd" id="snd" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path class="w" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>開聲音</span></button></div><figcaption>48 秒產品介紹影片；點「開聲音」從頭聽原創配樂。</figcaption></figure>
+</section>
+
+<div class="nums" role="list">
+  <div role="listitem"><b>0 元</b><span>每場的運算成本，影片不離開自己的電腦</span></div>
+  <div role="listitem"><b>107</b><span>次提交，每一步都能單獨驗收</span></div>
+  <div role="listitem"><b>13</b><span>版評分模型，歷史紀錄一鍵重算</span></div>
+  <div role="listitem"><b>158 拍</b><span>8 分半影片自動切出，本人逐拍確認</span></div>
+  <div role="listitem"><b>0.91</b><span>轉肩速度與 OptiSwing 的逐拍相關</span></div>
+</div>
+
+<section id="problem" aria-labelledby="h-problem">
+  <div class="eyebrow">Problem</div>
+  <h2 id="h-problem">分數很多，但不知道<em>下一步</em>該練什麼</h2>
+  <div class="two">
+    <div class="card"><h3>現有工具的缺口</h3>
+      <ul class="plain">
+        <li>我用 OptiSwing 分析同一段影片：「手臂旋轉」直接 100 分，分數飽和、失去區分度</li>
+        <li>只給每項數字，看不出「最該改的是哪一個」</li>
+        <li>沒有練習方法，也不會在下一次幫你驗收有沒有進步</li>
+      </ul></div>
+    <div class="card"><h3>替代方案的成本</h3>
+      <ul class="plain">
+        <li>一對一私人課每小時約 NT$800–1,600（PRO360 行情），教練也很少拿數據說明</li>
+        <li>國外人工影片分析單次 £35–55，要等好幾天</li>
+        <li>機會：手機錄影已經很普及，姿態估計模型也成熟到可以在一般電腦上跑</li>
+      </ul></div>
+  </div>
+</section>
+
+<section id="users" aria-labelledby="h-users">
+  <div class="eyebrow">Users &amp; context</div>
+  <h2 id="h-users">先服務一個非常具體的情境</h2>
+  <p>第一版只鎖定我自己的使用情境，讓每個假設都能用真實資料檢查；架構上預留教練帶學員的延伸。</p>
+  <div class="two">
+    <div class="card"><h3>主要使用者：自主練球的業餘球員</h3>
+      <p class="muted">室內球機場、一個人打、手機固定在場邊。一次練 10 分鐘左右、100 拍以上。想知道今天哪裡打得好、哪裡要改、下次練什麼。</p></div>
+    <div class="card"><h3>延伸使用者：帶學員的教練</h3>
+      <p class="muted">要分開管理每位學員的資料、給學員只看得到自己的連結，並交出一份正式的報告。這是核心流程驗證過之後才加進來的，作為之後帳號系統的基礎。</p></div>
+  </div>
+</section>
+
+<section id="principles" aria-labelledby="h-principles">
+  <div class="eyebrow">Principles</div>
+  <h2 id="h-principles">我先寫下的五條規則</h2>
+  <p>這些規則寫在專案規格的最前面，後面每一個取捨都回頭對照它們。</p>
+  <div class="rules">
+    <div class="rule"><h3>授權先行</h3><p>保留商業化的可能，所以選型一律優先可商用授權。主流的 SMPL 系 3D 人體模型不能商用，直接排除；每引入一個模型，就把版本、授權、能不能商用記下來。</p></div>
+    <div class="rule"><h3>原始值是資料，分數是衍生層</h3><p>永遠只存角度、速度、位移這些原始指標，分數在產生報告時才算，評分公式標版本。公式改了，所有歷史練習可以重算，趨勢不會斷。</p></div>
+    <div class="rule"><h3>每個數字都有出處</h3><p>評分的參考值來自運動生物力學文獻：高水準選手的平均換算成 80 分、平均減兩個標準差是 50 分；出處逐條記在評分說明文件裡。</p></div>
+    <div class="rule"><h3>比排序，不比絕對值</h3><p>單一鏡頭的 3D 跟實驗室動作捕捉有系統性偏差。驗證時不要求數字一樣，只要求哪幾拍高、哪幾拍低的排序和趨勢一致。</p></div>
+    <div class="rule"><h3>像教練說話</h3><p>報告的讀者是打球的人。內文用白話和身體的比喻，例如「三球有一球」「一個拳頭」；原始數字收進可以展開的「看數據」，當作證據。</p></div>
+  </div>
+</section>
+
+<section id="product-arch" aria-labelledby="h-parch">
+  <div class="eyebrow">Product architecture</div>
+  <h2 id="h-parch">一個閉環：<em>診斷 → 練習 → 驗收</em></h2>
+  <p>產品的核心不是「給分數」，而是讓每一次練習都接到下一次。上傳之後的每個畫面，都在這個閉環的某一步上。</p>
+  <div class="diagram" role="img" aria-label="產品閉環：拍攝、上傳、自動處理、看報告、照練、下次驗收，再回到看報告">
+    <div class="loop">
+      <div class="node"><span class="n">01</span><b>架好手機錄</b><small>側拍、正面、背後都可以；一次 10 分鐘</small></div>
+      <div class="node"><span class="n">02</span><b>上傳</b><small>手機直接傳；先檢查幀率、解析度、拍攝時間</small></div>
+      <div class="node"><span class="n">03</span><b>自動處理</b><small>切拍、分類、姿態、指標、評分；自動挑 5 拍跑 3D</small></div>
+      <div class="node key"><span class="n">04</span><b>看報告</b><small>一句話診斷、做到 vs 沒做到、3D</small></div>
+      <div class="node"><span class="n">05</span><b>照練</b><small>本週重點、練法、組數、做不到時的替代練法</small></div>
+      <div class="node key"><span class="n">06</span><b>下次自動驗收</b><small>下一場上傳時逐項比對方案的目標值</small></div>
+    </div>
+    <div class="back">驗收的結果寫進下一份報告的「上次的功課」，決定重點要延續還是換下一個</div>
+  </div>
+  <div class="diagram" role="img" aria-label="產品模組：首頁、報告、單拍、輸出、學員管理">
+    <div class="layer"><div class="lab">首頁<span>每位球員一個</span></div>
+      <div class="row" style="--n:4"><div class="node"><b>今天</b><small>本週重點、最新一場、平均分</small></div><div class="node"><b>計畫</b><small>練習方案、追蹤目標、關卡</small></div><div class="node"><b>進步</b><small>跨場趨勢、NTRP 參考等級</small></div><div class="node"><b>紀錄</b><small>每場一張卡、備註、刪除</small></div></div></div>
+    <div class="layer"><div class="lab">報告<span>每場練習一份</span></div>
+      <div class="row" style="--n:3"><div class="node key"><b>診斷</b><small>最主要的一個問題、做到 vs 沒做到、上次的功課</small></div><div class="node"><b>數據</b><small>各項分數、最佳 5 拍、分佈範圍、檢查點</small></div><div class="node"><b>每一拍</b><small>切片、3D 檢視器、對照教學</small></div></div></div>
+    <div class="layer"><div class="lab">輸出<span>帶得走的</span></div>
+      <div class="row" style="--n:3"><div class="node"><b>分享影片</b><small>3D 子彈時間、光軌、做到 vs 沒做到</small></div><div class="node"><b>最佳 vs 典型</b><small>兩個 3D 人體並排同步繞一圈</small></div><div class="node"><b>PDF 報告</b><small>深色正式版：封面、章節、頁碼</small></div></div></div>
+    <div class="layer"><div class="lab">教練<span>多學員</span></div>
+      <div class="row" style="--n:3"><div class="node"><b>學員管理</b><small>切換球員、新增學員</small></div><div class="node"><b>專屬連結</b><small>學員只看得到、只能上傳自己的</small></div><div class="node"><b>資料各自獨立</b><small>持拍手、身高、基線、趨勢分開算</small></div></div></div>
+  </div>
+</section>
+
+<section id="tech-arch" aria-labelledby="h-tarch">
+  <div class="eyebrow">Technical architecture</div>
+  <h2 id="h-tarch">本機運算、網頁介面，<em>預留帳號與雲端</em></h2>
+  <p>第一版刻意不上雲：影片留在自己的電腦，運算成本是零，又能在手機上看。每一層都留了往雲端與帳號系統走的接口。</p>
+  <div class="diagram" role="img" aria-label="技術架構分四層：用戶端、本機伺服器、處理流程、資料">
+    <div class="layer"><div class="lab">用戶端<span>手機／電腦瀏覽器</span></div>
+      <div class="row" style="--n:4"><div class="node"><b>單頁報告</b><small>資料直接寫進頁面，沒網路也能開</small></div><div class="node"><b>3D 檢視器</b><small>three.js：假人網格、骨架、揮拍光帶</small></div><div class="node"><b>分享影片編碼</b><small>瀏覽器 WebCodecs；不支援時交給伺服器</small></div><div class="node"><b>深淺色主題</b><small>同一套設計系統 token</small></div></div></div>
+    <div class="down">HTTPS · 金鑰</div>
+    <div class="layer"><div class="lab">本機伺服器<span>Python</span></div>
+      <div class="row" style="--n:4"><div class="node key"><b>權限</b><small>擁有者看全部；學員金鑰只看自己的；區網自簽憑證</small></div><div class="node"><b>上傳＋工作佇列</b><small>一次處理一支、進度回報、失敗重試</small></div><div class="node"><b>按需運算</b><small>補跑 3D、產生高精細假人、匯出 PDF</small></div><div class="node"><b>用量紀錄</b><small>每次 3D 記球員與拍數，之後計費用</small></div></div></div>
+    <div class="down">子行程</div>
+    <div class="layer"><div class="lab">處理流程<span>兩個環境</span></div>
+      <div class="row" style="--n:4"><div class="node"><b>切片＋2D</b><small>PyAV、ONNX（CoreML 加速）、MediaPipe</small></div><div class="node"><b>3D</b><small>PyTorch（Apple MPS）、SAM 3D Body、MHR 網格</small></div><div class="node"><b>報告與 PDF</b><small>Python 產生 HTML；Chrome 無頭模式印 A4</small></div><div class="node"><b>綜合分析</b><small>Claude Code 無頭模式，照撰寫規範寫</small></div></div></div>
+    <div class="down">讀寫</div>
+    <div class="layer"><div class="lab">資料<span>每位球員一個資料夾</span></div>
+      <div class="row" style="--n:4"><div class="node key"><b>路徑層</b><small>所有位置集中管理；換帳號系統只改這層</small></div><div class="node"><b>報告</b><small>每一場一個資料夾：切片、姿態、3D、分享影片</small><code class="path">reports/<wbr><i>球員</i>/<wbr><i>練習</i></code></div><div class="node"><b>快取</b><small>每支影片的 2D／3D 姿態與人工修正，重做報告不用重算</small><code class="path">data/<wbr><i>球員</i>/<wbr><i>日期</i>/<wbr><i>影片</i></code></div><div class="node"><b>名冊與回收區</b><small>球員名冊；刪除的練習保留 30 天</small></div></div></div>
+  </div>
+</section>
+
+<section id="model-arch" aria-labelledby="h-march">
+  <div class="eyebrow">Model architecture</div>
+  <h2 id="h-march">聲音＋動作找出每一拍，<em>2D 為主、3D 補強</em></h2>
+  <p>每個模型都有明確的分工與授權。2D 每一幀都跑、成本低；3D 只跑關鍵的拍與關鍵的幾格，補 2D 量不到的轉動與手臂。</p>
+  <div class="diagram" role="img" aria-label="模型流程：音訊與視覺兩條線匯流成切片，再經分類、2D、3D、指標、評分、撰寫">
+    <div class="split">
+      <div class="lane"><div class="lab">音訊</div>
+        <div class="node"><b>擊球聲偵測</b><small>1.5–8 kHz 帶通後找波峰；比背景高 8 dB 才算候選</small></div></div>
+      <div class="lane"><div class="lab">視覺</div>
+        <div class="node"><b>人體偵測 YOLOX</b><small>鎖定目標球員（最大、最靠中間的人）</small><span class="tag">APACHE-2.0</span></div>
+        <div class="node"><b>2D 姿態 RTMPose</b><small>每一幀 17 個關節；另一個模型 RTMW 做資料稽核</small><span class="tag">APACHE-2.0</span></div></div>
+    </div>
+    <div class="down">兩條線配對</div>
+    <div class="node key"><b>切片：聲音 × 手腕速度峰值</b><small>兩者在 −0.35～+0.2 秒內同時出現才算一拍；只有聲音（球機、隔壁場）或只有動作都排除；擊球前 1 秒到後 0.5 秒</small></div>
+    <div class="down">每一拍</div>
+    <div class="row" style="--n:3">
+      <div class="node"><b>正反手分類</b><small>兩手距離、在身體哪一側、揮拍方向，依拍攝角度加權的邏輯迴歸</small><span class="tag">自訓 · 留一場 97%</span></div>
+      <div class="node"><b>3D 骨架 MediaPipe</b><small>33 點世界座標，量轉身與面向</small><span class="tag">APACHE-2.0</span></div>
+      <div class="node"><b>學生模型</b><small>以 SAM 3D 為老師、只吃 2D，判斷手腳前後</small><span class="tag">自訓</span></div>
+    </div>
+    <div class="down">自動挑 5 拍，按需補跑</div>
+    <div class="node"><b>3D 人體 SAM 3D Body（Meta）</b><small>每拍只算擊球前後 11 個關鍵幀再插值；輸出 70 個關鍵點、各關節旋轉與 MHR 人體網格：手臂旋轉、腕部、轉肩都從這裡量；網格做成霧面假人，用在 3D 檢視器與分享影片</small><span class="tag">SAM LICENSE</span></div>
+    <div class="down">原始指標</div>
+    <div class="row" style="--n:3">
+      <div class="node"><b>指標</b><small>30 多項原始值：轉肩速度、手臂鞭打、屈膝、上步、重心前移…；只存原始值</small></div>
+      <div class="node key"><b>評分層</b><small>文獻參考值經 logistic 映射到 0–100；職業／進階／入門三種尺度；版本化，可整批重算</small></div>
+      <div class="node"><b>檢查點與診斷</b><small>逐拍判斷做到沒做到；找出跟速度最相關的問題</small></div>
+    </div>
+    <div class="down">撰寫</div>
+    <div class="node"><b>綜合分析 Claude</b><small>照撰寫規範把數據寫成教練口吻：一句話診斷、三段分析、練習方案；每個數字先算過再寫，數字收進「看數據」</small></div>
+    <div class="legend"><span><i class="k"></i>產品的關鍵環節</span><span><i></i>模型或處理步驟</span><span>標籤是授權或驗證結果</span></div>
+  </div>
+</section>
+
+<section id="decisions" aria-labelledby="h-decisions">
+  <div class="eyebrow">Decision log</div>
+  <h2 id="h-decisions">七個關鍵取捨</h2>
+  <div class="decs">
+    <article class="dec"><div class="when">決策 01<h3>3D 人體要用哪個模型</h3></div><dl>
+      <dt>情境</dt><dd>要量轉肩、手臂旋轉，2D 不夠；但準確度最好的幾個模型都是 SMPL 系，授權不能商用。</dd>
+      <dt>選項</dt><dd><span class="chip">WHAM / GVHMR（SMPL）</span><span class="chip">SAM 3D Body</span><span class="chip">只用 2D</span></dd>
+      <dt>決定</dt><dd>3D 用 Meta 的 SAM 3D Body，2D 用 Apache-2.0 的 RTMPose 與 MediaPipe；把商用前仍需律師確認的條款列成清單。</dd>
+      <dt>結果</dt><dd class="out">保住商業化的路，同時拿到手臂旋轉、腕部這些 2D 量不到的指標。</dd></dl></article>
+    <article class="dec"><div class="when">決策 02<h3>2D 量不準的指標怎麼辦</h3></div><dl>
+      <dt>情境</dt><dd>做了兩個姿態模型互相比對的資料稽核，發現髖肩分離角在 2D 下兩個模型對不起來。</dd>
+      <dt>決定</dt><dd>把它移出計分，只當參考；之後每個指標依拍攝角度標「可信／參考／不可信」。</dd>
+      <dt>結果</dt><dd class="out">寧可少一項分數，也不給使用者錯的數字；後來支援正面、背後等角度時，這張可信度表直接沿用。</dd></dl></article>
+    <article class="dec"><div class="when">決策 03<h3>3D 太慢，要不要上雲端</h3></div><dl>
+      <dt>情境</dt><dd>SAM 3D 在 Mac 上每拍 13–25 秒，一場 150 拍要 40 分鐘以上；雲端 GPU 的成本還沒實測。</dd>
+      <dt>選項</dt><dd><span class="chip">全部上雲端</span><span class="chip">全部本機</span><span class="chip">關鍵幀＋插值，只跑關鍵的拍</span></dd>
+      <dt>決定</dt><dd>只算關鍵幀再插值；上傳後自動挑 5 拍（本場最佳、典型、方案的目標拍與問題拍、待改進），其他拍按需補跑，並記下每次用量。</dd>
+      <dt>結果</dt><dd class="out">每場的 3D 從 40 分鐘以上降到約 2 分鐘；用量紀錄直接成為「基本 5 拍、全場加購」收費方案的計費依據。</dd></dl></article>
+    <article class="dec"><div class="when">決策 04<h3>沒有 3D 時，骨架常把手腳前後弄反</h3></div><dl>
+      <dt>情境</dt><dd>2D 只看得到平面，四肢前後顛倒的比例在不同角度有 11–28%。</dd>
+      <dt>決定</dt><dd>用 SAM 3D 的結果當老師，訓練一個只吃 2D 的小模型判斷前後，混合進原本的骨架；同時確認 SAM 授權沒有禁止用輸出訓練。</dd>
+      <dt>結果</dt><dd class="out">顛倒率降到正面 2%、右後 3%、側面 9%、背後 14%，而且不用多付 3D 的運算成本。</dd></dl></article>
+    <article class="dec"><div class="when">決策 05<h3>分享影片要長什麼樣子</h3></div><dl>
+      <dt>情境</dt><dd>使用者想把好球分享出去，這也是最便宜的獲客管道；需求是「要高級、能病毒傳播、展示厲害的東西」。</dd>
+      <dt>決定</dt><dd>預設樣式做成「3D 子彈時間」：原片播一次 → 擊球瞬間定格 → 本人變成 3D 雕塑繞一圈 → 回原片收拍；片尾品牌畫面固定、不能關。</dd>
+      <dt>結果</dt><dd class="out">每一支分享影片都是一則產品示範；之後的「最佳 vs 典型」對比影片也沿用同一套 3D 舞台。</dd></dl></article>
+    <article class="dec"><div class="when">決策 06<h3>要不要在手機端先壓縮再上傳</h3></div><dl>
+      <dt>情境</dt><dd>一場原片約 580 MB，手機上傳很慢。</dd>
+      <dt>實驗</dt><dd>手機端先切片：仍要上傳 79–84%，不划算。壓成 720p 2Mbps：大小降到 1/4，拍數、正反手幾乎一樣，但壓縮雜訊讓速度類指標偏高 3–17%。</dd>
+      <dt>決定</dt><dd>先不上線。偏高的數字混進歷史紀錄，會讓使用者誤以為自己進步了；等決定好歷史資料怎麼銜接再做。</dd>
+      <dt>結果</dt><dd class="out">把一個看起來簡單的優化，變成一份有數據的取捨紀錄，避免傷到最核心的「趨勢可信」。</dd></dl></article>
+    <article class="dec"><div class="when">決策 07<h3>要給學員用，資料要怎麼分</h3></div><dl>
+      <dt>情境</dt><dd>準備找球友試用，之後可能要做帳號系統。</dd>
+      <dt>選項</dt><dd><span class="chip">在現有資料上加標記</span><span class="chip">每位球員一個資料夾＋路徑層</span></dd>
+      <dt>決定</dt><dd>做最徹底的版本：所有路徑集中到一層，每位球員各自的設定、基線、趨勢與首頁；學員有專屬連結，只看得到、只能上傳自己的資料；刪除先進回收區，30 天內可復原。</dd>
+      <dt>結果</dt><dd class="out">端對端測試通過（上傳、3D、自動分析都落在學員自己的資料夾）；之後換成帳號系統，只要改路徑那一層。</dd></dl></article>
+  </div>
+</section>
+
+<section id="validation" aria-labelledby="h-validation">
+  <div class="eyebrow">Validation</div>
+  <h2 id="h-validation">怎麼知道它是對的</h2>
+  <p>每個開發階段都先訂好驗收標準，再拿真實資料檢查。第一段測試影片是我在球機場錄的 8 分半正手練習。</p>
+  <div class="tbl"><table>
+    <thead><tr><th>項目</th><th>方法</th><th>結果</th></tr></thead>
+    <tbody>
+      <tr><td>自動切拍</td><td>驗收標準：與人工計數差距小於 5%；我逐拍看過縮圖</td><td class="res">158 拍，本人確認</td></tr>
+      <tr><td>正手／反手分類</td><td>10 場、110 拍逐拍目視標註；另做留一場交叉驗證</td><td class="res">108 / 110 判對</td></tr>
+      <tr><td>跟 OptiSwing 對照</td><td>同一段影片的前 10 拍，逐拍比較高低排序</td><td class="res">轉肩 0.91、手速 0.90</td></tr>
+      <tr><td>單項數值抽查</td><td>第 10 拍擊球瞬間的屈膝角</td><td class="res">25° vs OptiSwing 26°</td></tr>
+      <tr><td>整體分數</td><td>最佳 5 拍平均的力量／技術分</td><td class="res">73 / 62 vs 71 / 62</td></tr>
+      <tr><td>畫面類功能</td><td>每場、每種拍攝角度、有沒有 3D，至少實際產生一支再交付</td><td class="res">成為固定的交付規則</td></tr>
+    </tbody></table></div>
+  <p class="muted">做不到的也照實記下：手臂旋轉、抖腕跟 OptiSwing 的定義還沒對上；準確度目前只在我一個人的資料上驗證過，是商業化前最大的風險。</p>
+</section>
+
+<section id="product" aria-labelledby="h-product">
+  <div class="eyebrow">Product</div>
+  <h2 id="h-product">做出來的產品</h2>
+  <p class="lede">以下都是實際畫面，用的是我 10/20 那一場（158 拍）。手機框裡的長圖可以直接往下捲；畫面中的人臉都模糊處理過。</p>
+<div class="tour">
+  <div class="tg">
+    <div class="tgh"><span class="tn">01</span><div><h3>首頁與計畫：打開就知道今天練什麼</h3><p class="muted">首頁只放一件事：本週重點與最新一場。計畫頁把診斷翻成練法、組數和驗收標準；進步頁看分數趨勢與「跟上次比」。</p></div></div>
+    <div class="phones" style="--n:4">
+      <figure class="ph long"><div class="fr"><img src="img/t_home.jpg" alt="首頁：本週重點、追蹤指標、最新一場的分數" width="520" height="1488" loading="lazy"></div><span class="hint">↕ 可捲動</span><figcaption><b>今天</b>本週重點、最新一場</figcaption></figure>
+      <figure class="ph long"><div class="fr"><img src="img/t_plan.jpg" alt="計畫頁：下一次正手練法、每組的提示、追蹤目標" width="520" height="3045" loading="lazy"></div><span class="hint">↕ 可捲動</span><figcaption><b>計畫</b>練法、組數、驗收標準</figcaption></figure>
+      <figure class="ph long"><div class="fr"><img src="img/t_progress.jpg" alt="進步頁：各項分數隨時間的變化與跟上次比較" width="520" height="1883" loading="lazy"></div><span class="hint">↕ 可捲動</span><figcaption><b>進步</b>趨勢與跟上次比</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="img/t_log.jpg" alt="紀錄頁：每一場練習的分數、拍數與拍攝提醒" width="520" height="1125" loading="lazy"></div><figcaption><b>紀錄</b>每一場、拍攝提醒</figcaption></figure>
+    </div>
+  </div>
+  <div class="tg">
+    <div class="tgh"><span class="tn">02</span><div><h3>一場練習的報告：診斷 → 數據 → 每一拍</h3><p class="muted">先講一個最主要的問題和證據拍，再給完整數據，最後是每一拍的切片。三頁都是整頁長圖，可以在手機框裡往下捲。</p></div></div>
+    <div class="phones" style="--n:3">
+      <figure class="ph long"><div class="fr"><img src="img/t_analysis.jpg" alt="報告的診斷頁：一句話診斷、證據拍、做到與沒做到、總結與動作階段" width="520" height="5333" loading="lazy"></div><span class="hint">↕ 可捲動</span><figcaption><b>診斷</b>主要問題、證據拍、教練的話</figcaption></figure>
+      <figure class="ph long"><div class="fr"><img src="img/t_dash.jpg" alt="報告的數據頁：各項分數、最佳 5 拍、分佈範圍與檢查點" width="520" height="4428" loading="lazy"></div><span class="hint">↕ 可捲動</span><figcaption><b>數據</b>分數、分佈、檢查點</figcaption></figure>
+      <figure class="ph long"><div class="fr"><img src="img/t_clips.jpg" alt="報告的每一拍頁：自動切出的每一拍縮圖、分數與 3D 標記" width="520" height="2028" loading="lazy"></div><span class="hint">↕ 可捲動</span><figcaption><b>每一拍</b>158 拍切片、標註</figcaption></figure>
+    </div>
+  </div>
+  <div class="tg">
+    <div class="tgh"><span class="tn">03</span><div><h3>單拍 3D 與分享影片</h3><p class="muted">每一拍都能用 3D 從任何角度看；一鍵產生直式分享影片：子彈時間、揮拍光軌、最佳拍 vs 典型拍並排繞一圈。</p></div></div>
+    <div class="phones" style="--n:3">
+      <figure class="ph"><div class="fr"><img src="img/t_swing3d.jpg" alt="單拍頁：3D 人體與原片同步播放、擊球點標記" width="520" height="1125" loading="lazy"></div><figcaption><b>單拍</b>3D 人體＋原片同步</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="img/t_share_bullet_hero.jpg" alt="分享影片：3D 人體與綠色揮拍光軌、手腕速度" width="400" height="711" loading="lazy"></div><figcaption><b>子彈時間</b>3D 揮拍光軌</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="img/t_share_bullet_scan.jpg" alt="分享影片：擊球瞬間的原片與準備、引拍、擊球、隨揮四個階段" width="400" height="711" loading="lazy"></div><figcaption><b>擊球瞬間</b>四個階段</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="img/t_share_bvt_orbit.jpg" alt="分享影片：最佳拍與典型拍的 3D 並排，下方是差最多的三項" width="400" height="711" loading="lazy"></div><figcaption><b>最佳 vs 典型</b>3D 並排、差最多的三項</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="img/t_share_cmp_freeze.jpg" alt="分享影片：做到與沒做到的兩拍上下並排，標出屈膝角度" width="400" height="711" loading="lazy"></div><figcaption><b>做到 vs 沒做到</b>兩拍定格、標出角度</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="img/t_share_bvt_anno.jpg" alt="分享影片：最佳拍與典型拍的原片，標出擊球時屈膝" width="400" height="711" loading="lazy"></div><figcaption><b>最佳 vs 典型</b>原片標線</figcaption></figure>
+    </div>
+  </div>
+</div>
+  <div class="cmpk">
+    <div class="cmph"><h3><span class="tn">04</span>做到 vs 沒做到：骨架標線與數據</h3><p class="muted">同一場、同一個角度的自己，停在關鍵的那一瞬間；左邊做到、右邊沒做到，骨架上直接標出角度與位移。</p></div>
+    <div class="pair">
+    <figure><img src="img/cp_knee_impact.jpg" alt="擊球時屈膝：做到的第 95 次屈膝 36 度，沒做到的第 24 次只有 16 度，骨架上標出前腳角度" loading="lazy"><figcaption><b>擊球時屈膝</b>　做到 <span class="good">36°</span>　vs　沒做到 <span class="bad">16°</span>　·　130 拍有 93 拍沒做到</figcaption></figure>
+    <figure><img src="img/cp_load_drop.jpg" alt="引拍時重心下沉：做到的第 17 次骨盆下沉 6.4 公分，沒做到的第 83 次只有 0.9 公分" loading="lazy"><figcaption><b>引拍時重心下沉</b>　做到 <span class="good">6.4 cm</span>　vs　沒做到 <span class="bad">0.9 cm</span>　·　虛線是引拍最高點</figcaption></figure>
+    </div>
+  </div>
+<div class="tour">
+  <div class="tg">
+    <div class="tgh"><span class="tn">05</span><div><h3>教練與上傳</h3><p class="muted">教練登入後先看到自己的學員；上傳是分段續傳，斷線也能接著傳。</p></div></div>
+    <div class="phones" style="--n:4">
+      <figure class="ph"><div class="fr"><img src="img/t_coachhome.jpg" alt="教練的首頁：列出底下的學員與最近一次練習" width="520" height="1125" loading="lazy"></div><figcaption><b>教練首頁</b>我的學員</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="img/t_upload.jpg" alt="上傳面板：拖放影片、拍攝角度提醒" width="520" height="1125" loading="lazy"></div><figcaption><b>上傳</b>拖放影片、拍攝提醒</figcaption></figure>
+    </div>
+  </div>
+</div>
+  <div class="cmpk">
+    <div class="cmph"><h3>給學員的正式 PDF 報告（9 頁）</h3><p class="muted">深色正式版，報告頁一鍵匯出：封面、摘要、分析、指標與動作檢查點、做到 vs 沒做到、最佳拍 vs 典型拍、練習方案；每頁有頁碼。</p></div>
+    <figure><img src="img/pdfsheet.jpg" alt="PDF 報告全部 9 頁的拼圖：封面、摘要、分析、指標、做到與沒做到、最佳與典型、練習方案" width="1776" height="2472" loading="lazy"><figcaption>10/20 那一場的實際輸出，9 頁全部攤開。</figcaption></figure>
+  </div>
+</section>
+
+<section id="method" aria-labelledby="h-method">
+  <div class="eyebrow">How I worked</div>
+  <h2 id="h-method">我跟 AI 怎麼分工</h2>
+  <p>程式由 AI 編碼代理實作，我負責「做對的東西」：定義問題、訂驗收標準、在選項之間做決定，並且審查每一個結果。讓這件事能穩定推進、不走偏的，是幾條工作規則：</p>
+  <div class="two">
+    <div class="card"><h3>規則</h3><ul class="plain">
+      <li>開發順序拆成可以單獨驗收的步驟：切片 → 2D 指標與評分 → 3D → 分析與趨勢</li>
+      <li>畫面類功能交付前，每場、每種角度都要實際產生一次（來自一次交付失誤）</li>
+      <li>視覺決定先出效果圖讓我選，不直接改</li>
+      <li>好幾個對話同時改同一個專案時，各自只提交自己的改動</li></ul></div>
+    <div class="card"><h3>我做的判斷</h3><ul class="plain">
+      <li>先限定一個具體情境，再一步步擴大（球機場 → 任何角度 → 學員）</li>
+      <li>拒絕看起來很快的優化，當它會傷到「趨勢可信」</li>
+      <li>把分享影片當成獲客管道來設計，而不只是附加功能</li>
+      <li>為還沒做的帳號系統先把資料結構做對</li></ul></div>
+  </div>
+</section>
+
+<section id="next" aria-labelledby="h-next">
+  <div class="eyebrow">What's next</div>
+  <h2 id="h-next">下一步</h2>
+  <ul class="plain">
+    <li>用 60fps 影片重新校對速度類指標與手臂旋轉、抖腕</li>
+    <li>用同一套流程跑高水準球員的參考影片，修正單鏡頭的系統性偏差（評分 v2 校正）</li>
+    <li>雲端 GPU 實測成本與速度，接上帳號與付款</li>
+    <li>擴大試用到不同程度、慣用手、拍攝角度的球員</li>
+  </ul>
+  <div class="close"><div class="brand"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#D7FA4C"/><path d="M11 43C24 49 42 40 49 16" fill="none" stroke="#121412" stroke-width="6" stroke-linecap="round"/></svg><span>one<i>stroke</i></span></div><p class="muted">一拍 · 手機拍一段，看懂每一拍</p><p class="muted">Aron · 產品經理。本頁的產品畫面、數字與日期皆來自這個專案的實際資料與開發紀錄。</p></div>
+</section>
+
+</main>
+</div>
+
+<script>
+(() => {   // 主視覺影片：靜音自動播放；「開聲音」從頭播並打開聲音，再按一次靜音
+  const v = document.getElementById("heroVid"), b = document.getElementById("snd");
+  if (!v || !b) return;
+  const lab = b.querySelector("span");
+  const sync = () => { const on = !v.muted && !v.paused; b.setAttribute("aria-pressed", on); lab.textContent = on ? "靜音" : "開聲音"; };
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); }
+  let heard = false;
+  b.addEventListener("click", () => {
+    if (v.muted || v.paused) {
+      if (!heard) { v.currentTime = 0; heard = true; }
+      v.muted = false;
+      v.play().catch(() => {});
+    } else v.muted = true;
+    sync();
+  });
+  ["volumechange", "play", "pause"].forEach(e => v.addEventListener(e, sync));
+  sync();
+})();
+</script>
+
+</body>
+</html>
