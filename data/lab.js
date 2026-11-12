@@ -54,7 +54,8 @@ window.LAB = {
       ],
     },
     {
-      id: 'daybreak', no: '02', name: 'Daybreak', zh: '破曉',
+      // 2026-11-12 起品牌名中英文都只寫 Daybreak（譯名「破曉」不對外用），副標跟英文版一樣寫它是什麼
+      id: 'daybreak', no: '02', name: 'Daybreak', zh: '比特幣日報',
       color: '#FF3B1F',
       domains: ['crypto'], kind: '日報',
       status: 'live', cadence: '每日 08:30 出刊',
@@ -98,12 +99,13 @@ window.LAB = {
         { t: 'X @songpu717', u: 'https://x.com/songpu717', type: 'social' },
         { t: '原始碼', u: 'https://github.com/North7/daybreak', type: 'repo', en: 'Source code' },
       ],
-      // 宣傳素材：原始檔在 daybreak 的 ops/video/showcase/（沒進 git），這裡放網頁用的那一版（-small，畫質一樣、檔案小一半）
+      // 宣傳素材：原始檔在 daybreak-ops 的 ops/video/out/daybreak-showcase-v4*.mp4（沒進 git），這裡放網頁用的 -small 版（畫質一樣、檔案小一半）。
+      // v4（11/12）：片頭中文字幕改成「Daybreak 全新改版…」、片尾網址改成 daybreak.aronlab.dev；v3 不再用
       promo: {
-        date: '2026-11-11',
+        date: '2026-11-12',
         note: '新版首頁的展示影片，英文字幕附中文，有配樂（預設靜音，右上角開聲音）；出場框架的數字已模糊。',
         dir: 'assets/media/daybreak/',
-        video: { src: 'showcase-v3.mp4', poster: 'showcase-v3-poster.jpg', t: '新版首頁展示影片 · 橫式 78 秒', ar: '16 / 9', sound: true },
+        video: { src: 'showcase-v4.mp4', poster: 'showcase-v4-poster.jpg', t: '新版首頁展示影片 · 橫式 78 秒', ar: '16 / 9', sound: true },
         en: {
           note: 'Showcase video for the new homepage, with English captions plus Chinese subtitles and a music track (muted by default; turn sound on at the top right). Numbers in the exit plan are blurred.',
           video: 'New homepage showcase · landscape, 78 s',

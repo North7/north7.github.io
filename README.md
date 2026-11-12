@@ -7,7 +7,7 @@
 | # | 作品 | 是什麼 | 狀態 |
 |---|---|---|---|
 | 01 | [Tidemark](https://tidemark.aronlab.dev/) | BTC 週期頂部／底部訊號儀表板 | 已上線 · 每日更新 |
-| 02 | [Daybreak 破曉](https://daybreak.aronlab.dev/) | 每天清晨的比特幣簡報 | 已上線 · 每日出刊 |
+| 02 | [Daybreak](https://daybreak.aronlab.dev/) | 每天清晨的比特幣簡報 | 已上線 · 每日出刊 |
 | 03 | [Morningbell 晨鐘](https://morningbell.aronlab.dev/) | 給長期投資人的美股、台股日報 | 已上線 · 每天兩刊 |
 | 04 | [Market Ticker](https://ticker.aronlab.dev/) | 副螢幕行情看板，7 個主題 | 已上線 · 即時 |
 | 05 | OneStroke 一拍 | 網球揮拍分析（[產品案例](https://portfolio.aronlab.dev/onestroke/)） | 自用 · 本機 |
@@ -88,7 +88,7 @@ Logo：Aron 的「A_」（黑色 A＋橘色橫槓，`assets/logo.svg`）。頂�
 - `assets/app.css`：樣式。色場版：Jost ＋ Noto Sans TC，作品色階用 `color-mix()` 從 `--pc` 算，深色模式只換底色
 - `assets/logo.svg`：Aron 的 logo（向量，照原圖量出來的）；`assets/favicon.svg`、`assets/apple-touch-icon.png`：網站圖示
 - `assets/covers/`：作品與作品集封面
-- `assets/media/<作品>/`：宣傳素材的網頁版（圖片轉 JPEG、影片用 H.264；原始檔留在各作品那邊：OneStroke 在 release，Daybreak 在 daybreak 的 ops/video/showcase/）
+- `assets/media/<作品>/`：宣傳素材的網頁版（圖片轉 JPEG、影片用 H.264；原始檔留在各作品那邊：OneStroke 在 release，Daybreak 在 daybreak-ops 的 ops/video/out/，目前用 v4）
 - `tools/covers.sh`：用 Chrome 無頭模式重拍線上作品的封面（一律淺色；名稱結尾 `-en` 的用英文瀏覽器語言拍，給英文版用；需要先準備的頁面寫在 `PREP`：PayPulse 從旁邊的本機 checkout 讀，塞進示範薪資設定和固定時間「平日 15:42」再拍）
 
 本機預覽：`python3 -m http.server 8765` 後開 <http://127.0.0.1:8765/>。
