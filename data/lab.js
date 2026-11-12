@@ -8,7 +8,7 @@ window.LAB = {
     github: 'https://github.com/North7',
     x: 'https://x.com/songpu717',
     xHandle: '@songpu717',
-    // 2026-11-12：個人主頁（portfolio.aronlab.dev）先不放在 Aron Lab，聯絡只留 GitHub、X、email
+    // 2026-11-12：個人主頁先不放在 Aron Lab，聯絡只留 GitHub、X、email
     email: 'songpu717@hotmail.com',
   },
 
