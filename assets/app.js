@@ -147,8 +147,8 @@
 
   // ── 所有入口（和正式首頁的索引同一套算法） ──
   const TYPES = tr(
-    { site: '首頁', section: '分頁', case: '作品集', lang: '語言版本', tool: '工具', data: '資料', media: '宣傳素材', social: '社群', repo: '原始碼', local: '本機', legacy: '舊版', archive: '封存', private: '私人' },
-    { site: 'Home', section: 'Page', case: 'Case study', lang: 'Language', tool: 'Tool', data: 'Data', media: 'Media', social: 'Social', repo: 'Source', local: 'Local', legacy: 'Legacy', archive: 'Archive', private: 'Private' },
+    { site: '首頁', section: '分頁', case: '作品集', lang: '語言版本', tool: '工具', data: '資料', media: '宣傳素材', social: '聯絡', repo: '原始碼', local: '本機', legacy: '舊版', archive: '封存', private: '私人' },
+    { site: 'Home', section: 'Page', case: 'Case study', lang: 'Language', tool: 'Tool', data: 'Data', media: 'Media', social: 'Contact', repo: 'Source', local: 'Local', legacy: 'Legacy', archive: 'Archive', private: 'Private' },
   );
   const promoUrl = (p, f) => abs(null, p.promo.dir + f);
   const entries = [];
@@ -173,6 +173,7 @@
   });
   entries.push({ p: ME, t: 'GitHub · North7', u: L.owner.github, type: 'social' });
   entries.push({ p: ME, t: `X ${L.owner.xHandle}`, u: L.owner.x, type: 'social' });
+  if (L.owner.email) entries.push({ p: ME, t: `Email · ${L.owner.email}`, u: `mailto:${L.owner.email}`, type: 'social' });
   const countFor = (p) => entries.filter((e) => e.p === p).length;
 
   // ── 即時數據 ──
@@ -607,8 +608,8 @@
   console.log(P.map(() => '%c   ').join(''), ...P.map((p) => `background:${p.color};font-size:16px;line-height:26px`));
   console.log(`%cARON LAB%c  ${tr('自己每天要用的，就自己做成產品。', 'What I need every day, I build into a product.')}`, 'font:700 15px Jost,sans-serif;letter-spacing:.14em', 'font:13px sans-serif');
   console.log(tr(
-    `全部內容都在 data/lab.js，原始碼：https://github.com/North7/north7.github.io\n按 ? 看鍵盤快捷鍵；還有一個彩蛋：在頁面上打 albers。\n個人主頁：${L.owner.portfolio}`,
-    `Everything on this page comes from data/lab.js. Source: https://github.com/North7/north7.github.io\nPress ? for keyboard shortcuts. There's also an easter egg: type albers anywhere on the page.\nHomepage: ${L.owner.portfolio}`,
+    `全部內容都在 data/lab.js，原始碼：https://github.com/North7/north7.github.io\n按 ? 看鍵盤快捷鍵；還有一個彩蛋：在頁面上打 albers。`,
+    `Everything on this page comes from data/lab.js. Source: https://github.com/North7/north7.github.io\nPress ? for keyboard shortcuts. There's also an easter egg: type albers anywhere on the page.`,
   ));
 
   // ── 讀即時數據 ──

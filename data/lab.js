@@ -8,7 +8,8 @@ window.LAB = {
     github: 'https://github.com/North7',
     x: 'https://x.com/songpu717',
     xHandle: '@songpu717',
-    portfolio: 'https://portfolio.aronlab.dev/',
+    // 2026-11-12：個人主頁（portfolio.aronlab.dev）先不放在 Aron Lab，聯絡只留 GitHub、X、email
+    email: 'songpu717@hotmail.com',
   },
 
   domains: { crypto: '加密貨幣', stocks: '股市', sport: '運動', health: '健康', work: '職場' },
@@ -452,26 +453,6 @@ window.LAB = {
         desc: "The analysis tools on the market give you a score but can't tell you what's off or what to practice next. I turned that frustration into a tennis analysis product that's ready to sell.",
         meta: [['Role', 'Product owner (definition, research, validation, design decisions)'], ['Stage', 'MVP ready to sell'], ['Form', 'Mobile web + local compute']],
         go: 'Read (Chinese)',
-      },
-    },
-    {
-      id: 'portfolio', product: null, type: 'site', go: '前往主頁',
-      title: 'Complex systems. Intuitive products.',
-      sub: 'Aron 個人主頁',
-      desc: '13 年產品與工程經驗（11 年產品管理），橫跨 Web3 金融科技與 AI 醫療，多次從 0 到 1。主頁用三個產品故事說明我怎麼做產品：問題、做法、結果各一段，再接到之前的經歷與履歷。',
-      meta: [['角色', 'Product Architect · 產品架構師'], ['領域', 'Web3 FinTech · AI MedTech'], ['內容', '三個產品故事、在那之前的經歷、聯絡、履歷']],
-      url: 'https://portfolio.aronlab.dev/',
-      cover: 'assets/covers/portfolio.jpg',
-      chaptersLabel: '個人主頁',
-      // 2026-11-12 改版成「故事章節」：三個作品各一章，再來是之前的經歷和聯絡
-      chapters: [['OneStroke', '#c1'], ['Daybreak', '#c2'], ['Tidemark', '#c3'], ['在那之前', '#c4'], ['聯絡', '#end'], ['履歷', 'resume/']],
-      en: {
-        sub: 'Aron homepage',
-        desc: '13 years in product and engineering (11 in product management) across Web3 fintech and AI medtech, taking products from 0 to 1 several times. The homepage tells three product stories, each as problem, approach and result, then covers my earlier career and résumé.',
-        meta: [['Role', 'Product Architect'], ['Domains', 'Web3 FinTech · AI MedTech'], ['Contents', 'Three product stories, earlier career, contact, résumé']],
-        go: 'Visit homepage (Chinese)',
-        chaptersLabel: 'Homepage',
-        chapters: [['OneStroke', '#c1'], ['Daybreak', '#c2'], ['Tidemark', '#c3'], ['Before that', '#c4'], ['Contact', '#end'], ['Résumé', 'resume/']],
       },
     },
   ],

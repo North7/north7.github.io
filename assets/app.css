@@ -339,7 +339,7 @@ html[lang="en"] .log li.start .lt::before { content: 'Started'; font-family: var
 .keys-link button:hover { opacity: 1; }
 .keys-link kbd { padding: 1px 6px; border: 1.5px solid rgba(241,238,231,.4); font: 600 12px/1.4 var(--geo); }
 @media (hover: none) { .keys-link { display: none; } }
-.foot-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.3fr); gap: 30px; margin-top: 60px; padding-top: 24px; border-top: 2px solid rgba(241,238,231,.2); }
+.foot-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(max-content, 1fr) minmax(0, 1.3fr); gap: 30px; margin-top: 60px; padding-top: 24px; border-top: 2px solid rgba(241,238,231,.2); }
 .foot h3 { margin: 0 0 12px; font: 500 12px/1 var(--geo); letter-spacing: .18em; text-transform: uppercase; opacity: .6; }
 .foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .foot li a { font-weight: 700; font-size: 14.5px; display: inline-flex; align-items: center; gap: 10px; }
@@ -418,7 +418,7 @@ html[lang="en"] .log li.start .lt::before { content: 'Started'; font-family: var
   .g-tick span { font-size: 10.5px; }
   .log li { grid-template-columns: 1fr; gap: 4px; }
   .foot-grid { grid-template-columns: 1fr 1fr; }
-  .foot-note { grid-column: 1 / -1; }
+  .foot-note, .foot-contact { grid-column: 1 / -1; }
   .lb-prev, .lb-next { top: auto; bottom: 20px; margin-top: 0; }
 }
 
