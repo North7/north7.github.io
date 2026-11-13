@@ -408,8 +408,20 @@ window.LAB = {
         { n: '03', t: '外送雞', u: '#no-03', en: 'Delivery Hen' },
         { n: '04', t: '蟲蟲計程車', u: '#no-04', en: 'Bug Taxi' },
         { n: '05', t: '火雞', u: '#no-05', en: 'Thanksgiving Turkey' },
+        { n: '06', t: '聖誕樹', u: '#no-06', en: 'Christmas Tree' },
       ],
       links: [],
+      // 宣傳素材：原始檔在 everkeep 的 docs/everkeep-intro.mp4（沒進 git，產生的工具在 everkeep 的 tools/film/），這裡放網頁用的手機版（2.5 Mbps、索引在檔頭）
+      promo: {
+        date: '2026-11-13',
+        note: '用真的小島和展覽室一格一格錄下來，中間兩段是實際在手機上操作頁面；有配樂和音效（預設靜音，右上角開聲音）。',
+        dir: 'assets/media/everkeep/',
+        video: { src: 'intro.mp4', poster: 'intro-poster.jpg', t: '介紹影片 · 直式 83 秒', sound: true },
+        en: {
+          note: 'Recorded frame by frame from the real island and gallery, with two segments of the actual phone UI in use; music and sound effects (muted by default; turn sound on at the top right).',
+          video: 'Intro video · vertical, 83 s',
+        },
+      },
     },
   ],
 
@@ -506,5 +518,6 @@ window.LAB = {
     { d: '2026-11-11', p: 'daybreak', t: '首頁改版：七頁各回答一個問題、近百張圖各附一句結論；舊版搬到 classic.html', en: 'New homepage: seven pages that each answer one question, nearly 100 charts with a one-line read each; the old layout moved to classic.html' },
     { d: '2026-11-11', p: 'daybreak', t: '新版首頁展示影片（橫式 78 秒）', en: 'Showcase video for the new homepage (landscape, 78 s)' },
     { d: '2026-11-12', p: null, t: '搬到自己的網域 aronlab.dev，每個作品一個子網域（例如 daybreak.aronlab.dev）', en: 'Moved to its own domain, aronlab.dev, with a subdomain for each work (for example daybreak.aronlab.dev)' },
+    { d: '2026-11-13', p: 'everkeep', t: '介紹影片（直式 83 秒）：雞從春聯跳下來、天氣和節日、兩段實際操作手機頁面', en: 'Intro video (vertical, 83 s): the hen hopping out of the New Year couplet, weather and holidays, and two segments of the phone UI in use' },
   ],
 };
