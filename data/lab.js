@@ -47,7 +47,7 @@ window.LAB = {
         { n: '—', t: '週期策略', u: '#strat', en: { t: 'Cycle strategy', u: 'en/#strat' } },
       ],
       links: [
-        { t: '作品集：讀懂比特幣的潮汐', u: 'case-study/', type: 'case', en: "Case study: reading Bitcoin's tides (Chinese)" },
+        { t: '作品集：讀懂比特幣的潮汐', u: 'case-study/?lang=zh', type: 'case', en: { t: "Case study: reading Bitcoin's tides", u: 'case-study/en/' } },
         { t: '簡體中文版', u: 'zh-hans/', type: 'lang', en: 'Simplified Chinese' },
         { t: 'English', u: 'en/', type: 'lang', en: { t: 'Traditional Chinese', u: './' } },
         { t: '當日數據 latest.json', u: 'latest.json', type: 'data', en: "Today's data latest.json" },
@@ -427,7 +427,8 @@ window.LAB = {
       sub: 'Tidemark 作品集',
       desc: '從問題定義、假設驗證到上線營運，獨立完成一個每天自動更新的比特幣週期數據產品。',
       meta: [['角色', '產品經理（獨立專案）'], ['期間', '2026 年 10 月 · 8 次迭代'], ['實作', 'AI 協作（Claude Code）']],
-      url: 'https://tidemark.aronlab.dev/case-study/',
+      // 2026-11-15 中英雙語：Tidemark 的語言記在它自己的子網域，跟 aronlab.dev 不共用，所以中文版帶 ?lang=zh、英文版直接連 en/
+      url: 'https://tidemark.aronlab.dev/case-study/?lang=zh',
       cover: 'assets/covers/tidemark-case.jpg',
       chapters: [
         ['概述', '#overview'], ['產品定義', '#brief'], ['決策與取捨', '#decisions'], ['假設驗證', '#research'],
@@ -439,7 +440,8 @@ window.LAB = {
         sub: 'Tidemark case study',
         desc: 'From defining the problem and testing hypotheses to launch and operations: a Bitcoin cycle data product that updates itself every day, built solo.',
         meta: [['Role', 'Product manager (solo project)'], ['Period', 'October 2026 · 8 iterations'], ['Build', 'AI-assisted (Claude Code)']],
-        go: 'Read (Chinese)',
+        url: 'https://tidemark.aronlab.dev/case-study/en/',
+        cover: 'assets/covers/tidemark-case-en.jpg',
         chapters: [
           ['Overview', '#overview'], ['Product definition', '#brief'], ['Decisions and trade-offs', '#decisions'], ['Testing hypotheses', '#research'],
           ['Signal model', '#model'], ['Iterations', '#iterations'], ['Cycle strategy', '#strategy'], ['Interface', '#ui'],
