@@ -393,7 +393,7 @@ window.LAB = {
       desc: '把小朋友捏的黏土、陶土、寫的春聯和剪的紙火雞拍下來，照照片一件件重建成 3D：放在一座小島上會走、會飛、會開車，也收進展覽室，照做的時候幾歲排好。每件都有自己的頁面，可以轉到和原本照片同一個角度對照。',
       facts: ['照實物照片重建 3D', '小島上會走、會飛、會開車', '展覽室照年紀排'],
       en: {
-        zh: "A Child's World", kind: '3D keepsake', cadence: 'Grows with each new piece', sectionsLabel: 'Piece', ui: 'zh',
+        zh: "A Child's World", kind: '3D keepsake', cadence: 'Grows with each new piece', sectionsLabel: 'Piece',
         tagline: "A child's clay, pottery and calligraphy, rebuilt in 3D from photos.",
         desc: "A child's clay figures, pottery, New Year calligraphy and paper crafts are photographed and rebuilt one by one in 3D. They live on a small island where they walk, fly and drive, and in a gallery ordered by the age they were made. Each piece has its own page that can turn to the same angle as the original photos.",
         facts: ['Rebuilt in 3D from photos', 'Walks, flies and drives on the island', 'Gallery ordered by age'],
