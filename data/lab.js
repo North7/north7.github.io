@@ -504,7 +504,7 @@ window.LAB = {
       id: 'everkeep-case', product: 'everkeep',
       title: '把孩子會壞掉的手作，留成一個會長大的世界',
       sub: 'Everkeep 產品案例',
-      desc: '黏土會裂、紙會褪色、作品會被拆掉。我把 Ethan 的手作照實物重建成可以轉、會動的 3D，先把一個家庭做到位、定下品質標準，再決定怎麼讓每個孩子上傳自己的作品。',
+      desc: '黏土會裂、紙會褪色、作品會被拆掉。我把小朋友的手作照實物重建成可以轉、會動的 3D，先把一個家庭做到位、定下品質標準，再決定怎麼讓每個孩子上傳自己的作品。',
       meta: [['角色', '產品負責人（願景、策略、體驗與品質標準）'], ['階段', '已上線 · 單一家庭版本 · 7 件作品'], ['形態', '手機網頁、3D、AR、3D 列印檔']],
       url: 'https://aronlab.dev/everkeep/case-study/',
       cover: 'assets/covers/everkeep-case.jpg',
@@ -515,7 +515,7 @@ window.LAB = {
       en: {
         title: "Keeping a child's fragile crafts as a world that grows",
         sub: 'Everkeep case study',
-        desc: "Clay cracks, paper fades and crafts get taken apart. I rebuilt Ethan's handmade pieces in 3D from photos so they can turn and move, got one family's version right and set the quality bar first, before deciding how every child could upload their own.",
+        desc: "Clay cracks, paper fades and crafts get taken apart. I rebuilt a child's handmade pieces in 3D from photos so they can turn and move, got one family's version right and set the quality bar first, before deciding how every child could upload their own.",
         meta: [['Role', 'Product owner (vision, strategy, experience and quality bar)'], ['Stage', 'Live · one-family version · 7 pieces'], ['Form', 'Mobile web, 3D, AR, 3D-print files']],
         go: 'Read (Chinese)',
         chapters: [

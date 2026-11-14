@@ -6,7 +6,7 @@
 <link rel="canonical" href="https://aronlab.dev/everkeep/case-study/">
 <script>
   // 2026-11-14 Everkeep 產品案例，照 OneStroke 的做法放在 Aron Lab 底下（aronlab.dev/everkeep/case-study/）。
-  // 介紹影片直接用 Aron Lab 宣傳素材那支（assets/media/everkeep/），不另外放一份。
+  // 2026-11-14 Aron：案例裡不寫具體的人名，一律寫「小朋友」。截圖裡的名字已遮掉；介紹影片的字幕和畫面有名字，所以開頭改放小島截圖。
   // 同一份網站也部署在 GitHub Pages；從 north7.github.io 進來的訪客轉到正式網域，路徑保留
   if (location.hostname === 'north7.github.io') location.replace('https://aronlab.dev' + location.pathname + location.search + location.hash);
 </script>
@@ -270,7 +270,7 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; }
   <div class="txt">
     <div class="eyebrow">Case study · Everkeep</div>
     <h1 id="t">把孩子會壞掉的手作，留成一個<em>會長大的世界</em></h1>
-    <p class="lede">Ethan 4 到 6 歲做的黏土、陶土、春聯和紙火雞，會裂、會褪色、會被拆掉。我把它們照實物重建成可以轉、會動的 3D，放進一座小島和一間展覽室：孩子在島上玩，家人在展覽室收藏、分享。第一版只服務一個家庭，用來定下品質標準和體驗，之後才決定怎麼讓每個孩子上傳自己的作品。</p>
+    <p class="lede">家裡小朋友 4 到 6 歲做的黏土、陶土、春聯和紙火雞，會裂、會褪色、會被拆掉。我把它們照實物重建成可以轉、會動的 3D，放進一座小島和一間展覽室：孩子在島上玩，家人在展覽室收藏、分享。第一版只服務一個家庭，用來定下品質標準和體驗，之後才決定怎麼讓每個孩子上傳自己的作品。</p>
     <dl class="meta">
       <div><dt>角色</dt><dd>產品負責人：願景、策略、體驗與品質標準</dd></div>
       <div><dt>階段</dt><dd>已上線，單一家庭版本，7 件作品</dd></div>
@@ -280,9 +280,8 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; }
     <div class="cta"><a class="btn pri" href="https://everkeep.aronlab.dev/" target="_blank" rel="noopener">打開 Everkeep <span aria-hidden="true">↗</span></a></div>
   </div>
   <figure class="hv">
-    <div class="vwrap"><video id="heroVid" src="/assets/media/everkeep/intro.mp4" poster="/assets/media/everkeep/intro-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="83 秒的產品介紹影片：照片變成 3D、小島、春聯上的字變成雞、天氣和節日、手機實際操作"></video>
-      <button class="snd" id="snd" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>開聲音</span></button></div>
-    <figcaption>介紹影片 83 秒，配樂是程式現場合成的音樂盒。</figcaption>
+    <div class="vwrap" style="aspect-ratio: 390 / 844"><img src="img/island.jpg" alt="小島：七件作品住在島上，旁邊是貼著春聯的小木屋" width="780" height="1688" style="width:100%;height:100%;object-fit:cover;display:block;border:0;border-radius:0"></div>
+    <figcaption>小島，手機上的實際畫面。</figcaption>
   </figure>
 </section>
 
@@ -336,7 +335,7 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; }
   <h2 id="h-strategy">先把<em>一個家庭</em>做到位，再談每個孩子</h2>
   <p>最終的目標是讓每個孩子上傳照片，就長出自己的世界。但在自動化之前，要先知道「好」長什麼樣子。我把路線拆成三段，每一段只回答一個問題，前一段的答案是後一段的規格。</p>
   <div class="road">
-    <div class="stage now"><div class="k">01 · 現在 <span class="pill">已上線</span></div><h3>Ethan's Everkeep</h3>
+    <div class="stage now"><div class="k">01 · 現在 <span class="pill">已上線</span></div><h3>第一個家庭的 Everkeep</h3>
       <dl><dt>問題</dt><dd>要做到什麼程度，家人才會說「這就是他做的那個」？</dd>
         <dt>做法</dt><dd>逐件照照片重建，把每一件做到最高標準，上線給家人用</dd>
         <dt>產出</dt><dd>品質標準、重建方法論、新增作品的固定流程、拍照指南</dd></dl></div>
@@ -399,7 +398,7 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; }
       <dt>決定</dt><dd>小島和展覽室都要，分成兩個畫面：小島給孩子，展覽室給收藏；在小島點作品，可以直接去它在展覽室的展台。分享連結預設開在展覽室。小星球留作品牌形象。</dd>
       <dt>結果</dt><dd class="out">一個產品同時服務兩種節奏，不用為了其中一邊犧牲另一邊。</dd></dl></article>
     <article class="dec"><div class="when">決策 02<h3>孩子的想像要怎麼做出來</h3></div><dl>
-      <dt>情境</dt><dd>Ethan 4 歲寫了一張春聯「事事如意」，家人覺得那個「如」字像一隻背著外送箱的雞。</dd>
+      <dt>情境</dt><dd>小朋友 4 歲寫了一張春聯「事事如意」，家人覺得那個「如」字像一隻背著外送箱的雞。</dd>
       <dt>決定</dt><dd>剪影必須和字一模一樣：平貼在春聯上就是字，按「出門」才鼓起來、長出羽毛、跳下紙。腳就用字原本的兩筆，不另外加一雙真的雞腳。春聯貼在島上小木屋的門上。</dd>
       <dt>結果</dt><dd class="out">這成了整個產品最讓人記得的一刻，也是介紹影片的主場景。從此的原則：孩子的想像就是內容，不是我們重新詮釋的素材。</dd></dl></article>
     <article class="dec"><div class="when">決策 03<h3>照片自動重建能不能直接用</h3></div><dl>
@@ -458,7 +457,7 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; }
 <section id="product" aria-labelledby="h-product">
   <div class="eyebrow">Product</div>
   <h2 id="h-product">做出來的產品</h2>
-  <p class="lede">以下都是手機上的實際畫面。</p>
+  <p class="lede">以下都是手機上的實際畫面，畫面裡的名字已經遮掉。</p>
   <div class="tour">
     <div class="tg">
       <div class="tgh"><span class="tn">01</span><div><h3>小島、展覽室、作品頁</h3><p class="muted">底部一條控制列切換兩個畫面；選了作品，控制列變成它的動作列。展覽室照年齡排，上方是成長時間軸。</p></div></div>
@@ -523,7 +522,7 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; }
     <li>找幾個家庭試拍，看一般家長照指南拍出可用素材的比例</li>
     <li>開放給其他家庭之前，先把孩子的照片、名字要怎麼保存和公開想清楚</li>
   </ul>
-  <div class="close"><div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Everkeep</span></div><p class="muted">孩子做的東西，留下來，也活起來。</p><p class="muted">Aron · 產品負責人。本頁畫面都是產品實際截圖；線上版本在 everkeep.aronlab.dev。</p></div>
+  <div class="close"><div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Everkeep</span></div><p class="muted">孩子做的東西，留下來，也活起來。</p><p class="muted">Aron · 產品負責人。本頁畫面都是產品實際截圖（名字已遮掉）；線上版本在 everkeep.aronlab.dev。</p></div>
 </section>
 
 </main>
@@ -538,18 +537,6 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; }
 </div>
 
 <script>
-(() => {   // 主視覺影片：靜音自動播放；「開聲音」從頭播並打開聲音，再按一次靜音
-  const v = document.getElementById("heroVid"), b = document.getElementById("snd");
-  if (!v || !b) return;
-  const lab = b.querySelector("span");
-  const sync = () => { const on = !v.muted && !v.paused; b.setAttribute("aria-pressed", on); lab.textContent = on ? "靜音" : "開聲音"; };
-  b.addEventListener("click", () => {
-    if (v.muted) { v.muted = false; v.currentTime = 0; v.play().catch(() => {}); } else { v.muted = true; }
-    sync();
-  });
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); }
-})();
-
 (() => {   // 目錄：目前章節標一條陶土橘；手機版右下角圓環顯示讀到哪
   const links = [...document.querySelectorAll("nav.toc a[href^='#']")];
   const secs = links.map(a => document.querySelector(a.getAttribute("href")));
