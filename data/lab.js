@@ -383,18 +383,18 @@ window.LAB = {
       ],
     },
     {
-      id: 'everkeep', no: '09', name: 'Everkeep', zh: 'Ethan 的世界',
+      id: 'everkeep', no: '09', name: 'Everkeep', zh: '小朋友的世界',
       color: '#B8612F',
       domains: ['family'], kind: '3D 收藏館',
       status: 'live', cadence: '有新作品就加',
       started: '2026-11-12',
       tagline: '孩子做的東西，照照片變成可以轉、會動的 3D。',
-      desc: '把 Ethan 捏的黏土、陶土、寫的春聯和剪的紙火雞拍下來，照照片一件件重建成 3D：放在一座小島上會走、會飛、會開車，也收進展覽室，照他做的時候幾歲排好。每件都有自己的頁面，可以轉到和原本照片同一個角度對照。',
+      desc: '把小朋友捏的黏土、陶土、寫的春聯和剪的紙火雞拍下來，照照片一件件重建成 3D：放在一座小島上會走、會飛、會開車，也收進展覽室，照做的時候幾歲排好。每件都有自己的頁面，可以轉到和原本照片同一個角度對照。',
       facts: ['照實物照片重建 3D', '小島上會走、會飛、會開車', '展覽室照年紀排'],
       en: {
-        zh: "Ethan's World", kind: '3D keepsake', cadence: 'Grows with each new piece', sectionsLabel: 'Piece', ui: 'zh',
+        zh: "A Child's World", kind: '3D keepsake', cadence: 'Grows with each new piece', sectionsLabel: 'Piece', ui: 'zh',
         tagline: "A child's clay, pottery and calligraphy, rebuilt in 3D from photos.",
-        desc: "Ethan's clay figures, pottery, New Year calligraphy and paper crafts are photographed and rebuilt one by one in 3D. They live on a small island where they walk, fly and drive, and in a gallery ordered by the age he made them. Each piece has its own page that can turn to the same angle as the original photos.",
+        desc: "A child's clay figures, pottery, New Year calligraphy and paper crafts are photographed and rebuilt one by one in 3D. They live on a small island where they walk, fly and drive, and in a gallery ordered by the age they were made. Each piece has its own page that can turn to the same angle as the original photos.",
         facts: ['Rebuilt in 3D from photos', 'Walks, flies and drives on the island', 'Gallery ordered by age'],
       },
       site: 'https://everkeep.aronlab.dev/',
@@ -414,17 +414,7 @@ window.LAB = {
       links: [
         { t: '產品案例：把孩子會壞掉的手作，留成一個會長大的世界', u: 'https://aronlab.dev/everkeep/case-study/', type: 'case', en: "Case study: keeping a child's fragile crafts as a world that grows (Chinese)" },
       ],
-      // 宣傳素材：原始檔在 everkeep 的 docs/everkeep-intro.mp4（沒進 git，產生的工具在 everkeep 的 tools/film/），這裡放網頁用的手機版（2.5 Mbps、索引在檔頭）
-      promo: {
-        date: '2026-11-13',
-        note: '用真的小島和展覽室一格一格錄下來，中間兩段是實際在手機上操作頁面；有配樂和音效（預設靜音，右上角開聲音）。',
-        dir: 'assets/media/everkeep/',
-        video: { src: 'intro.mp4', poster: 'intro-poster.jpg', t: '介紹影片 · 直式 83 秒', sound: true },
-        en: {
-          note: 'Recorded frame by frame from the real island and gallery, with two segments of the actual phone UI in use; music and sound effects (muted by default; turn sound on at the top right).',
-          video: 'Intro video · vertical, 83 s',
-        },
-      },
+      // 2026-11-14 介紹影片的字幕和畫面有小朋友的名字，Aron 要求對外不寫人名，所以不放宣傳素材
     },
   ],
 
