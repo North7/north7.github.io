@@ -48,8 +48,11 @@ for name in ${@:-${(k)SHOTS}}; do
   # 減少動態效果，讓有進場動畫的標題直接顯示完成狀態；一律用淺色模式拍（不受這台電腦當下的深淺色影響）
   # 名稱結尾是 -en 的是英文版封面：瀏覽器語言設成英文，免得網站看到這台電腦的中文設定又切回中文
   lang=(); [[ $name == *-en ]] && lang=(--lang=en-US --accept-lang=en-US)
+  # 2026-11-15：Chrome 有時截好圖、關閉時才逾時（結束碼 2），set -e 會讓整支腳本無聲停下；改成看有沒有截到圖。
+  # 用自己的暫存設定檔，不跟其他對話開著的 Chrome 搶同一個設定檔
   TZ=Asia/Taipei "$CHROME" --headless=new --disable-gpu --hide-scrollbars --force-prefers-reduced-motion --blink-settings=preferredColorScheme=1 $lang \
-    --window-size=1440,900 --virtual-time-budget=15000 --screenshot="$TMP/$name.png" "$url" >/dev/null 2>&1
+    --user-data-dir="$TMP/profile" --window-size=1440,900 --virtual-time-budget=15000 --screenshot="$TMP/$name.png" "$url" >/dev/null 2>&1 || true
+  [[ -s "$TMP/$name.png" ]] || { echo "✗ $name：沒有截到圖"; continue; }
   sips -s format jpeg -s formatOptions 78 --resampleWidth 1200 "$TMP/$name.png" --out "assets/covers/$name.jpg" >/dev/null
   echo "✓ $name"
 done

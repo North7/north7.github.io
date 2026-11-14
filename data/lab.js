@@ -322,7 +322,7 @@ window.LAB = {
       desc: '兩個經回測驗證的策略：S1 4 小時通道突破、D 日線趨勢動能。網站畫出 K 線上的進出場與停損線、資金曲線、回撤、曝險、逐年報酬與交易紀錄；有要操作的指令時推播到手機。紙上交易的模擬紀錄，不是投資建議。',
       facts: ['20,000 USDT 紙上帳戶', '全部在雲端自動執行', '指令推播到手機'],
       en: {
-        zh: 'BTC Strategy Account', kind: 'Paper trading', cadence: 'Updates every 4 hours', sectionsLabel: 'Section', ui: 'zh',
+        zh: 'BTC Strategy Account', kind: 'Paper trading', cadence: 'Updates every 4 hours', sectionsLabel: 'Section',
         tagline: 'After every 4-hour candle closes, it tells you what the BTC strategy account does next.',
         desc: 'Two back-tested strategies: S1, a 4-hour channel breakout, and D, daily trend momentum. The site plots entries, exits and stop lines on the chart, plus the equity curve, drawdowns, exposure, yearly returns and the trade log, and pushes any action to my phone. Simulated paper-trading records, not investment advice.',
         facts: ['20,000 USDT paper account', 'Runs fully in the cloud', 'Actions pushed to my phone'],
@@ -340,7 +340,7 @@ window.LAB = {
         { n: '05', t: '風險', u: '#risk', en: 'Risk' },
         { n: '06', t: '報酬', u: '#returns', en: 'Returns' },
         { n: '07', t: '交易', u: '#trades', en: 'Trades' },
-        { n: '08', t: '紀錄', u: '#records', en: 'Action log' },
+        { n: '08', t: '紀錄', u: '#records', en: 'Log' },
         { n: '09', t: '說明', u: '#intro', en: 'About' },
       ],
       links: [
