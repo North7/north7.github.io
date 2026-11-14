@@ -409,6 +409,7 @@ window.LAB = {
         { n: '04', t: '蟲蟲計程車', u: '#no-04', en: 'Bug Taxi' },
         { n: '05', t: '火雞', u: '#no-05', en: 'Thanksgiving Turkey' },
         { n: '06', t: '聖誕樹', u: '#no-06', en: 'Christmas Tree' },
+        { n: '07', t: '鬆餅熊', u: '#no-07', en: 'Pancake Bear' },
       ],
       links: [],
       // 宣傳素材：原始檔在 everkeep 的 docs/everkeep-intro.mp4（沒進 git，產生的工具在 everkeep 的 tools/film/），這裡放網頁用的手機版（2.5 Mbps、索引在檔頭）
