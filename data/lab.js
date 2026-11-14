@@ -2,7 +2,7 @@
 // 欄位說明見 README.md。網址可以寫完整網址，或寫相對於 site 的路徑（例如 '#news'、'en/'）。
 // 英文版：每一筆都可以帶 en。字串＝英文標題；物件＝要換成英文的欄位（例如 { tagline, desc }，網址也可以換）。沒寫的就沿用中文。
 window.LAB = {
-  updated: '2026-11-13',
+  updated: '2026-11-14',
   owner: {
     name: 'Aron',
     github: 'https://github.com/North7',
@@ -411,7 +411,9 @@ window.LAB = {
         { n: '06', t: '聖誕樹', u: '#no-06', en: 'Christmas Tree' },
         { n: '07', t: '鬆餅熊', u: '#no-07', en: 'Pancake Bear' },
       ],
-      links: [],
+      links: [
+        { t: '產品案例：把孩子會壞掉的手作，留成一個會長大的世界', u: 'https://aronlab.dev/everkeep/case-study/', type: 'case', en: "Case study: keeping a child's fragile crafts as a world that grows (Chinese)" },
+      ],
       // 宣傳素材：原始檔在 everkeep 的 docs/everkeep-intro.mp4（沒進 git，產生的工具在 everkeep 的 tools/film/），這裡放網頁用的手機版（2.5 Mbps、索引在檔頭）
       promo: {
         date: '2026-11-13',
@@ -498,6 +500,30 @@ window.LAB = {
         go: 'Read (Chinese)',
       },
     },
+    {
+      id: 'everkeep-case', product: 'everkeep',
+      title: '把孩子會壞掉的手作，留成一個會長大的世界',
+      sub: 'Everkeep 產品案例',
+      desc: '黏土會裂、紙會褪色、作品會被拆掉。我把 Ethan 的手作照實物重建成可以轉、會動的 3D，先把一個家庭做到位、定下品質標準，再決定怎麼讓每個孩子上傳自己的作品。',
+      meta: [['角色', '產品負責人（願景、策略、體驗與品質標準）'], ['階段', '已上線 · 單一家庭版本 · 7 件作品'], ['形態', '手機網頁、3D、AR、3D 列印檔']],
+      url: 'https://aronlab.dev/everkeep/case-study/',
+      cover: 'assets/covers/everkeep-case.jpg',
+      chapters: [
+        ['機會', '#problem'], ['使用者', '#users'], ['產品策略', '#strategy'], ['產品原則', '#principles'], ['體驗架構', '#architecture'],
+        ['決策紀錄', '#decisions'], ['品質標準', '#quality'], ['產品畫面', '#product'], ['工作方式', '#method'], ['下一步', '#next'],
+      ],
+      en: {
+        title: "Keeping a child's fragile crafts as a world that grows",
+        sub: 'Everkeep case study',
+        desc: "Clay cracks, paper fades and crafts get taken apart. I rebuilt Ethan's handmade pieces in 3D from photos so they can turn and move, got one family's version right and set the quality bar first, before deciding how every child could upload their own.",
+        meta: [['Role', 'Product owner (vision, strategy, experience and quality bar)'], ['Stage', 'Live · one-family version · 7 pieces'], ['Form', 'Mobile web, 3D, AR, 3D-print files']],
+        go: 'Read (Chinese)',
+        chapters: [
+          ['Opportunity', '#problem'], ['Users', '#users'], ['Strategy', '#strategy'], ['Principles', '#principles'], ['Experience architecture', '#architecture'],
+          ['Decision log', '#decisions'], ['Quality bar', '#quality'], ['Product', '#product'], ['How I worked', '#method'], ["What's next", '#next'],
+        ],
+      },
+    },
   ],
 
   // 時間軸：每個作品的開工日會自動加入，這裡只放其他里程碑
@@ -520,5 +546,6 @@ window.LAB = {
     { d: '2026-11-11', p: 'daybreak', t: '新版首頁展示影片（橫式 78 秒）', en: 'Showcase video for the new homepage (landscape, 78 s)' },
     { d: '2026-11-12', p: null, t: '搬到自己的網域 aronlab.dev，每個作品一個子網域（例如 daybreak.aronlab.dev）', en: 'Moved to its own domain, aronlab.dev, with a subdomain for each work (for example daybreak.aronlab.dev)' },
     { d: '2026-11-13', p: 'everkeep', t: '介紹影片（直式 83 秒）：雞從春聯跳下來、天氣和節日、兩段實際操作手機頁面', en: 'Intro video (vertical, 83 s): the hen hopping out of the New Year couplet, weather and holidays, and two segments of the phone UI in use' },
+    { d: '2026-11-14', p: 'everkeep', t: '產品案例上線：策略、原則、七個關鍵取捨、品質標準與實際畫面', en: 'Case study live: strategy, principles, seven key decisions, the quality bar and real screens' },
   ],
 };
