@@ -14,7 +14,7 @@
 | 06 | Baseline 身體日報 | 私人健康日報 | 只在本機，不公開 |
 | 07 | [Signal Tower](https://signals.aronlab.dev/) | BTC 策略帳戶的紙上交易：S1 突破 × D 趨勢 | 已上線 · 每 4 小時更新 |
 | 08 | [PayPulse 薪跳](https://paypulse.aronlab.dev/) | 上班鼓勵器：即時顯示今天已經賺了多少 | 已上線 · 每秒跳動 |
-| 09 | [Everkeep](https://everkeep.aronlab.dev/) | 小朋友的作品照照片重建成 3D：小島和展覽室（[產品案例](https://aronlab.dev/everkeep/case-study/)） | 已上線 · 有新作品就加 |
+| 09 | [Everkeep](https://everkeep.aronlab.dev/) | 小朋友的作品照照片重建成 3D：小島和展覽室（[產品案例](https://aronlab.dev/everkeep/case-study/)，中英雙語） | 已上線 · 有新作品就加 |
 
 ## 頁面
 

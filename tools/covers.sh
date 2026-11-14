@@ -19,7 +19,8 @@ SHOTS=(
   daybreak-case  "https://daybreak.aronlab.dev/case-study/"
   daybreak-case-en "https://daybreak.aronlab.dev/case-study/en/"
   onestroke-case "https://aronlab.dev/onestroke/case-study/"
-  everkeep-case  "https://aronlab.dev/everkeep/case-study/"
+  everkeep-case  "https://aronlab.dev/everkeep/case-study/?lang=zh"
+  everkeep-case-en "https://aronlab.dev/everkeep/case-study/en/?lang=en"
   paypulse       "https://paypulse.aronlab.dev/"
 )
 # PayPulse 第一次打開會先跳出薪資設定，畫面也跟著現在幾點走：

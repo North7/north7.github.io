@@ -412,7 +412,7 @@ window.LAB = {
         { n: '07', t: '鬆餅熊', u: '#no-07', en: 'Pancake Bear' },
       ],
       links: [
-        { t: '產品案例：把孩子會壞掉的手作，留成一個會長大的世界', u: 'https://aronlab.dev/everkeep/case-study/', type: 'case', en: "Case study: keeping a child's fragile crafts as a world that grows (Chinese)" },
+        { t: '產品案例：把孩子會壞掉的手作，留成一個會長大的世界', u: 'https://aronlab.dev/everkeep/case-study/', type: 'case', en: { t: "Case study: keeping a child's fragile crafts as a world that grows", u: 'https://aronlab.dev/everkeep/case-study/en/' } },
       ],
       // 2026-11-14 介紹影片的字幕和畫面有小朋友的名字，Aron 要求對外不寫人名，所以不放宣傳素材
     },
@@ -498,6 +498,7 @@ window.LAB = {
       meta: [['角色', '產品負責人（願景、策略、體驗與品質標準）'], ['階段', '已上線 · 單一家庭版本 · 7 件作品'], ['形態', '手機網頁、3D、AR、3D 列印檔']],
       url: 'https://aronlab.dev/everkeep/case-study/',
       cover: 'assets/covers/everkeep-case.jpg',
+      // 中英雙語：英文版在 en/，案例頁自己依 IP 地區選預設語言（functions/everkeep/case-study/）
       chapters: [
         ['機會', '#problem'], ['使用者', '#users'], ['產品策略', '#strategy'], ['產品原則', '#principles'], ['體驗架構', '#architecture'],
         ['決策紀錄', '#decisions'], ['品質標準', '#quality'], ['產品畫面', '#product'], ['工作方式', '#method'], ['下一步', '#next'],
@@ -507,7 +508,8 @@ window.LAB = {
         sub: 'Everkeep case study',
         desc: "Clay cracks, paper fades and crafts get taken apart. I rebuilt a child's handmade pieces in 3D from photos so they can turn and move, got one family's version right and set the quality bar first, before deciding how every child could upload their own.",
         meta: [['Role', 'Product owner (vision, strategy, experience and quality bar)'], ['Stage', 'Live · one-family version · 7 pieces'], ['Form', 'Mobile web, 3D, AR, 3D-print files']],
-        go: 'Read (Chinese)',
+        url: 'https://aronlab.dev/everkeep/case-study/en/',
+        cover: 'assets/covers/everkeep-case-en.jpg',
         chapters: [
           ['Opportunity', '#problem'], ['Users', '#users'], ['Strategy', '#strategy'], ['Principles', '#principles'], ['Experience architecture', '#architecture'],
           ['Decision log', '#decisions'], ['Quality bar', '#quality'], ['Product', '#product'], ['How I worked', '#method'], ["What's next", '#next'],
