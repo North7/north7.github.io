@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="canonical" href="https://aronlab.dev/everkeep/case-study/">
+<script>
+  // 2026-11-14 Everkeep 產品案例，照 OneStroke 的做法放在 Aron Lab 底下（aronlab.dev/everkeep/case-study/）。
+  // 介紹影片直接用 Aron Lab 宣傳素材那支（assets/media/everkeep/），不另外放一份。
+  // 同一份網站也部署在 GitHub Pages；從 north7.github.io 進來的訪客轉到正式網域，路徑保留
+  if (location.hostname === 'north7.github.io') location.replace('https://aronlab.dev' + location.pathname + location.search + location.hash);
+</script>
+<meta name="description" content="把孩子會壞掉的手作照實物重建成 3D，放進一座小島和一間展覽室：機會、策略、原則、決策紀錄、品質標準與實際畫面。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Everkeep｜產品案例 · Aron">
+<meta property="og:description" content="把孩子會壞掉的手作照實物重建成 3D，放進一座小島和一間展覽室：機會、策略、原則、決策紀錄、品質標準與實際畫面。">
+<meta property="og:url" content="https://aronlab.dev/everkeep/case-study/">
+<meta property="og:image" content="https://aronlab.dev/assets/covers/everkeep-case.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23B8612F'/%3E%3Cpath d='M19 49V30a13 13 0 0 1 26 0v19' fill='none' stroke='%23F3F0E9' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='38' r='5.5' fill='%23F3F0E9'/%3E%3C/svg%3E">
+<title>Everkeep｜產品案例 · Aron</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* 版面：跟產品同一套「紙上的手作」——紙色底、墨色字、陶土橘只標重點和「你在哪」；
+   長捲動的產品案例，電腦左邊目錄（目前章節一條 2px 陶土橘），手機右下角一顆進度圓環，點了展開目錄 */
+:root {
+  --bg: #F3F0E9; --card: #FBF9F4; --card2: #ECE7DC; --line: #DDD6C9; --fg: #1E1B17; --muted: #6C645A;
+  --accent: #B8612F; --on-accent: #FBF9F4; --soft: rgba(184, 97, 47, .11); --frame: #E6E0D4;
+  --display: "Jost", "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+  --body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #100F0D; --card: #1A1815; --card2: #23201C; --line: #2F2B26; --fg: #EEEAE2; --muted: #A1988C;
+  --accent: #E08A52; --on-accent: #1A120C; --soft: rgba(224, 138, 82, .14); --frame: #1E1C18; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #100F0D; --card: #1A1815; --card2: #23201C; --line: #2F2B26; --fg: #EEEAE2; --muted: #A1988C;
+  --accent: #E08A52; --on-accent: #1A120C; --soft: rgba(224, 138, 82, .14); --frame: #1E1C18; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 400 16px/1.8 var(--body); margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: inherit; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 48px 110px; display: grid; grid-template-columns: 184px minmax(0, 1fr); gap: 56px; }
+
+/* 目錄 */
+nav.toc { position: sticky; top: calc(28px + env(safe-area-inset-top, 0px)); align-self: start; display: flex; flex-direction: column; gap: 2px; font: 500 13.5px/1.4 var(--body); }
+.brand { display: flex; align-items: center; gap: 10px; font: 600 19px var(--display); letter-spacing: -.01em; }
+.brand svg { width: 28px; height: 28px; flex: none; }
+a.who { text-decoration: none; }
+a.who:hover { color: var(--fg); }
+.who { font: 500 12px var(--mono); letter-spacing: .06em; color: var(--muted); margin: 6px 0 18px; }
+nav.toc a { color: var(--muted); text-decoration: none; padding: 5px 0 5px 13px; border-left: 2px solid var(--line); }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--fg); outline: none; }
+nav.toc a.on { color: var(--fg); border-left-color: var(--accent); }
+nav.toc a.who { border-left: 0; padding: 0; color: var(--muted); }
+nav.toc a.who:hover { color: var(--fg); }
+
+main { min-width: 0; display: flex; flex-direction: column; gap: 96px; }
+section { display: flex; flex-direction: column; gap: 22px; scroll-margin-top: 28px; }
+.eyebrow { display: flex; align-items: center; gap: 9px; font: 600 12px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.eyebrow::before { content: ""; width: 9px; height: 11px; border-radius: 5px 5px 1px 1px; background: var(--accent); }
+h1 { font: 900 clamp(34px, 5.4vw, 58px)/1.14 var(--body); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
+h1 em, h2 em { font-style: normal; color: var(--accent); }
+h2 { font: 900 clamp(25px, 3.3vw, 34px)/1.28 var(--body); margin: 0; text-wrap: balance; }
+h3 { font: 700 17px/1.5 var(--body); margin: 0; }
+p { margin: 0; max-width: 66ch; }
+.lede { font-size: 18px; line-height: 1.85; color: var(--muted); max-width: 58ch; }
+.muted { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+ul.plain { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 7px; }
+ul.plain li::marker { color: var(--accent); }
+.g2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+
+/* 開頭 */
+.hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 44px; align-items: center; }
+.hero .txt { display: flex; flex-direction: column; gap: 24px; }
+.hv { justify-self: end; width: min(100%, 320px); display: flex; flex-direction: column; gap: 10px; }
+.vwrap { position: relative; aspect-ratio: 9 / 16; border-radius: 26px; overflow: hidden; border: 1px solid var(--line); background: var(--frame); }
+.vwrap video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.snd { position: absolute; right: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; font: 700 13px/1 var(--body); color: #1E1B17;
+  background: rgba(251, 249, 244, .9); border: 1px solid rgba(30, 27, 23, .1); border-radius: 99px; padding: 9px 13px 9px 11px; cursor: pointer;
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: 0 6px 18px rgba(0, 0, 0, .18); }
+.snd svg { width: 16px; height: 16px; }
+.snd[aria-pressed="false"] .w { opacity: .3; }
+.snd:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.hv figcaption { font-size: 13px; color: var(--muted); }
+.meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 28px; padding-top: 20px; border-top: 1px solid var(--line); margin: 0; }
+.meta dt { font: 600 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.meta dd { margin: 0; font-weight: 500; font-size: 15px; line-height: 1.6; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 700 14px/1 var(--body); padding: 12px 16px; border-radius: 99px; border: 1px solid var(--line); background: var(--card); }
+.btn.pri { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 關鍵數字 */
+.nums { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.nums li { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+.nums b { font: 600 clamp(28px, 3.3vw, 38px)/1 var(--display); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.nums b small { font: 700 15px var(--body); margin-left: 3px; letter-spacing: 0; }
+.nums li:first-child b { color: var(--accent); }
+.nums span { font-size: 13px; line-height: 1.55; color: var(--muted); }
+
+/* 三段路線：真的有先後，所以有編號 */
+.road { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.stage { padding: 20px 22px 6px 0; display: flex; flex-direction: column; gap: 10px; position: relative; min-width: 0; }
+.stage + .stage { padding-left: 22px; border-left: 1px solid var(--line); }
+.stage::before { content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 2px; background: transparent; }
+.stage.now::before { background: var(--accent); right: 22px; }
+.stage .k { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font: 600 12px/1 var(--mono); letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+.pill { font: 700 11.5px/1 var(--body); letter-spacing: 0; padding: 5px 9px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; text-transform: none; }
+.stage.now .pill { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.stage h3 { font-size: 19px; }
+.stage dl { margin: 0; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 6px 10px; font-size: 14.5px; line-height: 1.7; }
+.stage dt { color: var(--muted); font-size: 13px; line-height: 1.95; }
+.stage dd { margin: 0; }
+
+/* 產品原則 */
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
+.rule { display: flex; flex-direction: column; gap: 6px; padding: 20px 0; border-top: 1px solid var(--line); }
+.rule h3 { font-size: 18px; }
+.rule p { color: var(--muted); font-size: 15px; }
+
+/* 體驗架構：一條流程，第五站分成兩個畫面 */
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.3fr) minmax(0, 1fr); gap: 0; align-items: stretch; overflow-x: auto; padding-bottom: 4px; }
+.st { position: relative; padding: 16px 18px 16px 0; display: flex; flex-direction: column; gap: 5px; min-width: 128px; }
+.st::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--line); }
+.st::after { content: ""; position: absolute; top: -4px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--bg); border: 2px solid var(--muted); }
+.st.key::after { background: var(--accent); border-color: var(--accent); }
+.st .n { font: 600 11.5px var(--mono); letter-spacing: .12em; color: var(--muted); margin-top: 8px; }
+.st b { font: 700 15.5px/1.4 var(--body); }
+.st small { font-size: 13px; line-height: 1.6; color: var(--muted); }
+.st .fork { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.st .fork div { padding-left: 12px; border-left: 2px solid var(--accent); display: flex; flex-direction: column; gap: 2px; }
+.st .fork div b { font-size: 15px; }
+.layers { display: flex; flex-direction: column; }
+.ly { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 18px; padding: 15px 0; border-top: 1px solid var(--line); align-items: baseline; }
+.ly:last-child { border-bottom: 1px solid var(--line); }
+.ly .lab { font: 700 15px var(--body); }
+.ly .lab span { display: block; font: 500 12px var(--mono); letter-spacing: .08em; color: var(--muted); margin-top: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-block; font: 500 13px/1 var(--body); padding: 7px 11px; border-radius: 99px; background: var(--card); border: 1px solid var(--line); }
+
+/* 決策紀錄 */
+.decs { display: flex; flex-direction: column; gap: 12px; }
+.dec { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px 26px; display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 22px; }
+.dec .when { font: 600 12px/1.5 var(--mono); color: var(--accent); letter-spacing: .12em; }
+.dec .when h3 { font: 700 17.5px/1.45 var(--body); color: var(--fg); letter-spacing: 0; margin-top: 8px; }
+.dec dl { margin: 0; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 9px 14px; }
+.dec dt { font: 500 12.5px/1.95 var(--body); color: var(--muted); }
+.dec dd { margin: 0; }
+.dec dd.out { font-weight: 500; }
+.dec dd.out::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: 1px; }
+.dec q { quotes: "「" "」"; }
+
+/* 品質標準：真的是一個流程 */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 28px; counter-reset: s; margin: 0; padding: 0; list-style: none; }
+.steps li { counter-increment: s; padding: 16px 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
+.steps li::before { content: counter(s, decimal-leading-zero); font: 600 12px var(--mono); letter-spacing: .12em; color: var(--accent); }
+.steps b { font-size: 16px; }
+.steps span { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.lesson { background: var(--soft); border-radius: 16px; padding: 18px 22px; display: flex; gap: 14px; align-items: flex-start; }
+.lesson b { flex: none; font: 600 12px/1.9 var(--mono); letter-spacing: .12em; color: var(--accent); }
+.lesson p { font-size: 15px; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+figure img { width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid var(--line); background: var(--frame); }
+figcaption { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+figcaption b { color: var(--fg); margin-right: 6px; }
+.tbl { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 6px 22px; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 15px; }
+th, td { text-align: left; padding: 14px 16px 14px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font: 600 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+td.res { font: 600 15px/1.5 var(--display); font-variant-numeric: tabular-nums; color: var(--accent); }
+td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; }
+
+/* 產品畫面 */
+.tour { display: flex; flex-direction: column; gap: 56px; }
+.tg { display: flex; flex-direction: column; gap: 18px; }
+.tgh { display: flex; gap: 14px; align-items: flex-start; }
+.tgh p { font-size: 14.5px; margin-top: 4px; }
+.tn { flex: none; font: 600 12.5px/1 var(--mono); color: var(--on-accent); background: var(--accent); border-radius: 8px; padding: 6px 7px; margin-top: 2px; }
+.phones { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.ph .fr { border: 1px solid var(--line); border-radius: 26px; overflow: hidden; background: var(--frame); aspect-ratio: 390 / 844; }
+.ph .fr img { width: 100%; height: 100%; object-fit: cover; border: 0; border-radius: 0; }
+.works { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.works li { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.works img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 14px; border: 1px solid var(--line); display: block; background: var(--frame); }
+.works .no { font: 600 11px var(--mono); letter-spacing: .1em; color: var(--accent); }
+.works b { font-size: 14px; line-height: 1.35; display: block; }
+.works small { font-size: 12px; line-height: 1.5; color: var(--muted); display: block; }
+.duo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+
+.close { border-top: 1px solid var(--line); padding-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+
+/* 手機目錄：右下角一顆進度圓環，點了從邊緣長出目錄 */
+.mtoc { display: none; }
+@media (max-width: 900px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; padding-block: 24px 88px; }
+  nav.toc { display: none; }
+  .mtop { display: flex; flex-direction: column; gap: 2px; margin-bottom: 28px; }
+  main { gap: 68px; }
+  .hero, .g2, .g3, .duo, .rules { grid-template-columns: minmax(0, 1fr); }
+  .hero { gap: 28px; }
+  .hv { justify-self: center; width: min(100%, 300px); }
+  .nums { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nums li:first-child { grid-column: 1 / -1; }
+  .road { grid-template-columns: minmax(0, 1fr); border-top: 0; }
+  .stage, .stage + .stage { padding: 18px 0 18px; border-left: 0; border-top: 1px solid var(--line); }
+  .stage.now::before { right: 0; }
+  .flow { grid-template-columns: minmax(0, 1fr); }
+  .st { padding: 0 0 18px 26px; min-width: 0; }
+  .st::before { top: 0; bottom: 0; left: 4px; right: auto; width: 1px; height: auto; }
+  .st::after { top: 6px; }
+  .st .n { margin-top: 0; }
+  .ly { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .dec { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 20px; }
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .phones { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding-bottom: 8px; }
+  .phones > .ph { flex: none; width: min(64vw, 250px); scroll-snap-align: start; }
+  .works { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
+  .works li { flex: none; width: 126px; scroll-snap-align: start; }
+  .mtoc { display: block; position: fixed; right: max(14px, env(safe-area-inset-right, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); z-index: 20; }
+}
+@media (min-width: 901px) { .mtop { display: none; } }
+.mbtn { width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--fg); display: grid; place-items: center; cursor: pointer; padding: 0;
+  box-shadow: 0 1px 2px rgba(30, 27, 23, .08), 0 10px 26px -12px rgba(30, 27, 23, .35); position: relative; }
+.mbtn svg.ring { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); transform: rotate(-90deg); }
+.mbtn svg.ring circle { fill: none; stroke-width: 2.5; }
+.mbtn .bgc { stroke: var(--line); }
+.mbtn .pr { stroke: var(--accent); stroke-linecap: round; }
+.mbtn .ic { width: 18px; height: 18px; }
+.mbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.mpanel { position: absolute; right: 0; bottom: 62px; width: min(78vw, 280px); background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 10px;
+  box-shadow: 0 2px 4px rgba(30, 27, 23, .08), 0 24px 48px -18px rgba(30, 27, 23, .4); display: flex; flex-direction: column;
+  transform-origin: 100% 100%; transform: scale(.6); opacity: 0; pointer-events: none; }
+.mtoc.open .mpanel { transform: none; opacity: 1; pointer-events: auto; }
+.mpanel a { text-decoration: none; padding: 10px 12px; border-radius: 12px; font: 500 15px/1.3 var(--body); color: var(--muted); display: flex; justify-content: space-between; gap: 10px; }
+.mpanel a span { font: 500 11.5px var(--mono); letter-spacing: .08em; opacity: .8; }
+.mpanel a.on { color: var(--fg); background: var(--soft); }
+@media (prefers-reduced-motion: no-preference) {
+  nav.toc a { transition: color .15s, border-color .2s; }
+  .mpanel { transition: transform .42s cubic-bezier(.3, 1.45, .5, 1), opacity .2s; }
+  .mbtn { transition: transform .35s cubic-bezier(.3, 1.6, .5, 1); }
+  .mbtn:active { transform: scale(.9); }
+  .btn { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1); }
+  .btn:active { transform: scale(.95); }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#B8612F"/><path d="M19 49V30a13 13 0 0 1 26 0v19" fill="none" stroke="#F3F0E9" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="38" r="5.5" fill="#F3F0E9"/></symbol>
+</svg>
+
+<div class="wrap">
+<nav class="toc" aria-label="目錄">
+  <div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Everkeep</span></div>
+  <a class="who" href="/#w-everkeep">← Aron Lab</a>
+  <a href="#problem">機會</a><a href="#users">使用者</a><a href="#strategy">產品策略</a><a href="#principles">產品原則</a><a href="#architecture">體驗架構</a>
+  <a href="#decisions">決策紀錄</a><a href="#quality">品質標準</a><a href="#product">產品畫面</a><a href="#method">工作方式</a><a href="#next">下一步</a>
+</nav>
+<main>
+
+<div class="mtop"><div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Everkeep</span></div><a class="who" href="/#w-everkeep" style="margin-bottom:0">← Aron Lab</a></div>
+
+<section class="hero" aria-labelledby="t">
+  <div class="txt">
+    <div class="eyebrow">Case study · Everkeep</div>
+    <h1 id="t">把孩子會壞掉的手作，留成一個<em>會長大的世界</em></h1>
+    <p class="lede">Ethan 4 到 6 歲做的黏土、陶土、春聯和紙火雞，會裂、會褪色、會被拆掉。我把它們照實物重建成可以轉、會動的 3D，放進一座小島和一間展覽室：孩子在島上玩，家人在展覽室收藏、分享。第一版只服務一個家庭，用來定下品質標準和體驗，之後才決定怎麼讓每個孩子上傳自己的作品。</p>
+    <dl class="meta">
+      <div><dt>角色</dt><dd>產品負責人：願景、策略、體驗與品質標準</dd></div>
+      <div><dt>階段</dt><dd>已上線，單一家庭版本，7 件作品</dd></div>
+      <div><dt>團隊</dt><dd>我＋AI 編碼代理（Claude Code）</dd></div>
+      <div><dt>形態</dt><dd>手機網頁、3D、AR、3D 列印檔</dd></div>
+    </dl>
+    <div class="cta"><a class="btn pri" href="https://everkeep.aronlab.dev/" target="_blank" rel="noopener">打開 Everkeep <span aria-hidden="true">↗</span></a></div>
+  </div>
+  <figure class="hv">
+    <div class="vwrap"><video id="heroVid" src="/assets/media/everkeep/intro.mp4" poster="/assets/media/everkeep/intro-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="83 秒的產品介紹影片：照片變成 3D、小島、春聯上的字變成雞、天氣和節日、手機實際操作"></video>
+      <button class="snd" id="snd" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>開聲音</span></button></div>
+    <figcaption>介紹影片 83 秒，配樂是程式現場合成的音樂盒。</figcaption>
+  </figure>
+</section>
+
+<ul class="nums" aria-label="關鍵數字">
+  <li><b>7<small>件</small></b><span>4 到 6 歲的作品，每件照實物照片重建</span></li>
+  <li><b>7<small>種</small></b><span>材料與工法：黏土、陶釉、春聯、卡紙、棉花、水彩紙…</span></li>
+  <li><b>0<small>個帳號</small></b><span>打開連結就看，分享預設開在展覽室</span></li>
+  <li><b>3<small>種</small></b><span>帶走的方式：AR 放到桌上、3D 列印、分享卡和影片</span></li>
+  <li><b>37<small>秒</small></b><span>21 張照片用 Apple Object Capture 重建成形</span></li>
+</ul>
+
+<section id="problem" aria-labelledby="h-problem">
+  <div class="eyebrow">Opportunity</div>
+  <h2 id="h-problem">手作會<em>壞</em>，照片又<em>太扁</em></h2>
+  <p>每個家裡都有一個角落堆著孩子的作品。家長的選擇通常只有三種，而每一種都在丟掉一些東西。</p>
+  <div class="g3">
+    <div class="card"><h3>現在的做法</h3>
+      <ul class="plain">
+        <li>拍照存相簿：樣子留住了，但轉不了，過幾個月就找不到</li>
+        <li>留下實物：佔空間，黏土會裂、紙會褪色、作品會被拆掉重做</li>
+        <li>丟掉：最省事，也最捨不得</li>
+      </ul></div>
+    <div class="card"><h3>照片少掉的三樣東西</h3>
+      <ul class="plain">
+        <li><b>立體</b>：孩子做的是拿在手上轉的東西</li>
+        <li><b>生命</b>：在孩子眼裡，雞會送外送、熊會捧鬆餅</li>
+        <li><b>時間</b>：4 歲到 6 歲的作品排在一起，才看得出長大</li>
+      </ul></div>
+    <div class="card"><h3>為什麼是現在</h3>
+      <ul class="plain">
+        <li>手機就拍得出多角度的照片和繞一圈的影片</li>
+        <li>Apple Object Capture 在一般的 Mac 上就能從照片重建 3D</li>
+        <li>iPhone 和 Android 的瀏覽器都能直接開 AR；網頁 3D 在手機上跑得動</li>
+      </ul></div>
+  </div>
+</section>
+
+<section id="users" aria-labelledby="h-users">
+  <div class="eyebrow">Users</div>
+  <h2 id="h-users">一個產品，<em>三種人</em>用</h2>
+  <p>三種人要的節奏完全不同。產品結構就是從這個差異長出來的。</p>
+  <div class="g3">
+    <div class="card"><h3>孩子：6 歲</h3><p class="muted">會想轉一下、擺一下、看一下，但不會長時間玩，也還不太讀字。要大按鈕、可以拖、點一下就有反應。</p></div>
+    <div class="card"><h3>家長</h3><p class="muted">想收藏、整理、拿去分享，也要能決定孩子什麼時候可以玩。新作品進來時，希望不用多花力氣。</p></div>
+    <div class="card"><h3>收到連結的親友</h3><p class="muted">不下載、不登入，在手機上打開就看得到。看到的是一件有編號、有年齡、有原作照片的作品，而不是一個遊戲。</p></div>
+  </div>
+</section>
+
+<section id="strategy" aria-labelledby="h-strategy">
+  <div class="eyebrow">Strategy</div>
+  <h2 id="h-strategy">先把<em>一個家庭</em>做到位，再談每個孩子</h2>
+  <p>最終的目標是讓每個孩子上傳照片，就長出自己的世界。但在自動化之前，要先知道「好」長什麼樣子。我把路線拆成三段，每一段只回答一個問題，前一段的答案是後一段的規格。</p>
+  <div class="road">
+    <div class="stage now"><div class="k">01 · 現在 <span class="pill">已上線</span></div><h3>Ethan's Everkeep</h3>
+      <dl><dt>問題</dt><dd>要做到什麼程度，家人才會說「這就是他做的那個」？</dd>
+        <dt>做法</dt><dd>逐件照照片重建，把每一件做到最高標準，上線給家人用</dd>
+        <dt>產出</dt><dd>品質標準、重建方法論、新增作品的固定流程、拍照指南</dd></dl></div>
+    <div class="stage"><div class="k">02 · 下一步 <span class="pill">待驗證</span></div><h3>少數家庭陪跑</h3>
+      <dl><dt>問題</dt><dd>一般家長拍得出能重建的素材嗎？每件要花多少人力？</dd>
+        <dt>做法</dt><dd>照拍照指南拍一圈影片，半自動重建、人工修補</dd>
+        <dt>產出</dt><dd>上傳時的拍攝引導、每件作品的人力與運算成本</dd></dl></div>
+    <div class="stage"><div class="k">03 · 之後 <span class="pill">方向</span></div><h3>每個孩子自己上傳</h3>
+      <dl><dt>問題</dt><dd>沒有人工把關時，品質守得住嗎？</dd>
+        <dt>做法</dt><dd>自動校準鏡頭，把輪廓比對算成分數，讓程式自己調到重合</dd>
+        <dt>產出</dt><dd>上傳照片就長出自己的世界，不只小島，還有海洋、城市</dd></dl></div>
+  </div>
+  <p class="muted">品牌叫 Everkeep 而不是「某某島」，就是為了這一段：小島只是第一個區域，之後的世界可以照作品的種類長出別的地方。</p>
+</section>
+
+<section id="principles" aria-labelledby="h-principles">
+  <div class="eyebrow">Principles</div>
+  <h2 id="h-principles">六條規則，所有取捨都回頭對照它們</h2>
+  <div class="rules">
+    <div class="rule"><h3>照原作做，不替孩子補</h3><p>每個零件都在正面照片上量過大小、位置和輪廓；左右不對稱就做成不對稱。孩子要一眼認得是自己的，這是整個產品信任的起點。</p></div>
+    <div class="rule"><h3>修掉損傷，留下特徵</h3><p>裂縫、霉斑、斷掉的接縫不做；手捏的凹凸、指壓痕、釉積得深淺不一要留。在真實的前提下，稍微美化。</p></div>
+    <div class="rule"><h3>作品是活的</h3><p>每件都有一個屬於它的動作：劍龍繞圈走、火雞開屏、春聯上的「如」字變成雞去送外送。待著不動時，也會輕輕呼吸。</p></div>
+    <div class="rule"><h3>給孩子玩，給大人收藏</h3><p>兩件事分成兩個畫面。小島可以隨便玩；展覽室安靜、有說明牌，分享連結預設開在這裡。</p></div>
+    <div class="rule"><h3>不用讀字也會用</h3><p>大按鈕、圖示、點一下就有反應。說明收進展品牌，點了才展開；最主要的「看完整 3D」永遠露在外面。</p></div>
+    <div class="rule"><h3>打開就看，也帶得走</h3><p>不登入，可以加到手機主畫面、離線也打得開。AR 放到桌上是實物大小，3D 列印檔可以直接印。</p></div>
+  </div>
+</section>
+
+<section id="architecture" aria-labelledby="h-arch">
+  <div class="eyebrow">Experience architecture</div>
+  <h2 id="h-arch">從一件實物，到一個<em>每天都不太一樣</em>的世界</h2>
+  <p>產品的骨架是一條線：一件實物進來，變成可以轉的 3D，分到兩個畫面，最後再以實物大小回到桌上。</p>
+  <div class="flow" role="img" aria-label="流程：實物、拍攝、重建、作品頁，分成小島和展覽室，最後帶走">
+    <div class="st"><span class="n">01</span><b>實物</b><small>黏土、陶土、紙、棉花，孩子做好的那一刻</small></div>
+    <div class="st"><span class="n">02</span><b>拍攝</b><small>繞作品一圈的短影片，加正面、側面、背面、俯視</small></div>
+    <div class="st key"><span class="n">03</span><b>重建</b><small>形狀、材質、屬於它的動作；損傷修掉，特徵留下</small></div>
+    <div class="st"><span class="n">04</span><b>作品頁</b><small>可以轉，點原作照片，鏡頭轉到同一個角度對照</small></div>
+    <div class="st key"><span class="n">05</span><b>兩個畫面</b>
+      <div class="fork"><div><b>小島</b><small>給孩子：點作品就有動作、佈置、拍照</small></div><div><b>展覽室</b><small>給收藏：照年齡排、展品牌、分享卡</small></div></div></div>
+    <div class="st"><span class="n">06</span><b>帶走</b><small>AR 實物大小放到桌上、3D 列印、分享卡和短影片</small></div>
+  </div>
+  <h3 style="margin-top:12px">讓孩子願意再打開一次</h3>
+  <p class="muted">6 歲的孩子不會長時間玩，所以世界要自己會變：每次打開都有一點不一樣，不需要新功能。</p>
+  <div class="layers">
+    <div class="ly"><div class="lab">時間<span>TIME</span></div><div class="chips"><span class="chip">跟著真實時間的日夜</span><span class="chip">可以拖到晚上</span><span class="chip">天黑聖誕樹自己亮</span></div></div>
+    <div class="ly"><div class="lab">天氣<span>WEATHER</span></div><div class="chips"><span class="chip">晴</span><span class="chip">多雲（雲影掃過島）</span><span class="chip">雨（地面變濕）</span><span class="chip">雪</span><span class="chip">霧</span><span class="chip">雨後彩虹</span></div></div>
+    <div class="ly"><div class="lab">節日<span>CALENDAR</span></div><div class="chips"><span class="chip">春節燈籠</span><span class="chip">中秋紙燈籠</span><span class="chip">萬聖南瓜燈</span><span class="chip">感恩節秋葉</span><span class="chip">聖誕下雪</span><span class="chip">跨年煙火</span></div></div>
+    <div class="ly"><div class="lab">生命<span>LIFE</span></div><div class="chips"><span class="chip">白天蝴蝶、海鷗</span><span class="chip">晚上螢火蟲</span><span class="chip">跳出水面的魚</span><span class="chip">草被風吹</span></div></div>
+    <div class="ly"><div class="lab">作品之間<span>CAST</span></div><div class="chips"><span class="chip">外送雞把外送送到別的作品面前</span><span class="chip">對方用招牌動作回應</span><span class="chip">走近時互相打招呼</span></div></div>
+  </div>
+</section>
+
+<section id="decisions" aria-labelledby="h-decisions">
+  <div class="eyebrow">Decision log</div>
+  <h2 id="h-decisions">七個關鍵取捨</h2>
+  <div class="decs">
+    <article class="dec"><div class="when">決策 01<h3>首頁要長什麼樣子</h3></div><dl>
+      <dt>情境</dt><dd>孩子要能玩，家人要能收藏和分享，兩件事的節奏完全不同。</dd>
+      <dt>選項</dt><dd><span class="chip">桌上的手作小島</span> <span class="chip">博物館展覽室</span> <span class="chip">小星球</span></dd>
+      <dt>決定</dt><dd>小島和展覽室都要，分成兩個畫面：小島給孩子，展覽室給收藏；在小島點作品，可以直接去它在展覽室的展台。分享連結預設開在展覽室。小星球留作品牌形象。</dd>
+      <dt>結果</dt><dd class="out">一個產品同時服務兩種節奏，不用為了其中一邊犧牲另一邊。</dd></dl></article>
+    <article class="dec"><div class="when">決策 02<h3>孩子的想像要怎麼做出來</h3></div><dl>
+      <dt>情境</dt><dd>Ethan 4 歲寫了一張春聯「事事如意」，家人覺得那個「如」字像一隻背著外送箱的雞。</dd>
+      <dt>決定</dt><dd>剪影必須和字一模一樣：平貼在春聯上就是字，按「出門」才鼓起來、長出羽毛、跳下紙。腳就用字原本的兩筆，不另外加一雙真的雞腳。春聯貼在島上小木屋的門上。</dd>
+      <dt>結果</dt><dd class="out">這成了整個產品最讓人記得的一刻，也是介紹影片的主場景。從此的原則：孩子的想像就是內容，不是我們重新詮釋的素材。</dd></dl></article>
+    <article class="dec"><div class="when">決策 03<h3>照片自動重建能不能直接用</h3></div><dl>
+      <dt>情境</dt><dd>長期一定要自動化。先用現成的 Apple Object Capture，拿手上已有的照片試四件。</dd>
+      <dt>實驗</dt><dd>計程車 21 張照片、37 秒成形；小劍龍、達利鳥只拍到一面，重建成碎片；火雞貼在窗戶上，整面窗被當成同一個物體。</dd>
+      <dt>決定</dt><dd>重建結果只當外型和紋理的依據，損傷照原則修掉；同時寫一份拍照指南：作品放桌上、平視和略高各繞一圈。</dd>
+      <dt>結果</dt><dd class="out">知道自動化主要卡在素材，不在演算法。拍攝引導會是之後產品的第一個畫面。</dd></dl></article>
+    <article class="dec"><div class="when">決策 04<h3>逼真和童趣怎麼取捨</h3></div><dl>
+      <dt>情境</dt><dd>小島換上真的天空、電影感色調、一片片葉子疊成的樹之後，細節進步很多，但對比太強、整體偏黑。</dd>
+      <dt>決定</dt><dd>細節留著，曝光拉高、天光補足、陰影變淡；晚上用偏藍的月光，不是一片黑。之後每次調光影，都做「原本／目前／這次」三欄並排再決定。</dd>
+      <dt>結果</dt><dd class="out">定下一條跨產品的規則：逼真不等於變暗。給孩子的產品，晚上也要看得清楚。</dd></dl></article>
+    <article class="dec"><div class="when">決策 05<h3>按鈕放在哪裡</h3></div><dl>
+      <dt>情境</dt><dd>全畫面 3D，按鈕一多就擋住作品，手機上更明顯。</dd>
+      <dt>選項</dt><dd>三種佈局做成效果圖並排比較，在手機和電腦上各看一次。</dd>
+      <dt>決定</dt><dd>上面只留品牌和分享，常用按鈕全部收到拇指範圍的底部一條；選了作品，這一條用彈簧變形成它的動作列。手機上整套小一號，把畫面還給作品。</dd>
+      <dt>結果</dt><dd class="out">單手就能操作全部，主角不會被標題或按鈕蓋住。</dd></dl></article>
+    <article class="dec"><div class="when">決策 06<h3>沒有帳號，家長怎麼管</h3></div><dl>
+      <dt>情境</dt><dd>家長的需求很直接：<q>有時要控制小朋友去玩小島</q>。但產品刻意沒有帳號。</dd>
+      <dt>決定</dt><dd>按住左上角 logo 2 秒，答一題乘法，就能鎖住或打開小島；鎖住時只開展覽室，設定記在這台裝置上。</dd>
+      <dt>結果</dt><dd class="out">不用帳號、不用密碼，用孩子還不會的乘法當門檻。</dd></dl></article>
+    <article class="dec"><div class="when">決策 07<h3>點一下，該不該留下東西</h3></div><dl>
+      <dt>情境</dt><dd>原本點草地會長出一朵花。可是這些花收不回來，孩子點多了，島很快就亂了。</dd>
+      <dt>決定</dt><dd>把「玩的回饋」和「會留下來的改變」分開：一般點一下只泛一圈光、招一隻蝴蝶過來；要種東西，去「佈置小島」，那裡可以收回、擦掉、全部清掉。</dd>
+      <dt>結果</dt><dd class="out">孩子怎麼點都有反應，世界也不會被弄亂。</dd></dl></article>
+  </div>
+</section>
+
+<section id="quality" aria-labelledby="h-quality">
+  <div class="eyebrow">Quality bar</div>
+  <h2 id="h-quality">把「像不像」變成<em>量得出來</em>的標準</h2>
+  <p>單一家庭版本最重要的產出，不是七件作品，而是一套可以交接、之後可以自動化的品質標準。第一件小劍龍做到的細節度，定成之後每一件的最低標準；流程寫成方法論，新作品照著走。</p>
+  <ol class="steps">
+    <li><b>看懂作品</b><span>每個零件放大看：扁的還是鼓的、佔主體多少；分清楚原作和損傷</span></li>
+    <li><b>校準鏡頭</b><span>用手機主鏡頭的視角算 3D 畫面，拿一個好認的部位對齊大小和位置</span></li>
+    <li><b>驗證基準</b><span>看離基準最遠的零件有沒有重合；沒有就先修基準，不修零件</span></li>
+    <li><b>紅藍線比輪廓</b><span>照片外形描紅線、3D 外形描藍線，兩線分開的地方就是要修的地方</span></li>
+    <li><b>先整體，再局部，再表面</b><span>比例和位置 → 邊緣走向和分岔 → 花色、凹凸、光澤</span></li>
+    <li><b>只改被指出的那一處</b><span>說「改好了」之前，用數字量、用描線證明真的變了</span></li>
+  </ol>
+  <div class="lesson"><b>教訓</b><p>做達利鳥時，比對鏡頭的傾斜方向用反了，照著一個歪了 16 度的基準修了好幾輪翅膀，越修越錯。第 3 步就是從這裡來的：連續兩三輪對不上，先停下來檢查方法和基準。</p></div>
+  <div class="duo">
+    <figure><img src="img/realism-works.jpg" alt="小劍龍和蟲蟲計程車材質修改前後的並排對照" loading="lazy" width="1220" height="1352"><figcaption><b>材質照工法做</b>小劍龍是霧面黏土加細砂粒；計程車是上釉的陶土，凹處釉積得深、凸處變淡。左邊原本，右邊改了之後。</figcaption></figure>
+    <figure><img src="img/hen.jpg" alt="外送雞羽毛修改前後的並排對照" loading="lazy" width="1400" height="742"><figcaption><b>動物要做成真的動物</b>外送雞每片羽毛都是一片真的幾何，有羽軸、羽枝和根部的絨毛，黑羽在光下泛一點綠紫。左邊原本，右邊改了之後。</figcaption></figure>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>項目</th><th>方法</th><th>結果</th></tr></thead>
+    <tbody>
+      <tr><td>自動重建可行性</td><td>Object Capture 跑四件的現有照片</td><td class="res">4 件中 1 件可用（計程車 21 張、37 秒）</td></tr>
+      <tr><td>打開速度</td><td>只細算表面附近；計程車改讀先算好的模型檔，其他件在手機上現場算</td><td class="res">外送雞、火雞、聖誕樹 &lt; 0.2 秒</td></tr>
+      <tr><td>AR 放到桌上</td><td>每件輸出 USDZ（iPhone）和 GLB（Android），實物大小；USDZ 用 Apple 的 ARKit 檢查工具驗過</td><td class="res">7 件都有，會動</td></tr>
+      <tr><td>裝置</td><td>每次改完都看 390px 手機寬、深淺色、中英文；iPhone 各家瀏覽器都給 AR 連結，電腦改顯示 QR code</td><td class="res">固定的交付規則</td></tr>
+      <tr><td>還沒驗證的</td><td>聲音的音色還要真人聽過再調；iPhone Safari 的錄影和分享影片沒在真機上試；中國大陸能不能穩定打開沒實測</td><td class="res no">照實列出</td></tr>
+    </tbody></table></div>
+</section>
+
+<section id="product" aria-labelledby="h-product">
+  <div class="eyebrow">Product</div>
+  <h2 id="h-product">做出來的產品</h2>
+  <p class="lede">以下都是手機上的實際畫面。</p>
+  <div class="tour">
+    <div class="tg">
+      <div class="tgh"><span class="tn">01</span><div><h3>小島、展覽室、作品頁</h3><p class="muted">底部一條控制列切換兩個畫面；選了作品，控制列變成它的動作列。展覽室照年齡排，上方是成長時間軸。</p></div></div>
+      <div class="phones">
+        <figure class="ph"><div class="fr"><img src="img/island.jpg" alt="小島全景：七件作品、小木屋、秋天的樹" loading="lazy" width="780" height="1688"></div><figcaption><b>小島</b>感恩節前，樹變成秋天的顏色</figcaption></figure>
+        <figure class="ph"><div class="fr"><img src="img/couplet.jpg" alt="小木屋門上的春聯，底部是外送雞的動作列" loading="lazy" width="780" height="1688"></div><figcaption><b>選了外送雞</b>春聯上的「如」，按出門就跳下來</figcaption></figure>
+        <figure class="ph"><div class="fr"><img src="img/museum.jpg" alt="展覽室裡的達利鳥展台和收起來的展品牌" loading="lazy" width="780" height="1688"></div><figcaption><b>展覽室</b>收起來的展品牌也露出「看完整 3D」</figcaption></figure>
+        <figure class="ph"><div class="fr"><img src="img/stego.jpg" alt="小劍龍的作品頁，底部有動作和視角按鈕" loading="lazy" width="780" height="1688"></div><figcaption><b>作品頁</b>點左下的原作照片，鏡頭轉到同一角度</figcaption></figure>
+      </div>
+    </div>
+    <div class="tg">
+      <div class="tgh"><span class="tn">02</span><div><h3>七件原作</h3><p class="muted">編號照加入 Everkeep 的順序，展覽室照年齡排。每件的材料都不一樣，所以每件的做法也不一樣。</p></div></div>
+      <ul class="works">
+        <li><img src="img/p1.jpg" alt="小劍龍原作照片" loading="lazy"><div><span class="no">NO.01</span><b>小劍龍</b><small>6 歲 · 黏土</small></div></li>
+        <li><img src="img/p2.jpg" alt="達利鳥原作照片" loading="lazy"><div><span class="no">NO.02</span><b>達利鳥</b><small>4 歲 · 輕黏土、鐵絲</small></div></li>
+        <li><img src="img/p3.jpg" alt="春聯原作照片" loading="lazy"><div><span class="no">NO.03</span><b>外送雞</b><small>4 歲 · 春聯的「如」字</small></div></li>
+        <li><img src="img/p4.jpg" alt="蟲蟲計程車原作照片" loading="lazy"><div><span class="no">NO.04</span><b>蟲蟲計程車</b><small>5 歲 · 陶土、亮釉</small></div></li>
+        <li><img src="img/p5.jpg" alt="紙火雞原作照片" loading="lazy"><div><span class="no">NO.05</span><b>火雞</b><small>4 歲 · 卡紙</small></div></li>
+        <li><img src="img/p6.jpg" alt="棉花聖誕樹原作照片" loading="lazy"><div><span class="no">NO.06</span><b>聖誕樹</b><small>5 歲 · 棉花、水瓶、毛球</small></div></li>
+        <li><img src="img/p7.jpg" alt="鬆餅熊原作照片" loading="lazy"><div><span class="no">NO.07</span><b>鬆餅熊</b><small>5 歲 · 超輕黏土、紙盤、水彩</small></div></li>
+      </ul>
+      <figure><img src="img/pancake.jpg" alt="鬆餅熊：原作照片、3D 和從正上方看的盤子" loading="lazy" width="1500" height="620"><figcaption><b>No.07 鬆餅熊</b>原作、3D、從正上方看。盤子上的字和畫直接取自照片；熊走路時會變成一隻照畫捏出來的立體熊，捧著鬆餅走。</figcaption></figure>
+    </div>
+    <div class="tg">
+      <div class="tgh"><span class="tn">03</span><div><h3>逼真，但不變暗</h3><p class="muted">決策 04 的三欄對照：原本、當時上線、調整後。白天、近看、傍晚、晚上各一列。</p></div></div>
+      <figure><img src="img/island-light.jpg" alt="小島光影的三欄對照：原本、目前上線、這次，四種時間" loading="lazy" width="1400" height="1327"><figcaption>中間那欄細節夠了但太暗；右邊保留細節、把曝光和天光拉回來，晚上也看得清楚。</figcaption></figure>
+    </div>
+    <div class="tg">
+      <div class="tgh"><span class="tn">04</span><div><h3>自動重建的起點</h3><p class="muted">決策 03 的實驗：計程車用原本的 21 張照片丟進 Object Capture，37 秒得到這個結果。外型大致對了，但有破洞、霉斑和缺角，要照原則修。</p></div></div>
+      <figure style="max-width:620px"><img src="img/capture.jpg" alt="Object Capture 用 21 張照片重建的蟲蟲計程車，四個角度" loading="lazy" width="1100" height="917"><figcaption>這張圖說明了為什麼「拍得好」比「算得快」更重要。</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="method" aria-labelledby="h-method">
+  <div class="eyebrow">How I worked</div>
+  <h2 id="h-method">我負責「做對的東西」，AI 負責「把東西做出來」</h2>
+  <p>3D 重建、著色器、互動、AR 檔、部署、介紹影片，都由 AI 編碼代理實作。我負責定方向、定品質標準、在方案之間做決定，並驗收每一個結果。讓這件事穩定前進、不走偏的，是下面這些規則。</p>
+  <div class="g2">
+    <div class="card"><h3>合作規則</h3><ul class="plain">
+      <li>大方向先出幾個方案的效果圖讓我挑：首頁 3 個、按鈕佈局 3 個、網站圖示 10 個</li>
+      <li>回饋用截圖圈起來或畫線；只改被指出的那一處，其他不動</li>
+      <li>說「改好了」之前要有證據：疊圖、數字、手機截圖</li>
+      <li>換一個產品也成立的意見，寫進跨產品的風格規則，下次不用再說</li>
+      <li>做錯了直接說：錯在哪、影響多久、修好了沒</li></ul></div>
+    <div class="card"><h3>我做的判斷</h3><ul class="plain">
+      <li>先只服務一個家庭，用最高標準定義「好」，再談規模</li>
+      <li>把孩子的想像當成內容本身，不加我們的詮釋</li>
+      <li>不做帳號：分享連結、家長鎖和裝置上的設定先解決需求</li>
+      <li>介紹影片要有真的操作畫面，不能只有漂亮的鏡頭</li>
+      <li>逼真可以，變暗不行；呼吸感可以，干擾不行</li></ul></div>
+  </div>
+</section>
+
+<section id="next" aria-labelledby="h-next">
+  <div class="eyebrow">What's next</div>
+  <h2 id="h-next">下一步</h2>
+  <ul class="plain">
+    <li>照拍照指南重拍小劍龍、達利鳥、火雞，再跑一次自動重建，量出每件需要多少人工修補</li>
+    <li>把紅藍線比對算成一個分數，讓程式自己調整參數直到重合：自動化的第一步</li>
+    <li>決定形狀要怎麼自動產生（多張照片、影片，或從圖片生成 3D），以及要做到多好才能上線</li>
+    <li>找幾個家庭試拍，看一般家長照指南拍出可用素材的比例</li>
+    <li>開放給其他家庭之前，先把孩子的照片、名字要怎麼保存和公開想清楚</li>
+  </ul>
+  <div class="close"><div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Everkeep</span></div><p class="muted">孩子做的東西，留下來，也活起來。</p><p class="muted">Aron · 產品負責人。本頁畫面都是產品實際截圖；線上版本在 everkeep.aronlab.dev。</p></div>
+</section>
+
+</main>
+</div>
+
+<div class="mtoc" id="mtoc">
+  <div class="mpanel" id="mpanel" role="menu" aria-label="目錄"></div>
+  <button class="mbtn" id="mbtn" type="button" aria-expanded="false" aria-controls="mpanel" aria-label="目錄">
+    <svg class="ring" viewBox="0 0 46 46" aria-hidden="true"><circle class="bgc" cx="23" cy="23" r="21"/><circle class="pr" id="pr" cx="23" cy="23" r="21" stroke-dasharray="131.95" stroke-dashoffset="131.95"/></svg>
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h9"/></svg>
+  </button>
+</div>
+
+<script>
+(() => {   // 主視覺影片：靜音自動播放；「開聲音」從頭播並打開聲音，再按一次靜音
+  const v = document.getElementById("heroVid"), b = document.getElementById("snd");
+  if (!v || !b) return;
+  const lab = b.querySelector("span");
+  const sync = () => { const on = !v.muted && !v.paused; b.setAttribute("aria-pressed", on); lab.textContent = on ? "靜音" : "開聲音"; };
+  b.addEventListener("click", () => {
+    if (v.muted) { v.muted = false; v.currentTime = 0; v.play().catch(() => {}); } else { v.muted = true; }
+    sync();
+  });
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); }
+})();
+
+(() => {   // 目錄：目前章節標一條陶土橘；手機版右下角圓環顯示讀到哪
+  const links = [...document.querySelectorAll("nav.toc a[href^='#']")];
+  const secs = links.map(a => document.querySelector(a.getAttribute("href")));
+  const panel = document.getElementById("mpanel"), box = document.getElementById("mtoc"), btn = document.getElementById("mbtn"), pr = document.getElementById("pr");
+  links.forEach((a, i) => {
+    const m = document.createElement("a");
+    m.href = a.getAttribute("href"); m.setAttribute("role", "menuitem");
+    m.innerHTML = a.textContent + "<span>" + String(i + 1).padStart(2, "0") + "</span>";
+    m.addEventListener("click", () => toggle(false));
+    panel.appendChild(m);
+  });
+  const mlinks = [...panel.querySelectorAll("a")];
+  const toggle = (open) => { box.classList.toggle("open", open); btn.setAttribute("aria-expanded", open); };
+  btn.addEventListener("click", () => toggle(!box.classList.contains("open")));
+  document.addEventListener("keydown", e => { if (e.key === "Escape") toggle(false); });
+  document.addEventListener("click", e => { if (!box.contains(e.target)) toggle(false); });
+  const C = 131.95;
+  let raf = 0;
+  const update = () => {
+    raf = 0;
+    const y = scrollY + innerHeight * 0.3;
+    let cur = -1;
+    secs.forEach((s, i) => { if (s && s.offsetTop <= y) cur = i; });
+    links.forEach((a, i) => a.classList.toggle("on", i === cur));
+    mlinks.forEach((a, i) => a.classList.toggle("on", i === cur));
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+    pr.setAttribute("stroke-dashoffset", (C * (1 - p)).toFixed(2));
+  };
+  addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+  addEventListener("resize", update);
+  update();
+})();
+</script>
+</body>
+</html>
