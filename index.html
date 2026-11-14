@@ -62,10 +62,10 @@ try { var t = localStorage.getItem('lab.theme'); if (t === 'light' || t === 'dar
 </header>
 
 <main>
-  <!-- 首屏：向方形致敬，配色依序換成每個作品 -->
+  <!-- 首屏：向方形致敬。開場是 ARON LAB 標誌（品牌橘），之後依序換成每個作品：方形由內往外換色，中間換成那個作品的幾何符號，ARON LAB 移到最外圈上緣 -->
   <section class="hero" id="hero">
     <a class="stage" id="stage" href="#works" aria-label="看目前展示的作品" data-en-label="See the work on show">
-      <div class="sq s1"><div class="sq s2"><div class="sq s3"><h1><svg class="logo" viewBox="0 0 478.25 321" aria-hidden="true"><use href="#logo" width="478.25" height="321"/></svg><span class="wm">ARON LAB</span><small data-en="Personal product lab">個人產品實驗室</small></h1></div></div></div>
+      <div class="sq s1"><p class="band off" id="band" aria-hidden="true"><svg class="logo" viewBox="0 0 478.25 321"><use href="#logo" width="478.25" height="321"/></svg><b>ARON LAB</b><small data-en="Personal product lab">個人產品實驗室</small></p><div class="sq s2"><div class="sq s3"><h1><svg class="logo" viewBox="0 0 478.25 321" aria-hidden="true"><use href="#logo" width="478.25" height="321"/></svg><span class="wm">ARON LAB</span><small data-en="Personal product lab">個人產品實驗室</small></h1><div class="hm" id="hm" aria-hidden="true"></div></div></div></div>
     </a>
     <div class="hero-bar">
       <div class="cap"><p data-en-html="What I need every day,<br>I build into a product.">自己每天要用的，<br>就自己做成產品。</p><span>Homage to the Product, 2026 — after <button type="button" class="egg-link" data-egg>Josef Albers</button></span></div>

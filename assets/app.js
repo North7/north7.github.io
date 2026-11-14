@@ -195,9 +195,44 @@
     [entries.length, tr('個入口', 'entries')],
   ].map(([n, t]) => `<div><dt>${n}</dt><dd>${t}</dd></div>`).join('');
 
-  // ── 首屏：每 4.2 秒換成下一個作品的配色 ──
+  // ── 作品的領域形狀（作品色場的大圖形；首屏的作品沒畫符號時也用它） ──
+  const GLYPH = {
+    crypto: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>',
+    stocks: '<svg viewBox="0 0 100 100"><rect width="100" height="100"/></svg>',
+    sport: '<svg viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>',
+    health: '<svg viewBox="0 0 100 100"><path d="M0 100 A50 50 0 0 1 100 100 Z"/></svg>',
+    work: '<svg viewBox="0 0 100 100"><polygon points="50,0 100,50 50,100 0,50"/></svg>',
+    family: '<svg viewBox="0 0 100 100"><path d="M0 100V50a50 50 0 0 1 100 0v50z"/></svg>',
+  };
+
+  // ── 首屏中間的幾何符號（2026-11-14 選定）：每個作品一個平塗的小圖形和一個動作。
+  // 100×100 座標；hm1 淺、hm2 中，ho1／ho2 是線；動作的 class（hm-…）寫在 app.css。新作品沒寫就用它領域的形狀，慢慢呼吸 ──
+  let hmN = 0;
+  const MARKS = {
+    tidemark: () => '<rect class="hm2 hm-ta" x="12" y="30" width="76" height="10"/><rect class="hm1 hm-tb" x="12" y="60" width="76" height="10"/>',
+    daybreak: (u) => `<clipPath id="${u}"><rect width="100" height="64"/></clipPath><g clip-path="url(#${u})"><circle class="hm1 hm-sun" cx="50" cy="64" r="25"/></g><rect class="hm2" x="10" y="67" width="80" height="8"/>`,
+    morningbell: () => `<g class="ho1" stroke-width="3">${['', ' d2', ' d3'].map((d) => `<rect class="hm-rg${d}" x="40" y="40" width="20" height="20"/>`).join('')}</g><rect class="hm1" x="42" y="42" width="16" height="16"/>`,
+    'market-ticker': (u) => {
+      const h = [30, 52, 22, 64, 40, 58, 26, 46], bars = (dx) => h.map((v, i) => `<rect class="${i % 2 ? 'hm2' : 'hm1'}" x="${12 + dx + i * 10}" y="${82 - v}" width="6" height="${v}"/>`).join('');
+      return `<clipPath id="${u}"><rect x="10" y="10" width="80" height="80"/></clipPath><g clip-path="url(#${u})"><g class="hm-tape">${bars(0)}${bars(80)}</g></g>`;
+    },
+    onestroke: () => '<path class="ho2 hm-sw" d="M14 86 A 72 72 0 0 1 86 14" pathLength="100" stroke-width="8" stroke-linecap="round"/><circle class="hm1" cx="80" cy="24" r="9"/>',
+    baseline: () => '<rect class="hm2" x="10" y="48" width="80" height="4"/><circle class="hm1 hm-bd" cx="20" cy="50" r="7"/>',
+    signals: () => [16, 28, 40, 52].map((h, i) => `<rect class="hm1 hm-sb" style="animation-delay:${i * 0.25}s" x="${17 + i * 18}" y="${80 - h}" width="12" height="${h}"/>`).join(''),
+    paypulse: () => '<circle class="hm2 hm-ring" cx="50" cy="50" r="20"/><circle class="hm1 hm-coin" cx="50" cy="50" r="20"/>',
+    everkeep: () => '<rect class="hm2" x="18" y="80" width="64" height="6"/><path class="ho1" d="M31 80V52a19 19 0 0 1 38 0v28" stroke-width="7" stroke-linecap="round"/><circle class="hm1 hm-hop" cx="50" cy="68" r="6.5"/>',
+  };
+  const markOf = (p) => {
+    const u = `hm${++hmN}`, f = MARKS[p.id];
+    const inner = f ? f(u) : `<g transform="translate(28 28) scale(.44)"><g class="hm1 hm-br">${(GLYPH[p.domains[0]] || GLYPH.stocks).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g></g>`;
+    return `<svg viewBox="0 0 100 100">${inner}</svg>`;
+  };
+
+  // ── 首屏：開場是 ARON LAB，之後每 4.2 秒換下一個作品 ──
+  // 換場（2026-11-14）：方形由內往外換色（CSS 的延遲），舊的符號和作品名先收掉，顏色換到一半再出新的符號、用方塊碎字拼出新的作品名
   const hero = $('hero'), topBar = $('top');
-  hero.classList.add('pc'); topBar.classList.add('pc');
+  const sqs = ['s1', 's2', 's3'].map((c) => hero.querySelector(`.${c}`)), s3 = sqs[2], band = $('band'), hm = $('hm'), nm = $('now-name');
+  hero.classList.add('pc'); topBar.classList.add('pc'); sqs.forEach((el) => el.classList.add('pc'));
   // 先放「台北現在這個時間」該看的作品，時刻照各作品的排程：
   // Morningbell 晨刊 07:00（週二到週六）、午後刊 16:00（週一到週五）；Tidemark 08:15、Daybreak 08:30；Signal Tower 每根 4 小時 K 線收盤時檢查；
   // 平日 17:00 起換 PayPulse 倒數下班（照它的預設工時 09:00–18:00），20:00 再回到行情
@@ -222,31 +257,49 @@
   };
   // 頂欄 logo 的橫槓像游標：正在看哪個作品就換成那個作品的顏色，其他地方是品牌橘
   const markAt = (i) => (i >= 0 ? topBar.style.setProperty('--cursor', P[i].color) : topBar.style.removeProperty('--cursor'));
-  let k = 0, timer = null, onHeroNow = true;
-  const show = (i) => {
-    k = (i + P.length) % P.length;
-    const p = P[k], now = pickNow(), line = now.i === k ? now.line : '';
-    hero.style.setProperty('--pc', p.color);
-    topBar.style.setProperty('--pc', p.color);
-    if (onHeroNow) markAt(k);
-    $('stage').href = `#w-${p.id}`;
-    $('now-k').textContent = line || 'Now showing';
-    $('now-k').classList.toggle('t', !!line);
-    $('now-name').textContent = `${p.name} ${p.zh}`;
-    $('now-name').href = `#w-${p.id}`;
-    $('now-live').innerHTML = p.live && live[p.live] ? liveLine(live[p.live]) : esc(p.tagline);
-    document.querySelectorAll('#dots button').forEach((b, j) => { b.classList.toggle('on', j === k); b.setAttribute('aria-pressed', String(j === k)); });
+  // SEQ 是首屏輪播的順序：開場那張（ARON LAB，品牌橘）＋所有作品；k 是 SEQ 裡的位置
+  const LAB = { lab: true, id: 'lab', color: '#F5801C' };
+  const SEQ = [LAB, ...P];
+  const pIdx = (x) => (x.lab ? -1 : P.indexOf(x));
+  let k = 0, timer = null, onHeroNow = true, tA = 0, tB = 0, curName = '', hopped = false;
+  const nameOut = () => { if (!curName) return; nm.textContent = curName; glyphRun([{ n: nm.firstChild, s: curName, d: 0 }], 200, 0, true); };
+  const nameIn = (s, anim) => {
+    curName = s;
+    if (!anim) { nm.textContent = s; return; }
+    nm.textContent = mixg(s, 0, false); glyphRun([{ n: nm.firstChild, s, d: 0 }], 440, 0, false);
   };
-  $('dots').innerHTML = P.map((p) => `<button type="button" aria-label="${esc(p.name)}"></button>`).join('');
-  $('dots').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; clearInterval(timer); timer = null; show([...b.parentNode.children].indexOf(b)); });
-  show(pickNow().i);
+  const show = (i, first) => {
+    k = (i + SEQ.length) % SEQ.length;
+    const p = SEQ[k], lab = !!p.lab, pi = pIdx(p), now = pickNow(), line = !lab && now.i === pi ? now.line : '';
+    [hero, topBar, ...sqs].forEach((el) => el.style.setProperty('--pc', p.color));
+    if (onHeroNow) markAt(pi);
+    $('stage').href = nm.href = lab ? '#works' : `#w-${p.id}`;
+    document.querySelectorAll('#dots button').forEach((b, j) => { b.classList.toggle('on', j === k); b.setAttribute('aria-pressed', String(j === k)); });
+    const name = lab ? tr('Aron Lab 個人產品實驗室', 'Aron Lab') : `${p.name} ${p.zh}`;
+    const words = () => {
+      $('now-k').textContent = lab ? tr('歡迎來到', 'Welcome to') : line || 'Now showing';
+      $('now-k').classList.toggle('t', !!line);
+      $('now-live').innerHTML = lab ? tr(`${P.length} 個作品的入口，每 4 秒換一個`, `${P.length} works in one place, a new one every 4 seconds`) : p.live && live[p.live] ? liveLine(live[p.live]) : esc(p.tagline);
+      $('now-live').classList.remove('hide');
+    };
+    const paint = () => { hm.innerHTML = lab ? '' : markOf(p); s3.classList.toggle('show-mark', !lab); band.classList.toggle('off', lab); s3.classList.remove('out'); };
+    clearTimeout(tA); clearTimeout(tB);
+    if (first || reduced) { paint(); words(); nameIn(name, false); return; }
+    s3.classList.add('out'); $('now-live').classList.add('hide'); nameOut();
+    tA = setTimeout(paint, 480);
+    tB = setTimeout(() => { words(); nameIn(name, true); }, 600);
+  };
+  $('dots').innerHTML = SEQ.map((p) => `<button type="button" aria-label="${p.lab ? 'Aron Lab' : esc(p.name)}"></button>`).join('');
+  $('dots').addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; clearInterval(timer); timer = null; hopped = true; show([...b.parentNode.children].indexOf(b)); });
+  // 打開時先放開場那張，下一張跳到「台北現在這個時間」該看的作品，之後照順序輪；減少動態時不輪播，直接放那個作品
+  show(reduced ? pickNow().i + 1 : 0, true);
   // 滑鼠停在方形或右下角的說明上就先不換，讓人看完；分頁在背景時也不換
   let hold = false;
   [$('stage'), document.querySelector('.now')].forEach((el) => {
     el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hold = true; });
     el.addEventListener('pointerleave', () => { hold = false; });
   });
-  if (!reduced) timer = setInterval(() => { if (!hold && !document.hidden) show(k + 1); }, 4200);
+  if (!reduced) timer = setInterval(() => { if (!hold && !document.hidden) { show(hopped ? k + 1 : pickNow().i + 1); hopped = true; } }, 4200);
 
   // ── 手機頂欄：跟著正在頂欄底下的色場換底色與字色（桌機仍用混色模式，這些變數不會用到） ──
   const layers = () => document.querySelectorAll('.hero, .field, .sec, .foot');
@@ -258,7 +311,7 @@
     const s = at(topBar.offsetHeight / 2), cur = at(innerHeight * .4);
     const onHero = !s || s === hero;
     onHeroNow = !cur || cur === hero;
-    markAt(onHeroNow ? k : cur.classList.contains('field') ? P.findIndex((p) => cur.id === `w-${p.id}`) : -1);
+    markAt(onHeroNow ? pIdx(SEQ[k]) : cur.classList.contains('field') ? P.findIndex((p) => cur.id === `w-${p.id}`) : -1);
     topBar.classList.toggle('over-hero', onHero);
     if (onHero) { topBar.style.removeProperty('--top-bg'); topBar.style.removeProperty('--top-fg'); return; }
     const cs = getComputedStyle(s);
@@ -271,14 +324,6 @@
   requestAnimationFrame(paintTop);
 
   // ── 作品色場 ──
-  const GLYPH = {
-    crypto: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>',
-    stocks: '<svg viewBox="0 0 100 100"><rect width="100" height="100"/></svg>',
-    sport: '<svg viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100"/></svg>',
-    health: '<svg viewBox="0 0 100 100"><path d="M0 100 A50 50 0 0 1 100 100 Z"/></svg>',
-    work: '<svg viewBox="0 0 100 100"><polygon points="50,0 100,50 50,100 0,50"/></svg>',
-    family: '<svg viewBox="0 0 100 100"><path d="M0 100V50a50 50 0 0 1 100 0v50z"/></svg>',
-  };
   const STATUS = tr({ live: '已上線', local: '本機', private: '私人' }, { live: 'Live', local: 'Local', private: 'Private' });
   const inZh = tr('', ' (Chinese)');
   $('works').innerHTML = P.map((p) => {
@@ -624,7 +669,7 @@
         el.classList.remove('wait');
         el.innerHTML = v.items.filter(([, val]) => val).map(([k2, val]) => `<span>${k2}<b>${val}</b></span>`).join('') + `<span>${tr('更新', 'Updated')} ${esc(v.when || '')}</span>`;
       });
-      if (P[k].live === key) show(k);
+      if (SEQ[k].live === key && !$('now-live').classList.contains('hide')) $('now-live').innerHTML = liveLine(v); // 只換這一行，不重跑換場
     } catch (e) {
       document.querySelectorAll(`[data-live="${key}"]`).forEach((el) => { el.innerHTML = `<span>${tr('暫時讀不到即時資料', 'Live data is unavailable right now')}</span>`; });
     }

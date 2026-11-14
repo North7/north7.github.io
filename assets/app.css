@@ -45,7 +45,7 @@ button { font: inherit; color: inherit; }
 /* 頂欄是實色，顏色跟著底下的色場（app.js 設定 --top-bg、--top-fg）。
    以前桌機用 mix-blend-mode: difference，但那會把 logo 的橘色反相，iOS 捲動時也會留殘影 */
 .top { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; align-items: center; gap: 28px; height: 60px; padding: 0 28px; background: var(--top-bg, var(--base)); color: var(--top-fg, var(--tx)); transition: background-color .25s, color .25s, --pc 1.4s cubic-bezier(.4,0,.2,1); }
-.top.over-hero { --top-bg: var(--t1); --top-fg: var(--tx); transition: --pc 1.4s cubic-bezier(.4,0,.2,1); }
+.top.over-hero { --top-bg: var(--t1); --top-fg: var(--tx); transition: --pc .75s cubic-bezier(.4,0,.2,1) .52s; }
 .brand { display: flex; align-items: center; gap: 12px; margin-right: auto; font: 700 17px/1 var(--geo); letter-spacing: .16em; white-space: nowrap; }
 /* logo：A 用文字色；橫槓（游標）平常是品牌橘，看到哪個作品就換成那個作品的顏色 */
 .logo { display: block; flex: none; overflow: visible; }
@@ -64,9 +64,55 @@ html[data-lang="en"]:not(.i18n) [data-en], html[data-lang="en"]:not(.i18n) [data
 html[lang="en"] .hero h1 small { letter-spacing: .3em; }
 
 /* ── 首屏 ── */
-.hero { --pc: #22A57F; position: relative; height: 100svh; min-height: 660px; background: var(--t1); overflow: hidden; transition: --pc 1.4s cubic-bezier(.4,0,.2,1); }
+.hero { --pc: #F5801C; position: relative; height: 100svh; min-height: 660px; background: var(--t1); overflow: hidden; transition: --pc .75s cubic-bezier(.4,0,.2,1) .4s; }
 .hero .stage { position: absolute; left: 50%; top: 47%; width: min(64vh, 70vw); transform: translate(-50%, -50%); display: block; }
 .hero .s1 { background: var(--t2); } .hero .s2 { background: var(--t3); } .hero .s3 { background: var(--t4); display: grid; place-items: center; }
+/* 換作品時由內往外換色（2026-11-14，參考燈箱海報換張的節奏）：最裡面的方形先換，外面兩圈接著，整片背景和頂欄最後，前後約 1.3 秒 */
+.hero .sq { transition: --pc .7s cubic-bezier(.4,0,.2,1); }
+.hero .s2 { transition-delay: .13s; } .hero .s1 { transition-delay: .26s; }
+/* ARON LAB 常駐在最外圈上緣：Albers 的方形往下偏，上緣那條色帶最寬（方形寬度的 18.75%）；開場那張中間已經是大標誌，這條先收起來 */
+.hero .s1 { container-type: inline-size; }
+.band { position: absolute; left: 0; right: 0; top: 0; height: 18.75%; margin: 0; display: flex; align-items: center; justify-content: center; gap: 2.2cqw; color: var(--t4); font: 800 4.6cqw/1 var(--geo); letter-spacing: .2em; white-space: nowrap; transition: opacity .4s; }
+.band .logo { width: 6.6cqw; height: 4.4cqw; --logo-a: var(--t4); --logo-bar: var(--t3); }
+.band b { margin-right: -.2em; }
+.band small { margin-left: 1.2cqw; font: 500 max(9px, 2.2cqw)/1 var(--cjk); letter-spacing: .3em; }
+html[lang="en"] .band small { letter-spacing: .14em; }
+.band.off { opacity: 0; }
+/* 中間：開場是 ARON LAB 標誌；換到作品時換成那個作品的幾何符號（平塗的小圖形＋一個動作，圖形寫在 app.js 的 MARKS）。h1 一直留在頁面上，只是看不見 */
+.hero .s3 h1, .hm { transition: opacity .3s; }
+.hero .s3.show-mark h1, .hero .s3:not(.show-mark) .hm, .hero .s3.out h1, .hero .s3.out .hm { opacity: 0; }
+.hm { position: absolute; inset: 13%; pointer-events: none; }
+.hm svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.hm1 { fill: var(--t1); } .hm2 { fill: var(--t2); }
+.ho1 { fill: none; stroke: var(--t1); } .ho2 { fill: none; stroke: var(--t2); }
+.hm-rg, .hm-coin, .hm-ring, .hm-br { transform-box: fill-box; transform-origin: center; }
+.hm-sw { stroke-dasharray: 100; }
+@media (prefers-reduced-motion: no-preference) {
+  .hm svg { animation: hmIn .5s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes hmIn { from { opacity: 0; transform: scale(.9); } }
+  .hm-ta { animation: hmTide 4s ease-in-out infinite; } .hm-tb { animation: hmTide 4s ease-in-out -2s infinite; }
+  @keyframes hmTide { 50% { transform: translateY(-6px); } }
+  .hm-sun { animation: hmSun 1.4s cubic-bezier(.2,.7,.2,1) .1s both; }
+  @keyframes hmSun { from { transform: translateY(26px); } }
+  .hm-rg { animation: hmRing 2.4s ease-out infinite; } .hm-rg.d2 { animation-delay: -.8s; } .hm-rg.d3 { animation-delay: -1.6s; }
+  @keyframes hmRing { from { transform: scale(1); opacity: 1; } to { transform: scale(3.3); opacity: 0; } }
+  .hm-tape { animation: hmTape 6s linear infinite; }
+  @keyframes hmTape { to { transform: translateX(-80px); } }
+  .hm-sw { animation: hmSwing 2.8s cubic-bezier(.5,0,.2,1) infinite; }
+  @keyframes hmSwing { 0% { stroke-dashoffset: 100; } 45%, 75% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -100; } }
+  .hm-bd { animation: hmSlide 6s ease-in-out infinite alternate; }
+  @keyframes hmSlide { to { transform: translateX(60px); } }
+  .hm-sb { animation: hmSig 2.4s ease-in-out infinite; }
+  @keyframes hmSig { 0%, 100% { opacity: .3; } 25%, 60% { opacity: 1; } }
+  .hm-coin { animation: hmBeat 1s ease-out infinite; }
+  @keyframes hmBeat { 0% { transform: scale(1.14); } 45%, 100% { transform: scale(1); } }
+  .hm-ring { animation: hmRipple 1s ease-out infinite; }
+  @keyframes hmRipple { from { transform: scale(1); opacity: .9; } to { transform: scale(1.9); opacity: 0; } }
+  .hm-hop { animation: hmHop .9s cubic-bezier(.3,0,.3,1) infinite alternate; }
+  @keyframes hmHop { to { transform: translateY(-14px); } }
+  .hm-br { animation: hmBreath 3.2s ease-in-out infinite; }
+  @keyframes hmBreath { 50% { transform: scale(.88); } }
+}
 .hero h1 { margin: 0; text-align: center; color: var(--t1); font: 800 clamp(17px, 2.8vh, 32px)/1 var(--geo); letter-spacing: .2em; }
 /* 首屏的 logo 跟著色場：A 和橫槓都用最淺的色階，和方形是同一組顏色 */
 .hero h1 .logo { width: clamp(72px, 13vh, 150px); height: clamp(48px, 8.7vh, 100px); margin: 0 auto clamp(14px, 2.4vh, 26px); --logo-a: var(--t1); --logo-bar: var(--t2); }
@@ -86,7 +132,8 @@ html[lang="en"] .hero h1 small { letter-spacing: .3em; }
 .now .nm { display: block; margin-top: 6px; font: 700 22px/1.2 var(--geo); }
 .now .nm:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .live-line b { font-weight: 700; color: var(--tx); }
-.live-line { display: block; min-height: 1.5em; margin-top: 2px; font: 500 14px/1.5 var(--geo); color: var(--tx2); }
+.live-line { display: block; min-height: 1.5em; margin-top: 2px; font: 500 14px/1.5 var(--geo); color: var(--tx2); transition: opacity .3s; }
+.live-line.hide { opacity: 0; }
 .dots { display: flex; gap: 6px; justify-content: flex-end; margin-top: 10px; }
 .dots button { width: 14px; height: 14px; padding: 0; border: 2px solid var(--t4); background: transparent; cursor: pointer; }
 .dots button.on { background: var(--t4); }
