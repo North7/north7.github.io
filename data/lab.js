@@ -209,7 +209,8 @@ window.LAB = {
       desc: '2D／3D 姿態、每拍 0–100 分、SAM 3D 重建、Claude 寫教練式分析，產出手機可看的報告與分享影片。支援教練與學員分開管理。',
       facts: ['可試賣的 MVP', '手機直接上傳', 'PDF 報告與分享影片'],
       en: {
-        zh: 'Tennis AI', kind: 'AI analysis', cadence: 'Personal use', sectionsLabel: 'Chapter', ui: 'zh',
+        // 2026-11-15 產品案例有英文版了（en/），章節連到英文版；App 本身只在本機跑，不連出去
+        zh: 'Tennis AI', kind: 'AI analysis', cadence: 'Personal use', sectionsLabel: 'Chapter', sectionsBase: 'https://aronlab.dev/onestroke/case-study/en/',
         tagline: 'Upload a practice video: it cuts out every stroke, scores it and diagnoses it like a coach.',
         desc: '2D/3D pose, a 0–100 score for every stroke, SAM 3D reconstruction and coach-style analysis written by Claude, delivered as a report you can read on your phone plus a share video. Coaches can manage each student separately.',
         facts: ['MVP ready to sell', 'Upload straight from your phone', 'PDF report and share video'],
@@ -236,7 +237,7 @@ window.LAB = {
         { n: '11', t: '下一步', u: '#next', en: 'Next steps' },
       ],
       links: [
-        { t: '產品案例：用手機影片看懂每一拍', u: 'https://aronlab.dev/onestroke/case-study/', type: 'case', en: 'Case study: understanding every stroke from a phone video (Chinese)' },
+        { t: '產品案例：用手機影片看懂每一拍', u: 'https://aronlab.dev/onestroke/case-study/', type: 'case', en: { t: 'Case study: understanding every stroke from a phone video', u: 'https://aronlab.dev/onestroke/case-study/en/' } },
         { t: '本機：上傳影片與訓練紀錄', u: 'http://127.0.0.1:8780/', type: 'local', en: 'Local: upload videos and training history' },
         { t: '原始碼（私人）', u: 'https://github.com/North7/onestroke', type: 'repo', en: 'Source code (private)' },
       ],
@@ -487,7 +488,8 @@ window.LAB = {
         sub: 'OneStroke case study',
         desc: "The analysis tools on the market give you a score but can't tell you what's off or what to practice next. I turned that frustration into a tennis analysis product that's ready to sell.",
         meta: [['Role', 'Product owner (definition, research, validation, design decisions)'], ['Stage', 'MVP ready to sell'], ['Form', 'Mobile web + local compute']],
-        go: 'Read (Chinese)',
+        url: 'https://aronlab.dev/onestroke/case-study/en/',
+        cover: 'assets/covers/onestroke-case-en.jpg',
       },
     },
     {

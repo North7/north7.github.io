@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="canonical" href="https://aronlab.dev/onestroke/case-study/en/">
+<link rel="alternate" hreflang="zh-Hant" href="https://aronlab.dev/onestroke/case-study/?lang=zh">
+<link rel="alternate" hreflang="en" href="https://aronlab.dev/onestroke/case-study/en/">
+<link rel="alternate" hreflang="x-default" href="https://aronlab.dev/onestroke/case-study/">
+<script>
+  // 英文版。中文版在上一層；語言規則寫在中文版開頭。英文版只看網址的 ?lang= 和自己選過的，不依 IP 轉回中文。
+  // 2026-11-12 從個人主頁搬到 Aron Lab 底下，跟其他作品放一起。
+  // 路徑照其他作品的 <作品>.aronlab.dev/case-study/ 排：OneStroke 之後上線到 onestroke.aronlab.dev 時，
+  // 把這個資料夾搬過去，Aron Lab 加一行 /onestroke/* 轉址就好。
+  // 2026-11-15 中英雙語：英文版在 en/。語言跟 Aron Lab 首頁同一套：網址的 ?lang= → 自己選過的（localStorage 的 lab.lang，整個 aronlab.dev 共用）
+  //   → IP 地區（functions/onestroke/case-study/index.js 寫進 <html data-geo>：台灣、香港、澳門、中國用中文，其他用英文）→ 瀏覽器語言。
+  // 同一份網站也部署在 GitHub Pages；從 north7.github.io 進來的訪客轉到正式網域，路徑保留
+  if (location.hostname === 'north7.github.io') location.replace('https://aronlab.dev' + location.pathname + location.search + location.hash);
+  else (function () {
+    var q = new URLSearchParams(location.search).get('lang'), s = null;
+    try { s = localStorage.getItem('lab.lang'); } catch (e) {}
+    var l = q === 'en' || q === 'zh' ? q : s;
+    if (l === 'zh') location.replace('/onestroke/case-study/' + location.hash);
+  })();
+</script>
+<meta name="description" content="A tennis swing analysis product that explains every stroke from one phone video: problem, principles, architecture, decision log, validation and real screens.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OneStroke | Case study · Aron">
+<meta property="og:description" content="A tennis swing analysis product that explains every stroke from one phone video: problem, principles, architecture, decision log, validation and real screens.">
+<meta property="og:url" content="https://aronlab.dev/onestroke/case-study/en/">
+<meta property="og:image" content="https://aronlab.dev/onestroke/case-study/img/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23D7FA4C'/%3E%3C/svg%3E">
+<title>OneStroke | Case study · Aron</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* 版面：跟產品同一套「黑夜賽場」——夜場近黑底、炭灰卡片、萊姆綠只當重點與底色、珊瑚紅只標問題；
+   長捲動的案例研究，桌面有側欄目錄；三張架構圖用卡片與箭頭畫成，跟著主題換色 */
+:root {
+  --bg: #0F100F; --card: #1B1C1A; --card2: #232521; --line: #2C2E2A; --fg: #ECEDE8; --muted: #9A9C96;
+  --lime: #D7FA4C; --on-lime: #121412; --accent: #D7FA4C; --coral: #FF6B5B; --ring: #D7FA4C;
+  --display: "Space Grotesk", "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+  --body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --num: "Space Grotesk", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg: #F3F4F0; --card: #FFFFFF; --card2: #F7F8F4; --line: #E1E3DC; --fg: #121412; --muted: #62655E;
+  --accent: #5F7F0E; --coral: #E5483A; --ring: #9DBF1E; color-scheme: light } }
+:root[data-theme="light"] {
+  --bg: #F3F4F0; --card: #FFFFFF; --card2: #F7F8F4; --line: #E1E3DC; --fg: #121412; --muted: #62655E;
+  --accent: #5F7F0E; --coral: #E5483A; --ring: #9DBF1E; color-scheme: light }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 400 16px/1.75 var(--body); margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1160px; margin: 0 auto; padding-block: 48px 96px; display: grid; grid-template-columns: 176px minmax(0, 1fr); gap: 56px; }
+nav.toc { position: sticky; top: calc(24px + env(safe-area-inset-top, 0px)); align-self: start; display: flex; flex-direction: column; gap: 4px; font: 500 13px/1.4 var(--body); }
+.brand { display: flex; align-items: center; gap: 8px; font: 700 17px var(--display); letter-spacing: -.02em; margin-bottom: 4px; }
+.brand svg { width: 26px; height: 26px; flex: none; }
+.brand i { font-style: normal; color: var(--ring); }
+nav.toc .who { font: 500 12px var(--body); color: var(--muted); margin-bottom: 14px; }
+nav.toc a { color: var(--muted); text-decoration: none; padding: 4px 0 4px 12px; border-left: 2px solid var(--line); }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--fg); border-left-color: var(--lime); outline: none; }
+main { min-width: 0; display: flex; flex-direction: column; gap: 84px; }
+section { display: flex; flex-direction: column; gap: 20px; scroll-margin-top: 24px; }
+.eyebrow { display: flex; align-items: center; gap: 8px; font: 700 12px/1 var(--num); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+.eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); }
+h1 { font: 700 clamp(36px, 5.6vw, 60px)/1.1 var(--display); letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+h1 em, h2 em { font-style: normal; color: var(--accent); }
+h2 { font: 700 clamp(26px, 3.4vw, 34px)/1.22 var(--display); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
+h3 { font: 700 17px/1.45 var(--body); margin: 0; }
+p { margin: 0; max-width: 68ch; }
+.lede { font-size: 18.5px; color: var(--muted); max-width: 60ch; }
+.muted { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+
+/* 開頭 */
+.hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 40px; align-items: end; }
+.hero .txt { display: flex; flex-direction: column; gap: 22px; }
+/* 主視覺影片：靜音自動播放、循環；「開聲音」從頭播並打開聲音 */
+.hero .hv { justify-self: end; width: min(100%, 340px); }
+.vwrap { position: relative; aspect-ratio: 9 / 16; border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: #0b0b0b; }
+.vwrap video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.snd { position: absolute; right: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; font: 700 13px/1 var(--body); color: var(--on-lime);
+  background: var(--lime); border: 0; border-radius: 99px; padding: 9px 13px 9px 11px; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.35); }
+.snd svg { width: 16px; height: 16px; }
+.snd[aria-pressed="false"] .w { opacity: .35; }
+.snd[aria-pressed="true"] { background: rgba(16,16,16,.72); color: #ECEDE8; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.snd:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; padding-top: 18px; border-top: 1px solid var(--line); margin: 0; }
+.meta dt { font: 700 11px/1 var(--num); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.meta dd { margin: 0; font-weight: 500; font-size: 15px; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+figure img { width: 100%; height: auto; display: block; border-radius: 18px; border: 1px solid var(--line); }
+figcaption { font-size: 13px; color: var(--muted); }
+
+/* 關鍵數字：跟產品首頁的數字方塊同一個樣子，第一格萊姆綠 */
+.nums { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.nums div { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 6px; }
+.nums div:first-child { background: var(--lime); border-color: var(--lime); color: var(--on-lime); }
+.nums div:first-child span { color: rgba(18,20,18,.7); }
+.nums b { font: 700 clamp(26px, 3.2vw, 36px)/1 var(--display); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.nums span { font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+ul.plain { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; }
+ul.plain li::marker { color: var(--ring); }
+
+/* 產品原則：編號是規格裡規則的順序 */
+.rules { display: flex; flex-direction: column; gap: 10px; }
+.rule { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 24px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px 22px; }
+.rule h3 { font-family: var(--display); }
+
+/* 架構圖共用：節點卡片、分層、箭頭 */
+.diagram { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px; display: flex; flex-direction: column; gap: 14px; overflow-x: auto; }
+.node { background: var(--card2); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.node b { font: 700 15px/1.35 var(--body); }
+.node small { font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.node .path { font: 500 11.5px/1.5 var(--num); color: var(--muted); opacity: .75; margin-top: 2px; }
+.node .path i { font-style: normal; white-space: nowrap; color: var(--fg); opacity: .8; }
+.node.key { background: var(--lime); border-color: var(--lime); color: var(--on-lime); }
+.node.key small { color: rgba(18,20,18,.72); }
+.tag { display: inline-block; font: 700 10.5px/1 var(--num); letter-spacing: .08em; padding: 4px 7px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); margin-top: 4px; align-self: flex-start; }
+.node.key .tag { border-color: rgba(18,20,18,.25); color: rgba(18,20,18,.75); }
+.layer { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 14px; align-items: stretch; }
+.layer > .lab { font: 700 12px/1.4 var(--num); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding-top: 12px; }
+.layer > .lab span { display: block; font: 500 13px var(--body); letter-spacing: 0; text-transform: none; color: var(--fg); margin-top: 4px; }
+.row { display: grid; gap: 10px; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); }
+.down { display: flex; justify-content: center; color: var(--muted); font: 700 14px var(--num); letter-spacing: .1em; }
+.down::before { content: "↓"; color: var(--ring); font-size: 18px; margin-right: 8px; }
+/* 產品閉環：一圈六步，最後一步接回第一步 */
+.loop { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; position: relative; }
+.loop .node { position: relative; }
+.loop .node .n { font: 700 12px var(--num); color: var(--ring); letter-spacing: .1em; }
+.loop .node.key .n { color: var(--on-lime); }
+.loop .node:not(:last-child)::after { content: "→"; position: absolute; right: -10px; top: 50%; transform: translate(50%, -50%); color: var(--ring); font: 700 15px var(--num); z-index: 1; }
+.back { font: 500 13px var(--body); color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.back::before { content: "↺"; color: var(--ring); font: 700 18px var(--num); }
+/* 模型架構：兩條輸入線匯流 */
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.lane { display: flex; flex-direction: column; gap: 8px; border: 1px dashed var(--line); border-radius: 16px; padding: 12px; }
+.lane > .lab { font: 700 11px/1 var(--num); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--muted); }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 4px; vertical-align: -1px; margin-right: 6px; background: var(--card2); border: 1px solid var(--line); }
+.legend i.k { background: var(--lime); border-color: var(--lime); }
+
+/* 決策紀錄 */
+.decs { display: flex; flex-direction: column; gap: 12px; }
+.dec { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px; display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 20px; }
+.dec .when { font: 700 12px/1.5 var(--num); color: var(--ring); letter-spacing: .1em; }
+.dec .when h3 { font: 700 17px/1.4 var(--body); color: var(--fg); letter-spacing: 0; margin-top: 8px; }
+.dec dl { margin: 0; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px 14px; }
+.dec dt { font: 500 12.5px/1.9 var(--body); color: var(--muted); }
+.dec dd { margin: 0; }
+.dec dd.out { font-weight: 500; }
+.dec dd.out::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--lime); margin-right: 8px; vertical-align: 1px; }
+.chip { display: inline-block; font: 500 12.5px/1 var(--body); padding: 6px 10px; border-radius: 99px; background: var(--card2); border: 1px solid var(--line); margin: 2px 4px 2px 0; }
+
+/* 驗證表 */
+.tbl { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 6px 22px; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 15px; }
+th, td { text-align: left; padding: 13px 14px 13px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font: 700 11px/1.4 var(--num); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+td.res { font: 700 15px var(--display); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--accent); }
+
+/* 產品畫面 */
+.screens { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.screens img { border-radius: 22px; }
+/* 產品畫面導覽：五組，每組一列手機框；長圖在框裡捲動 */
+.tour { display: flex; flex-direction: column; gap: 40px; }
+.tg { display: flex; flex-direction: column; gap: 16px; }
+.tgh { display: flex; gap: 14px; align-items: flex-start; }
+.tgh p { font-size: 14.5px; margin-top: 4px; max-width: 62ch; }
+.tn { flex: none; font: 700 13px/1 var(--num); color: var(--on-lime); background: var(--lime); border-radius: 8px; padding: 6px 7px; margin-top: 1px; }
+.cmph h3 .tn { display: inline-block; margin-right: 10px; vertical-align: 2px; }
+.phones { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 14px; align-items: start; }
+.ph { position: relative; }
+.ph .fr { border: 1px solid var(--line); border-radius: 24px; overflow: hidden; background: #0b0b0b; aspect-ratio: 390 / 844; }
+.ph .fr > img { height: 100%; object-fit: contain; }
+.ph.long .fr > img { height: auto; }
+.ph.long .fr { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #444 transparent; }
+.ph .fr img { border: 0; border-radius: 0; }
+.ph .hint { position: absolute; top: 10px; right: 10px; font: 600 11px/1 var(--body); color: var(--on-lime); background: var(--lime); padding: 5px 8px; border-radius: 99px; pointer-events: none; }
+.ph figcaption { font-size: 13px; color: var(--muted); }
+.ph figcaption b { color: var(--fg); font-weight: 700; margin-right: 6px; }
+.cmpk { display: flex; flex-direction: column; gap: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px; }
+.cmpk .cmph { display: flex; flex-direction: column; gap: 4px; }
+.cmpk img { border-radius: 14px; }
+.cmpk figcaption { font-size: 13.5px; color: var(--fg); }
+.cmpk .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; max-width: 760px; }
+.cmpk figcaption b { font-weight: 700; margin-right: 4px; }
+.cmpk .good { color: var(--accent); font-weight: 700; } .cmpk .bad { color: var(--coral); font-weight: 700; }
+.wide { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; max-width: 760px; }
+.wide.solo { grid-template-columns: minmax(0, 1fr); max-width: 360px; }
+
+.close { border-top: 1px solid var(--line); padding-top: 26px; display: flex; flex-direction: column; gap: 10px; }
+
+@media (max-width: 900px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-block: 28px 72px; }
+  nav.toc { position: static; flex-direction: row; flex-wrap: wrap; gap: 6px 14px; }
+  nav.toc .brand, nav.toc .who { width: 100%; }
+  nav.toc .who { margin-bottom: 6px; }
+  nav.toc a { border-left: 0; padding: 0; }
+  .hero .hv { justify-self: center; width: min(100%, 320px); }
+  .hero, .two, .wide, .split, .cmpk .pair { grid-template-columns: minmax(0, 1fr); }
+  .nums { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .screens { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .phones { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding-bottom: 6px; margin-inline: -4px; padding-inline: 4px; }
+  .phones > .ph { flex: none; width: min(62vw, 260px); scroll-snap-align: start; }
+  .rule, .dec, .layer { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .layer > .lab { padding-top: 0; }
+  .row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .loop { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .loop .node::after { display: none; }
+  main { gap: 60px; }
+}
+@media (prefers-reduced-motion: no-preference) { nav.toc a { transition: color .15s, border-color .15s; } }
+nav.toc a.who { border-left: 0; padding: 0; color: var(--muted); }
+nav.toc a.who:hover { color: var(--fg); }
+/* 中／EN 切換（2026-11-15，跟 Everkeep 產品案例同一套）：記住選擇（lab.lang，整個 aronlab.dev 共用），淡出後換到另一個語言的同一個章節 */
+.langseg { display: inline-flex; align-self: flex-start; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 99px; background: var(--card); margin: 0 0 14px; }
+.langseg a, nav.toc .langseg a { border: 0; padding: 5px 11px; border-radius: 99px; font: 700 12px/1 var(--num); letter-spacing: .06em; color: var(--muted); text-decoration: none; }
+.langseg a[aria-current="true"], nav.toc .langseg a[aria-current="true"] { background: var(--fg); color: var(--bg); }
+.langseg a:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+.tbr { display: none; }
+@media (max-width: 900px) { nav.toc .who { width: auto; } nav.toc .langseg { margin: 0 0 6px auto; } nav.toc .tbr { display: block; flex-basis: 100%; height: 0; } }  /* 手機：跟「← Aron Lab」同一行、靠右，章節從下一行開始 */
+html.leaving main, html.leaving nav.toc { opacity: 0; transform: translateY(6px); }
+@media (prefers-reduced-motion: no-preference) { main, nav.toc { transition: opacity .2s ease, transform .2s ease; } .langseg a { transition: background .25s, color .25s; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+  <div class="brand"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#D7FA4C"/><path d="M11 43C24 49 42 40 49 16" fill="none" stroke="#121412" stroke-width="6" stroke-linecap="round"/></svg><span>one<i>stroke</i></span></div>
+  <a class="who" href="/#w-onestroke">← Aron Lab</a>
+  <div class="langseg" role="group" aria-label="語言 Language"><a href="/onestroke/case-study/?lang=zh" data-lang-set="zh" lang="zh-Hant">中</a><a href="/onestroke/case-study/en/?lang=en" data-lang-set="en" lang="en" aria-current="true">EN</a></div><i class="tbr" aria-hidden="true"></i>
+  <a href="#problem">Problem and opportunity</a><a href="#users">Users and context</a><a href="#principles">Product principles</a><a href="#product-arch">Product architecture</a><a href="#tech-arch">Technical architecture</a><a href="#model-arch">Model architecture</a>
+  <a href="#decisions">Decision log</a><a href="#validation">Validation</a><a href="#product">Product screens</a><a href="#method">How I work</a><a href="#next">Next steps</a>
+</nav>
+<main>
+
+<section class="hero" aria-labelledby="t">
+  <div class="txt">
+    <div class="eyebrow">Case study · OneStroke</div>
+    <h1 id="t">A tennis product that explains<br><em>every stroke</em> from a phone video</h1>
+    <p class="lede">I practise on my own at an indoor ball-machine court. The analysis tools on the market gave me scores, but couldn't tell me what was off or what to practise next. I turned that frustration into a product ready to sell: upload a practice video and it cuts out every stroke, scores it, diagnoses it like a coach and rebuilds the player in 3D.</p>
+    <dl class="meta">
+      <div><dt>Role</dt><dd>Product owner (definition, research, validation, design decisions)</dd></div>
+      <div><dt>Stage</dt><dd>MVP ready to sell</dd></div>
+      <div><dt>Team</dt><dd>Me + an AI coding agent (Claude Code)</dd></div>
+      <div><dt>Form</dt><dd>Mobile web + local compute, PDF reports and share videos</dd></div>
+    </dl>
+  </div>
+  <figure class="hv"><div class="vwrap"><video id="heroVid" src="../media/onestroke-promo-web.mp4" poster="../media/onestroke-promo-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="48-second product video: automatic stroke cutting, scoring, 3D bullet time, done vs not done, practice plan, PDF report and coach edition"></video><button class="snd" id="snd" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path class="w" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Sound on</span></button></div><figcaption>48-second product video; tap “Sound on” to hear the original score from the start. The on-screen text is in Chinese for now.</figcaption></figure>
+</section>
+
+<div class="nums" role="list">
+  <div role="listitem"><b>$0</b><span>compute cost per session; the video never leaves my own computer</span></div>
+  <div role="listitem"><b>107</b><span>commits, each step accepted on its own</span></div>
+  <div role="listitem"><b>13</b><span>versions of the scoring model; the whole history recalculates in one click</span></div>
+  <div role="listitem"><b>158</b><span>strokes cut automatically from an 8½-minute video, each one checked by me</span></div>
+  <div role="listitem"><b>0.91</b><span>stroke-by-stroke correlation with OptiSwing on shoulder-turn speed</span></div>
+</div>
+
+<section id="problem" aria-labelledby="h-problem">
+  <div class="eyebrow">Problem</div>
+  <h2 id="h-problem">Plenty of scores, but no idea <em>what to practise next</em></h2>
+  <div class="two">
+    <div class="card"><h3>Where today's tools fall short</h3>
+      <ul class="plain">
+        <li>I ran the same video through OptiSwing: “arm rotation” came back as a flat 100. The score saturates and stops telling strokes apart</li>
+        <li>It gives a number for each item, but not which one matters most</li>
+        <li>There are no drills, and nothing checks next time whether you actually improved</li>
+      </ul></div>
+    <div class="card"><h3>What the alternatives cost</h3>
+      <ul class="plain">
+        <li>A private lesson costs about NT$800–1,600 an hour (PRO360 rates), and coaches rarely explain with data</li>
+        <li>Human video analysis from overseas costs £35–55 a session and takes days</li>
+        <li>The opening: everyone films on their phone, and pose-estimation models now run on an ordinary computer</li>
+      </ul></div>
+  </div>
+</section>
+
+<section id="users" aria-labelledby="h-users">
+  <div class="eyebrow">Users &amp; context</div>
+  <h2 id="h-users">Serve one very specific situation first</h2>
+  <p>The first version targets only my own situation, so every assumption can be checked against real data. The architecture leaves room for coaches with students.</p>
+  <div class="two">
+    <div class="card"><h3>Main user: amateurs practising on their own</h3>
+      <p class="muted">Indoor ball-machine court, playing alone, phone fixed at the side of the court. About 10 minutes and 100+ strokes a session. They want to know what went well today, what to fix and what to practise next time.</p></div>
+    <div class="card"><h3>Next user: coaches with students</h3>
+      <p class="muted">They need each student's data kept apart, a link that shows students only their own sessions, and a formal report to hand over. This came after the core flow was validated, as the groundwork for accounts later.</p></div>
+  </div>
+</section>
+
+<section id="principles" aria-labelledby="h-principles">
+  <div class="eyebrow">Principles</div>
+  <h2 id="h-principles">Five rules I wrote down first</h2>
+  <p>These rules sit at the top of the project spec, and every later trade-off was checked against them.</p>
+  <div class="rules">
+    <div class="rule"><h3>Licences first</h3><p>To keep commercial use possible, every model choice favours commercially usable licences. The mainstream SMPL family of 3D body models can't be used commercially, so it was ruled out. Every model that comes in gets its version, licence and commercial status written down.</p></div>
+    <div class="rule"><h3>Raw values are the data; scores are a layer on top</h3><p>Only raw measures are stored: angles, speeds, displacements. Scores are calculated when a report is made, and the scoring formula carries a version number. When the formula changes, every past session can be recalculated and the trend stays unbroken.</p></div>
+    <div class="rule"><h3>Every number has a source</h3><p>Scoring references come from the sports biomechanics literature: the elite average maps to 80, and the average minus two standard deviations maps to 50. Each source is listed in the scoring notes.</p></div>
+    <div class="rule"><h3>Compare rankings, not absolute values</h3><p>3D from a single camera is systematically off compared with lab motion capture. Validation doesn't ask for the same numbers, only the same ranking and trend: which strokes come out high and which come out low.</p></div>
+    <div class="rule"><h3>Talk like a coach</h3><p>The reader is a player. The text uses plain words and body comparisons, such as “one ball in three” or “a fist's width”. The raw numbers sit in an expandable “See the data” section as evidence.</p></div>
+  </div>
+</section>
+
+<section id="product-arch" aria-labelledby="h-parch">
+  <div class="eyebrow">Product architecture</div>
+  <h2 id="h-parch">One loop: <em>diagnose → practise → check</em></h2>
+  <p>The core of the product isn't handing out scores. It's linking each session to the next. Every screen after upload sits on one step of this loop.</p>
+  <div class="diagram" role="img" aria-label="Product loop: film, upload, automatic processing, read the report, practise, checked next time, then back to reading the report">
+    <div class="loop">
+      <div class="node"><span class="n">01</span><b>Set up the phone</b><small>Side, front or back all work; about 10 minutes</small></div>
+      <div class="node"><span class="n">02</span><b>Upload</b><small>Straight from the phone; frame rate, resolution and recording time checked first</small></div>
+      <div class="node"><span class="n">03</span><b>Automatic processing</b><small>Cut, classify, pose, measure, score; 5 strokes picked for 3D</small></div>
+      <div class="node key"><span class="n">04</span><b>Read the report</b><small>One-line diagnosis, done vs not done, 3D</small></div>
+      <div class="node"><span class="n">05</span><b>Practise</b><small>This week's focus, drills, sets, and a fallback drill</small></div>
+      <div class="node key"><span class="n">06</span><b>Checked next time</b><small>The next upload is compared item by item with the plan's targets</small></div>
+    </div>
+    <div class="back">The result goes into the next report as “last time's homework” and decides whether to keep the focus or move on</div>
+  </div>
+  <div class="diagram" role="img" aria-label="Product modules: home, report, single stroke, outputs, student management">
+    <div class="layer"><div class="lab">Home<span>one per player</span></div>
+      <div class="row" style="--n:4"><div class="node"><b>Today</b><small>This week's focus, latest session, average score</small></div><div class="node"><b>Plan</b><small>Practice plan, targets, milestones</small></div><div class="node"><b>Progress</b><small>Trends across sessions, NTRP reference level</small></div><div class="node"><b>Log</b><small>One card per session, notes, delete</small></div></div></div>
+    <div class="layer"><div class="lab">Report<span>one per session</span></div>
+      <div class="row" style="--n:3"><div class="node key"><b>Diagnosis</b><small>The main problem, done vs not done, last time's homework</small></div><div class="node"><b>Data</b><small>Scores, best 5 strokes, spread, checkpoints</small></div><div class="node"><b>Every stroke</b><small>Clips, 3D viewer, reference drills</small></div></div></div>
+    <div class="layer"><div class="lab">Outputs<span>to take away</span></div>
+      <div class="row" style="--n:3"><div class="node"><b>Share video</b><small>3D bullet time, light trail, done vs not done</small></div><div class="node"><b>Best vs typical</b><small>Two 3D bodies side by side, orbiting in sync</small></div><div class="node"><b>PDF report</b><small>Dark formal edition: cover, chapters, page numbers</small></div></div></div>
+    <div class="layer"><div class="lab">Coach<span>several students</span></div>
+      <div class="row" style="--n:3"><div class="node"><b>Students</b><small>Switch players, add a student</small></div><div class="node"><b>Personal links</b><small>Students see and upload only their own</small></div><div class="node"><b>Separate data</b><small>Handedness, height, baseline and trends kept per player</small></div></div></div>
+  </div>
+</section>
+
+<section id="tech-arch" aria-labelledby="h-tarch">
+  <div class="eyebrow">Technical architecture</div>
+  <h2 id="h-tarch">Local compute, a web interface, <em>ready for accounts and the cloud</em></h2>
+  <p>The first version stays off the cloud on purpose: videos stay on my own computer, compute costs nothing, and the results still open on a phone. Every layer leaves a hook for moving to the cloud and to accounts.</p>
+  <div class="diagram" role="img" aria-label="Technical architecture in four layers: client, local server, pipeline, data">
+    <div class="layer"><div class="lab">Client<span>phone / desktop browser</span></div>
+      <div class="row" style="--n:4"><div class="node"><b>Single-page report</b><small>Data written into the page; opens offline</small></div><div class="node"><b>3D viewer</b><small>three.js: mannequin mesh, skeleton, swing ribbon</small></div><div class="node"><b>Share-video encoding</b><small>WebCodecs in the browser; the server takes over where it isn't supported</small></div><div class="node"><b>Light and dark themes</b><small>One set of design-system tokens</small></div></div></div>
+    <div class="down">HTTPS · keys</div>
+    <div class="layer"><div class="lab">Local server<span>Python</span></div>
+      <div class="row" style="--n:4"><div class="node key"><b>Permissions</b><small>The owner sees everything; a student key sees only its own; self-signed certificate on the local network</small></div><div class="node"><b>Upload + job queue</b><small>One video at a time, progress updates, retries on failure</small></div><div class="node"><b>On-demand compute</b><small>Extra 3D runs, high-detail mannequins, PDF export</small></div><div class="node"><b>Usage log</b><small>Each 3D run records the player and stroke count, for billing later</small></div></div></div>
+    <div class="down">Subprocess</div>
+    <div class="layer"><div class="lab">Pipeline<span>two environments</span></div>
+      <div class="row" style="--n:4"><div class="node"><b>Clips + 2D</b><small>PyAV, ONNX (CoreML acceleration), MediaPipe</small></div><div class="node"><b>3D</b><small>PyTorch (Apple MPS), SAM 3D Body, MHR mesh</small></div><div class="node"><b>Report and PDF</b><small>Python writes the HTML; headless Chrome prints A4</small></div><div class="node"><b>Written analysis</b><small>Claude Code in headless mode, following a writing guide</small></div></div></div>
+    <div class="down">Read / write</div>
+    <div class="layer"><div class="lab">Data<span>one folder per player</span></div>
+      <div class="row" style="--n:4"><div class="node key"><b>Path layer</b><small>Every location managed in one place; moving to accounts only changes this layer</small></div><div class="node"><b>Reports</b><small>One folder per session: clips, pose, 3D, share videos</small><code class="path">reports/<wbr><i>player</i>/<wbr><i>session</i></code></div><div class="node"><b>Cache</b><small>2D/3D pose and manual fixes for each video, so a report can be rebuilt without recomputing</small><code class="path">data/<wbr><i>player</i>/<wbr><i>date</i>/<wbr><i>video</i></code></div><div class="node"><b>Roster and recycle bin</b><small>Player roster; deleted sessions kept for 30 days</small></div></div></div>
+  </div>
+</section>
+
+<section id="model-arch" aria-labelledby="h-march">
+  <div class="eyebrow">Model architecture</div>
+  <h2 id="h-march">Sound plus motion finds every stroke; <em>2D first, 3D fills the gaps</em></h2>
+  <p>Every model has a clear job and a clear licence. 2D runs on every frame and is cheap; 3D runs only on key strokes and key frames, to measure the rotation and arm movement that 2D can't.</p>
+  <div class="diagram" role="img" aria-label="Model pipeline: the audio and vision lines merge into clips, then classification, 2D, 3D, measures, scoring and writing">
+    <div class="split">
+      <div class="lane"><div class="lab">Audio</div>
+        <div class="node"><b>Hit-sound detection</b><small>Band-pass 1.5–8 kHz, then find peaks; a candidate must be 8 dB above the background</small></div></div>
+      <div class="lane"><div class="lab">Vision</div>
+        <div class="node"><b>Person detection: YOLOX</b><small>Locks onto the target player (the largest, most central person)</small><span class="tag">APACHE-2.0</span></div>
+        <div class="node"><b>2D pose: RTMPose</b><small>17 joints per frame; a second model, RTMW, audits the data</small><span class="tag">APACHE-2.0</span></div></div>
+    </div>
+    <div class="down">Match the two lines</div>
+    <div class="node key"><b>Clips: sound × wrist-speed peak</b><small>A stroke counts only when both appear within −0.35 to +0.2 s. Sound alone (ball machine, next court) or motion alone is dropped. Each clip runs from 1 s before contact to 0.5 s after</small></div>
+    <div class="down">Per stroke</div>
+    <div class="row" style="--n:3">
+      <div class="node"><b>Forehand / backhand</b><small>Logistic regression on hand distance, body side and swing direction, weighted by camera angle</small><span class="tag">In-house · leave-one-session-out 97%</span></div>
+      <div class="node"><b>3D skeleton: MediaPipe</b><small>33 world-space points to measure turn and facing</small><span class="tag">APACHE-2.0</span></div>
+      <div class="node"><b>Student model</b><small>Trained with SAM 3D as the teacher, using 2D only, to tell which limb is in front</small><span class="tag">In-house</span></div>
+    </div>
+    <div class="down">5 strokes picked automatically, more on demand</div>
+    <div class="node"><b>3D body: SAM 3D Body (Meta)</b><small>For each stroke it computes only 11 key frames around contact, then interpolates. It outputs 70 keypoints, joint rotations and an MHR body mesh. Arm rotation, wrist and shoulder turn are all measured here, and the mesh becomes a matte mannequin for the 3D viewer and share videos</small><span class="tag">SAM LICENSE</span></div>
+    <div class="down">Raw measures</div>
+    <div class="row" style="--n:3">
+      <div class="node"><b>Measures</b><small>30-plus raw values: shoulder-turn speed, arm whip, knee bend, step-in, weight transfer…; only raw values are stored</small></div>
+      <div class="node key"><b>Scoring layer</b><small>Literature references mapped to 0–100 with a logistic curve; pro, advanced and beginner scales; versioned, so everything can be recalculated at once</small></div>
+      <div class="node"><b>Checkpoints and diagnosis</b><small>Done or not done, stroke by stroke; finds the problem most tied to speed</small></div>
+    </div>
+    <div class="down">Writing</div>
+    <div class="node"><b>Written analysis: Claude</b><small>Turns the data into a coach's voice, following a writing guide: a one-line diagnosis, three paragraphs of analysis and a practice plan. Every number is calculated before it's written, and the numbers sit in “See the data”</small></div>
+    <div class="legend"><span><i class="k"></i>Key steps in the product</span><span><i></i>Model or processing step</span><span>Tags show licences or validation results</span></div>
+  </div>
+</section>
+
+<section id="decisions" aria-labelledby="h-decisions">
+  <div class="eyebrow">Decision log</div>
+  <h2 id="h-decisions">Seven key trade-offs</h2>
+  <div class="decs">
+    <article class="dec"><div class="when">Decision 01<h3>Which model for the 3D body</h3></div><dl>
+      <dt>Context</dt><dd>Measuring shoulder turn and arm rotation needs more than 2D, but the most accurate models are all SMPL-based, and their licences rule out commercial use.</dd>
+      <dt>Options</dt><dd><span class="chip">WHAM / GVHMR (SMPL)</span><span class="chip">SAM 3D Body</span><span class="chip">2D only</span></dd>
+      <dt>Decision</dt><dd>Meta's SAM 3D Body for 3D; Apache-2.0 RTMPose and MediaPipe for 2D. The clauses that still need a lawyer before commercial use are listed.</dd>
+      <dt>Result</dt><dd class="out">The commercial path stays open, and the arm-rotation and wrist measures that 2D can't capture come with it.</dd></dl></article>
+    <article class="dec"><div class="when">Decision 02<h3>What to do with measures 2D gets wrong</h3></div><dl>
+      <dt>Context</dt><dd>A data audit comparing two pose models found that hip–shoulder separation didn't agree between them in 2D.</dd>
+      <dt>Decision</dt><dd>Take it out of the score and keep it as reference only. From then on, every measure is labelled reliable, reference or unreliable for each camera angle.</dd>
+      <dt>Result</dt><dd class="out">Better one score fewer than a wrong number. When front and back angles were added later, this reliability table carried straight over.</dd></dl></article>
+    <article class="dec"><div class="when">Decision 03<h3>3D is slow: move to the cloud?</h3></div><dl>
+      <dt>Context</dt><dd>SAM 3D takes 13–25 s per stroke on a Mac, so a 150-stroke session needs more than 40 minutes. Cloud GPU costs hadn't been measured yet.</dd>
+      <dt>Options</dt><dd><span class="chip">All in the cloud</span><span class="chip">All local</span><span class="chip">Key frames + interpolation, key strokes only</span></dd>
+      <dt>Decision</dt><dd>Compute key frames only and interpolate. After upload, 5 strokes are picked automatically (the session's best, a typical one, the plan's target and problem strokes, one to improve); the rest run on demand, and every run's usage is logged.</dd>
+      <dt>Result</dt><dd class="out">3D per session dropped from over 40 minutes to about 2. The usage log became the billing basis for a “5 strokes included, full session extra” plan.</dd></dl></article>
+    <article class="dec"><div class="when">Decision 04<h3>Without 3D, the skeleton often swaps front and back limbs</h3></div><dl>
+      <dt>Context</dt><dd>2D only sees a flat image; depending on the angle, limbs were flipped front-to-back in 11–28% of frames.</dd>
+      <dt>Decision</dt><dd>Use SAM 3D results as the teacher to train a small model that reads only 2D and judges front and back, then blend it into the skeleton. I also confirmed the SAM licence doesn't forbid training on its outputs.</dd>
+      <dt>Result</dt><dd class="out">Flips fell to 2% from the front, 3% from back-right, 9% from the side and 14% from behind, with no extra 3D compute.</dd></dl></article>
+    <article class="dec"><div class="when">Decision 05<h3>What the share video should look like</h3></div><dl>
+      <dt>Context</dt><dd>Players want to share their good shots, and that's the cheapest way to win new users. The brief: premium, shareable, showing off the impressive parts.</dd>
+      <dt>Decision</dt><dd>The default style is “3D bullet time”: the clip plays once → freezes at contact → the player becomes a 3D sculpture and orbits once → back to the clip for the follow-through. The closing brand frame is fixed and can't be turned off.</dd>
+      <dt>Result</dt><dd class="out">Every share video is a product demo. The later “best vs typical” video reuses the same 3D stage.</dd></dl></article>
+    <article class="dec"><div class="when">Decision 06<h3>Compress on the phone before uploading?</h3></div><dl>
+      <dt>Context</dt><dd>One session's original footage is about 580 MB, and uploading from a phone is slow.</dd>
+      <dt>Experiment</dt><dd>Cutting clips on the phone first still meant uploading 79–84% of the data, so it wasn't worth it. Compressing to 720p at 2 Mbps cut the size to a quarter with almost the same stroke count and forehand/backhand split, but compression noise pushed speed measures up by 3–17%.</dd>
+      <dt>Decision</dt><dd>Not shipped yet. Inflated numbers mixed into the history would make players think they'd improved. It waits until there's a plan for joining old and new data.</dd>
+      <dt>Result</dt><dd class="out">A simple-looking optimisation became a trade-off backed by data, protecting the core promise: trends you can trust.</dd></dl></article>
+    <article class="dec"><div class="when">Decision 07<h3>How to split the data for students</h3></div><dl>
+      <dt>Context</dt><dd>Getting ready for friends to try it, with accounts likely later.</dd>
+      <dt>Options</dt><dd><span class="chip">Tag the existing data</span><span class="chip">One folder per player + a path layer</span></dd>
+      <dt>Decision</dt><dd>Go all the way: every path goes through one layer; each player gets their own settings, baseline, trends and home page; students get a personal link that sees and uploads only their own data; deleted items go to a recycle bin for 30 days.</dd>
+      <dt>Result</dt><dd class="out">End-to-end tests passed (upload, 3D and the automatic analysis all land in the student's own folder). Moving to accounts later only changes the path layer.</dd></dl></article>
+  </div>
+</section>
+
+<section id="validation" aria-labelledby="h-validation">
+  <div class="eyebrow">Validation</div>
+  <h2 id="h-validation">How I know it works</h2>
+  <p>Every stage set its acceptance criteria first, then checked them against real data. The first test video was an 8½-minute forehand session I recorded at the ball-machine court.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Item</th><th>Method</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>Automatic cutting</td><td>Acceptance: within 5% of a manual count; I checked every thumbnail</td><td class="res">158 strokes, confirmed by me</td></tr>
+      <tr><td>Forehand / backhand</td><td>10 sessions, 110 strokes labelled by eye; plus leave-one-session-out cross-validation</td><td class="res">108 / 110 correct</td></tr>
+      <tr><td>Against OptiSwing</td><td>First 10 strokes of the same video, ranking compared stroke by stroke</td><td class="res">Shoulder turn 0.91, hand speed 0.90</td></tr>
+      <tr><td>Spot check</td><td>Knee bend at contact on stroke 10</td><td class="res">25° vs OptiSwing 26°</td></tr>
+      <tr><td>Overall score</td><td>Average power / technique score of the best 5 strokes</td><td class="res">73 / 62 vs 71 / 62</td></tr>
+      <tr><td>Screen features</td><td>Every session, every camera angle, with and without 3D: at least one real output before delivery</td><td class="res">Became a standing delivery rule</td></tr>
+    </tbody></table></div>
+  <p class="muted">What isn't solved is written down too: arm rotation and wrist flick don't yet match OptiSwing's definitions, and accuracy has only been validated on my own data. That's the biggest risk before going commercial.</p>
+</section>
+
+<section id="product" aria-labelledby="h-product">
+  <div class="eyebrow">Product</div>
+  <h2 id="h-product">The product</h2>
+  <p class="lede">Everything below is a real screen from my October 20 session (158 strokes). The long screenshots scroll inside the phone frames, and faces are blurred. The app's interface is in Chinese.</p>
+<div class="tour">
+  <div class="tg">
+    <div class="tgh"><span class="tn">01</span><div><h3>Home and plan: open it and know what to practise today</h3><p class="muted">Home holds one thing: this week's focus and the latest session. The plan page turns the diagnosis into drills, sets and acceptance targets; the progress page shows score trends and how you compare with last time.</p></div></div>
+    <div class="phones" style="--n:4">
+      <figure class="ph long"><div class="fr"><img src="../img/t_home.jpg" alt="Home: this week's focus, tracked measures and the latest session's scores" width="520" height="1488" loading="lazy"></div><span class="hint">↕ Scroll</span><figcaption><b>Today</b>This week's focus, latest session</figcaption></figure>
+      <figure class="ph long"><div class="fr"><img src="../img/t_plan.jpg" alt="Plan: the next forehand drill, cues for each set and targets" width="520" height="3045" loading="lazy"></div><span class="hint">↕ Scroll</span><figcaption><b>Plan</b>Drills, sets, acceptance targets</figcaption></figure>
+      <figure class="ph long"><div class="fr"><img src="../img/t_progress.jpg" alt="Progress: each score over time and a comparison with last time" width="520" height="1883" loading="lazy"></div><span class="hint">↕ Scroll</span><figcaption><b>Progress</b>Trends and vs last time</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="../img/t_log.jpg" alt="Log: each session's scores, stroke count and filming tips" width="520" height="1125" loading="lazy"></div><figcaption><b>Log</b>Every session, filming tips</figcaption></figure>
+    </div>
+  </div>
+  <div class="tg">
+    <div class="tgh"><span class="tn">02</span><div><h3>A session report: diagnosis → data → every stroke</h3><p class="muted">First the one main problem and the strokes that prove it, then the full data, then a clip of every stroke. All three are full-page screenshots you can scroll inside the phone frame.</p></div></div>
+    <div class="phones" style="--n:3">
+      <figure class="ph long"><div class="fr"><img src="../img/t_analysis.jpg" alt="Diagnosis page: one-line diagnosis, evidence strokes, done and not done, summary and swing phases" width="520" height="5333" loading="lazy"></div><span class="hint">↕ Scroll</span><figcaption><b>Diagnosis</b>Main problem, evidence, the coach's notes</figcaption></figure>
+      <figure class="ph long"><div class="fr"><img src="../img/t_dash.jpg" alt="Data page: scores, best 5 strokes, spread and checkpoints" width="520" height="4428" loading="lazy"></div><span class="hint">↕ Scroll</span><figcaption><b>Data</b>Scores, spread, checkpoints</figcaption></figure>
+      <figure class="ph long"><div class="fr"><img src="../img/t_clips.jpg" alt="Every-stroke page: thumbnails of each automatically cut stroke with scores and 3D markers" width="520" height="2028" loading="lazy"></div><span class="hint">↕ Scroll</span><figcaption><b>Every stroke</b>158 clips, labelled</figcaption></figure>
+    </div>
+  </div>
+  <div class="tg">
+    <div class="tgh"><span class="tn">03</span><div><h3>Single-stroke 3D and share videos</h3><p class="muted">Every stroke can be viewed in 3D from any angle. One tap makes a vertical share video: bullet time, a swing light trail, and the best stroke orbiting next to a typical one.</p></div></div>
+    <div class="phones" style="--n:3">
+      <figure class="ph"><div class="fr"><img src="../img/t_swing3d.jpg" alt="Single-stroke page: the 3D body playing in sync with the clip, contact point marked" width="520" height="1125" loading="lazy"></div><figcaption><b>Single stroke</b>3D body + clip in sync</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="../img/t_share_bullet_hero.jpg" alt="Share video: the 3D body with a green swing trail and wrist speed" width="400" height="711" loading="lazy"></div><figcaption><b>Bullet time</b>3D swing trail</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="../img/t_share_bullet_scan.jpg" alt="Share video: the clip at contact with the four phases: ready, take-back, contact, follow-through" width="400" height="711" loading="lazy"></div><figcaption><b>Contact</b>Four phases</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="../img/t_share_bvt_orbit.jpg" alt="Share video: the best and a typical stroke side by side in 3D, with the three biggest differences below" width="400" height="711" loading="lazy"></div><figcaption><b>Best vs typical</b>3D side by side, top 3 differences</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="../img/t_share_cmp_freeze.jpg" alt="Share video: a done and a not-done stroke stacked, with knee angles marked" width="400" height="711" loading="lazy"></div><figcaption><b>Done vs not done</b>Two freeze frames, angles marked</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="../img/t_share_bvt_anno.jpg" alt="Share video: clips of the best and a typical stroke, with knee bend at contact marked" width="400" height="711" loading="lazy"></div><figcaption><b>Best vs typical</b>Clips with guide lines</figcaption></figure>
+    </div>
+  </div>
+</div>
+  <div class="cmpk">
+    <div class="cmph"><h3><span class="tn">04</span>Done vs not done: skeleton guides and data</h3><p class="muted">The same player, same session, same angle, frozen at the key moment: done on the left, not done on the right, with angles and displacements marked on the skeleton.</p></div>
+    <div class="pair">
+    <figure><img src="../img/cp_knee_impact.jpg" alt="Knee bend at contact: stroke 95 (done) bends 36 degrees, stroke 24 (not done) only 16, with the front-leg angle marked on the skeleton" loading="lazy"><figcaption><b>Knee bend at contact</b>　done <span class="good">36°</span>　vs　not done <span class="bad">16°</span>　·　93 of 130 strokes not done</figcaption></figure>
+    <figure><img src="../img/cp_load_drop.jpg" alt="Hips down on the take-back: stroke 17 (done) drops the pelvis 6.4 cm, stroke 83 (not done) only 0.9 cm" loading="lazy"><figcaption><b>Hips down on the take-back</b>　done <span class="good">6.4 cm</span>　vs　not done <span class="bad">0.9 cm</span>　·　the dashed line is the top of the take-back</figcaption></figure>
+    </div>
+  </div>
+<div class="tour">
+  <div class="tg">
+    <div class="tgh"><span class="tn">05</span><div><h3>Coach and upload</h3><p class="muted">After signing in, coaches see their own students first. Uploads are resumable, so a dropped connection picks up where it left off.</p></div></div>
+    <div class="phones" style="--n:4">
+      <figure class="ph"><div class="fr"><img src="../img/t_coachhome.jpg" alt="Coach home: the coach's students and their latest sessions" width="520" height="1125" loading="lazy"></div><figcaption><b>Coach home</b>My students</figcaption></figure>
+      <figure class="ph"><div class="fr"><img src="../img/t_upload.jpg" alt="Upload panel: drag and drop a video, with camera-angle tips" width="520" height="1125" loading="lazy"></div><figcaption><b>Upload</b>Drag and drop, filming tips</figcaption></figure>
+    </div>
+  </div>
+</div>
+  <div class="cmpk">
+    <div class="cmph"><h3>Formal PDF report for students (9 pages)</h3><p class="muted">A dark formal edition, exported from the report in one tap: cover, summary, analysis, measures and swing checkpoints, done vs not done, best vs typical, practice plan. Every page is numbered.</p></div>
+    <figure><img src="../img/pdfsheet.jpg" alt="All 9 pages of the PDF report: cover, summary, analysis, measures, done and not done, best and typical, practice plan" width="1776" height="2472" loading="lazy"><figcaption>The real output from the October 20 session, all 9 pages laid out.</figcaption></figure>
+  </div>
+</section>
+
+<section id="method" aria-labelledby="h-method">
+  <div class="eyebrow">How I worked</div>
+  <h2 id="h-method">How I split the work with AI</h2>
+  <p>An AI coding agent wrote the code. My job was to build the right thing: define the problem, set acceptance criteria, choose between options and review every result. A few working rules kept it moving steadily and on course:</p>
+  <div class="two">
+    <div class="card"><h3>Rules</h3><ul class="plain">
+      <li>Work broken into steps that can each be accepted on their own: clips → 2D measures and scoring → 3D → analysis and trends</li>
+      <li>Before any screen feature ships, it's generated for real on every session and every camera angle (a rule that came from one bad delivery)</li>
+      <li>Visual decisions start as mock-ups for me to choose from, never as direct edits</li>
+      <li>When several sessions work on the same project at once, each commits only its own changes</li></ul></div>
+    <div class="card"><h3>Calls I made</h3><ul class="plain">
+      <li>Start with one concrete situation, then widen step by step (ball-machine court → any angle → students)</li>
+      <li>Turn down optimisations that look quick when they would hurt trends you can trust</li>
+      <li>Design the share video as a way to win users, not as an add-on</li>
+      <li>Get the data structure right for accounts before building them</li></ul></div>
+  </div>
+</section>
+
+<section id="next" aria-labelledby="h-next">
+  <div class="eyebrow">What's next</div>
+  <h2 id="h-next">Next steps</h2>
+  <ul class="plain">
+    <li>Recalibrate speed measures, arm rotation and wrist flick with 60 fps video</li>
+    <li>Run elite players' reference videos through the same pipeline to correct single-camera bias (scoring v2 calibration)</li>
+    <li>Measure cloud GPU cost and speed, then add accounts and payments</li>
+    <li>Widen the trial to players of different levels, handedness and camera angles</li>
+  </ul>
+  <div class="close"><div class="brand"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#D7FA4C"/><path d="M11 43C24 49 42 40 49 16" fill="none" stroke="#121412" stroke-width="6" stroke-linecap="round"/></svg><span>one<i>stroke</i></span></div><p class="muted">OneStroke · film once, understand every stroke</p><p class="muted">Aron · product manager. Every screen, number and date on this page comes from the project's real data and development log.</p></div>
+</section>
+
+</main>
+</div>
+
+<script>
+(() => {   // 主視覺影片：靜音自動播放；「Sound on」從頭播並打開聲音，再按一次靜音
+  const v = document.getElementById("heroVid"), b = document.getElementById("snd");
+  if (!v || !b) return;
+  const lab = b.querySelector("span");
+  const sync = () => { const on = !v.muted && !v.paused; b.setAttribute("aria-pressed", on); lab.textContent = on ? "Mute" : "Sound on"; };
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); }
+  let heard = false;
+  b.addEventListener("click", () => {
+    if (v.muted || v.paused) {
+      if (!heard) { v.currentTime = 0; heard = true; }
+      v.muted = false;
+      v.play().catch(() => {});
+    } else v.muted = true;
+    sync();
+  });
+  ["volumechange", "play", "pause"].forEach(e => v.addEventListener(e, sync));
+  sync();
+})();
+(() => {   // 語言切換：記住選擇（跟 Aron Lab 首頁共用 lab.lang），淡出後換到另一個語言的同一個章節
+  const secs = [...document.querySelectorAll("main section[id]")];
+  document.querySelectorAll("[data-lang-set]").forEach(a => a.addEventListener("click", e => {
+    if (a.getAttribute("aria-current") === "true") { e.preventDefault(); return; }
+    try { localStorage.setItem("lab.lang", a.dataset.langSet); } catch (err) { /* 無痕模式：靠網址的 ?lang= */ }
+    const y = scrollY + innerHeight * 0.3;
+    let id = "";
+    secs.forEach(s => { if (s.offsetTop <= y) id = s.id; });
+    const url = a.getAttribute("href") + (id ? "#" + id : "");
+    e.preventDefault();
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { location.href = url; return; }
+    document.documentElement.classList.add("leaving");
+    setTimeout(() => { location.href = url; }, 200);
+  }));
+  addEventListener("pageshow", () => document.documentElement.classList.remove("leaving"));
+})();
+</script>
+
+</body>
+</html>

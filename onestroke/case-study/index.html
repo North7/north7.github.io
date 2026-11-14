@@ -4,12 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="canonical" href="https://aronlab.dev/onestroke/case-study/">
+<link rel="alternate" hreflang="zh-Hant" href="https://aronlab.dev/onestroke/case-study/?lang=zh">
+<link rel="alternate" hreflang="en" href="https://aronlab.dev/onestroke/case-study/en/">
+<link rel="alternate" hreflang="x-default" href="https://aronlab.dev/onestroke/case-study/">
 <script>
   // 2026-11-12 從個人主頁搬到 Aron Lab 底下，跟其他作品放一起。
   // 路徑照其他作品的 <作品>.aronlab.dev/case-study/ 排：OneStroke 之後上線到 onestroke.aronlab.dev 時，
   // 把這個資料夾搬過去，Aron Lab 加一行 /onestroke/* 轉址就好。
+  // 2026-11-15 中英雙語：英文版在 en/。語言跟 Aron Lab 首頁同一套：網址的 ?lang= → 自己選過的（localStorage 的 lab.lang，整個 aronlab.dev 共用）
+  //   → IP 地區（functions/onestroke/case-study/index.js 寫進 <html data-geo>：台灣、香港、澳門、中國用中文，其他用英文）→ 瀏覽器語言。
   // 同一份網站也部署在 GitHub Pages；從 north7.github.io 進來的訪客轉到正式網域，路徑保留
   if (location.hostname === 'north7.github.io') location.replace('https://aronlab.dev' + location.pathname + location.search + location.hash);
+  else (function () {
+    var h = document.documentElement, q = new URLSearchParams(location.search).get('lang'), s = null;
+    try { s = localStorage.getItem('lab.lang'); } catch (e) {}
+    var g = h.dataset.geo, geo = /^[A-Z]{2}$/.test(g || '') ? (/^(TW|HK|MO|CN)$/.test(g) ? 'zh' : 'en') : null;
+    var l = q === 'en' || q === 'zh' ? q : s === 'en' || s === 'zh' ? s : geo || ([].concat(navigator.languages || navigator.language || []).some(function (x) { return /^zh/i.test(x); }) ? 'zh' : 'en');
+    if (l === 'en') location.replace('/onestroke/case-study/en/' + location.hash);
+  })();
 </script>
 <meta name="description" content="用一段手機影片看懂每一拍的網球揮拍分析產品：問題、原則、架構、決策紀錄、驗證與實際畫面。">
 <meta property="og:type" content="article">
@@ -208,6 +220,15 @@ td.res { font: 700 15px var(--display); font-variant-numeric: tabular-nums; whit
 @media (prefers-reduced-motion: no-preference) { nav.toc a { transition: color .15s, border-color .15s; } }
 nav.toc a.who { border-left: 0; padding: 0; color: var(--muted); }
 nav.toc a.who:hover { color: var(--fg); }
+/* 中／EN 切換（2026-11-15，跟 Everkeep 產品案例同一套）：記住選擇（lab.lang，整個 aronlab.dev 共用），淡出後換到另一個語言的同一個章節 */
+.langseg { display: inline-flex; align-self: flex-start; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 99px; background: var(--card); margin: 0 0 14px; }
+.langseg a, nav.toc .langseg a { border: 0; padding: 5px 11px; border-radius: 99px; font: 700 12px/1 var(--num); letter-spacing: .06em; color: var(--muted); text-decoration: none; }
+.langseg a[aria-current="true"], nav.toc .langseg a[aria-current="true"] { background: var(--fg); color: var(--bg); }
+.langseg a:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+.tbr { display: none; }
+@media (max-width: 900px) { nav.toc .who { width: auto; } nav.toc .langseg { margin: 0 0 6px auto; } nav.toc .tbr { display: block; flex-basis: 100%; height: 0; } }  /* 手機：跟「← Aron Lab」同一行、靠右，章節從下一行開始 */
+html.leaving main, html.leaving nav.toc { opacity: 0; transform: translateY(6px); }
+@media (prefers-reduced-motion: no-preference) { main, nav.toc { transition: opacity .2s ease, transform .2s ease; } .langseg a { transition: background .25s, color .25s; } }
 </style>
 </head>
 <body>
@@ -215,6 +236,7 @@ nav.toc a.who:hover { color: var(--fg); }
 <nav class="toc" aria-label="目錄">
   <div class="brand"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#D7FA4C"/><path d="M11 43C24 49 42 40 49 16" fill="none" stroke="#121412" stroke-width="6" stroke-linecap="round"/></svg><span>one<i>stroke</i></span></div>
   <a class="who" href="/#w-onestroke">← Aron Lab</a>
+  <div class="langseg" role="group" aria-label="語言 Language"><a href="/onestroke/case-study/?lang=zh" data-lang-set="zh" lang="zh-Hant" aria-current="true">中</a><a href="/onestroke/case-study/en/?lang=en" data-lang-set="en" lang="en">EN</a></div><i class="tbr" aria-hidden="true"></i>
   <a href="#problem">問題與機會</a><a href="#users">使用者與情境</a><a href="#principles">產品原則</a><a href="#product-arch">產品架構</a><a href="#tech-arch">技術架構</a><a href="#model-arch">模型架構</a>
   <a href="#decisions">決策紀錄</a><a href="#validation">驗證</a><a href="#product">產品畫面</a><a href="#method">工作方式</a><a href="#next">下一步</a>
 </nav>
@@ -530,6 +552,22 @@ nav.toc a.who:hover { color: var(--fg); }
   });
   ["volumechange", "play", "pause"].forEach(e => v.addEventListener(e, sync));
   sync();
+})();
+(() => {   // 語言切換：記住選擇（跟 Aron Lab 首頁共用 lab.lang），淡出後換到另一個語言的同一個章節
+  const secs = [...document.querySelectorAll("main section[id]")];
+  document.querySelectorAll("[data-lang-set]").forEach(a => a.addEventListener("click", e => {
+    if (a.getAttribute("aria-current") === "true") { e.preventDefault(); return; }
+    try { localStorage.setItem("lab.lang", a.dataset.langSet); } catch (err) { /* 無痕模式：靠網址的 ?lang= */ }
+    const y = scrollY + innerHeight * 0.3;
+    let id = "";
+    secs.forEach(s => { if (s.offsetTop <= y) id = s.id; });
+    const url = a.getAttribute("href") + (id ? "#" + id : "");
+    e.preventDefault();
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { location.href = url; return; }
+    document.documentElement.classList.add("leaving");
+    setTimeout(() => { location.href = url; }, 200);
+  }));
+  addEventListener("pageshow", () => document.documentElement.classList.remove("leaving"));
 })();
 </script>
 
