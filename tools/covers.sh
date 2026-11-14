@@ -21,13 +21,17 @@ SHOTS=(
   onestroke-case "https://aronlab.dev/onestroke/case-study/"
   everkeep-case  "https://aronlab.dev/everkeep/case-study/?lang=zh"
   everkeep-case-en "https://aronlab.dev/everkeep/case-study/en/?lang=en"
-  paypulse       "https://paypulse.aronlab.dev/"
+  paypulse       "https://paypulse.aronlab.dev/?lang=zh"
+  paypulse-en    "https://paypulse.aronlab.dev/?lang=en"
 )
 # PayPulse 第一次打開會先跳出薪資設定，畫面也跟著現在幾點走：
-# 拿它的頁面塞進示範設定（月薪 50,000、09:00–18:00、午休不計薪）和固定時間（平日週四 15:42），再拍
+# 拿它的頁面塞進示範設定和固定時間（平日週四 15:42），再拍。
+# 中文版：新台幣月薪 50,000、09:00–18:00、午休一小時不計薪；英文版（-en）：美元月薪 5,000、09:00–17:30、午休半小時不計薪。
+# 語言直接寫進 paypulse.lang，不靠瀏覽器語言判斷
 typeset -A PREP
 PREP=(
-  paypulse "<base href=\"https://paypulse.aronlab.dev/\"><script>localStorage.setItem('paypulse.settings.v1',JSON.stringify({mode:'monthly',salary:50000,currency:'TWD',start:'09:00',end:'18:00',lunch:true,lunchStart:'12:00',lunchEnd:'13:00',lunchPaid:false,workdays:[1,2,3,4,5]}));(function(R){var off=new R('2026-11-05T15:42:00+08:00')-R.now();function D(){return arguments.length?new (Function.prototype.bind.apply(R,[null].concat([].slice.call(arguments))))():new R(R.now()+off)}D.prototype=R.prototype;D.now=function(){return R.now()+off};D.UTC=R.UTC;D.parse=R.parse;window.Date=D})(Date);</script>"
+  paypulse "<base href=\"https://paypulse.aronlab.dev/\"><script>localStorage.setItem('paypulse.lang','zh');localStorage.setItem('paypulse.settings.v1',JSON.stringify({mode:'monthly',salary:50000,currency:'TWD',start:'09:00',end:'18:00',lunch:true,lunchStart:'12:00',lunchEnd:'13:00',lunchPaid:false,workdays:[1,2,3,4,5]}));(function(R){var off=new R('2026-11-05T15:42:00+08:00')-R.now();function D(){return arguments.length?new (Function.prototype.bind.apply(R,[null].concat([].slice.call(arguments))))():new R(R.now()+off)}D.prototype=R.prototype;D.now=function(){return R.now()+off};D.UTC=R.UTC;D.parse=R.parse;window.Date=D})(Date);</script>"
+  paypulse-en "<base href=\"https://paypulse.aronlab.dev/\"><script>localStorage.setItem('paypulse.lang','en');localStorage.setItem('paypulse.settings.v1',JSON.stringify({mode:'monthly',salary:5000,currency:'USD',start:'09:00',end:'17:30',lunch:true,lunchStart:'12:00',lunchEnd:'12:30',lunchPaid:false,workdays:[1,2,3,4,5]}));(function(R){var off=new R('2026-11-05T15:42:00+08:00')-R.now();function D(){return arguments.length?new (Function.prototype.bind.apply(R,[null].concat([].slice.call(arguments))))():new R(R.now()+off)}D.prototype=R.prototype;D.now=function(){return R.now()+off};D.UTC=R.UTC;D.parse=R.parse;window.Date=D})(Date);</script>"
 )
 TMP=$(mktemp -d)
 for name in ${@:-${(k)SHOTS}}; do
@@ -35,7 +39,7 @@ for name in ${@:-${(k)SHOTS}}; do
   [[ -z $url ]] && { echo "沒有這個封面：$name"; continue; }
   if [[ -n ${PREP[$name]} ]]; then
     # 從旁邊的本機 checkout 讀（要先 git pull 到最新）；這台電腦的 curl／Python 連 github.io 常被重置，Chrome 不會
-    src="../$name/index.html"
+    src="../${name%-en}/index.html"   # paypulse-en 也讀 ../paypulse/
     [[ -f $src ]] || { echo "找不到 $src"; continue; }
     python3 -c 'import sys; h = open(sys.argv[1], encoding="utf-8").read(); assert "<head>" in h; print(h.replace("<head>", "<head>" + sys.argv[2], 1))' "$src" "${PREP[$name]}" > "$TMP/$name.html"
     url="file://$TMP/$name.html"

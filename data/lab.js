@@ -359,7 +359,7 @@ window.LAB = {
       desc: '填好月薪或時薪和上下班時間，畫面就即時跳出今天已經賺了多少，算到小數點後四位。旁邊有下班倒數、本月累計、今天的薪水換得到幾杯珍奶，還會算帶薪摸魚賺了多少；按 B 是老闆鍵，金額全部模糊。資料只存在自己的瀏覽器。',
       facts: ['資料只留在瀏覽器', '按 B 一鍵隱藏金額', '下班瞬間放彩帶'],
       en: {
-        zh: 'Workday Motivator', kind: 'Widget', cadence: 'Ticks every second', sectionsLabel: 'Feature', ui: 'zh',
+        zh: 'Workday Motivator', kind: 'Widget', cadence: 'Ticks every second', sectionsLabel: 'Feature', cover: 'assets/covers/paypulse-en.jpg',
         tagline: 'Every second of the workday, money comes in.',
         desc: "Enter a monthly or hourly wage and your working hours, and it shows what you've earned so far today, live to four decimal places. Alongside: a countdown to clocking off, the month so far, how many bubble teas today's pay already covers, and what your slacking-off time earned. Press B for the boss key, which blurs every amount. Your data stays in your own browser.",
         facts: ['Data stays in your browser', 'Press B to hide every amount', 'Confetti the second you clock off'],
