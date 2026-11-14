@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="canonical" href="https://aronlab.dev/everkeep/case-study/en/">
+<link rel="alternate" hreflang="zh-Hant" href="https://aronlab.dev/everkeep/case-study/?lang=zh">
+<link rel="alternate" hreflang="en" href="https://aronlab.dev/everkeep/case-study/en/">
+<link rel="alternate" hreflang="x-default" href="https://aronlab.dev/everkeep/case-study/">
+<script>
+  // 英文版。中文版在上一層；語言規則寫在中文版開頭。英文版只看網址的 ?lang= 和自己選過的，不依 IP 轉回中文。
+  // 2026-11-14 Everkeep 產品案例，照 OneStroke 的做法放在 Aron Lab 底下（aronlab.dev/everkeep/case-study/）。
+  // 2026-11-14 Aron：案例裡不寫具體的人名，一律寫「小朋友」。截圖裡的名字已遮掉；介紹影片的字幕和畫面有名字，所以開頭改放小島截圖。
+  // 2026-11-15 中英雙語：英文版在 en/。語言跟 Aron Lab 首頁同一套：網址的 ?lang= → 自己選過的（localStorage 的 lab.lang，整個 aronlab.dev 共用）
+  //   → IP 地區（functions/everkeep/case-study/index.js 寫進 <html data-geo>：台灣、香港、澳門、中國用中文，其他用英文）→ 瀏覽器語言。
+  // 同一份網站也部署在 GitHub Pages；從 north7.github.io 進來的訪客轉到正式網域，路徑保留
+  if (location.hostname === 'north7.github.io') location.replace('https://aronlab.dev' + location.pathname + location.search + location.hash);
+  else (function () {
+    var q = new URLSearchParams(location.search).get('lang'), s = null;
+    try { s = localStorage.getItem('lab.lang'); } catch (e) {}
+    var l = q === 'en' || q === 'zh' ? q : s;
+    if (l === 'zh') location.replace('/everkeep/case-study/' + location.hash);
+  })();
+</script>
+<meta name="description" content="My child's fragile crafts rebuilt in 3D from photos, living on a small island and in a gallery: opportunity, strategy, principles, decisions, quality bar and real screens.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Everkeep case study · Aron">
+<meta property="og:description" content="My child's fragile crafts rebuilt in 3D from photos, living on a small island and in a gallery: opportunity, strategy, principles, decisions, quality bar and real screens.">
+<meta property="og:url" content="https://aronlab.dev/everkeep/case-study/en/">
+<meta property="og:image" content="https://aronlab.dev/assets/covers/everkeep-case-en.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23B8612F'/%3E%3Cpath d='M19 49V30a13 13 0 0 1 26 0v19' fill='none' stroke='%23F3F0E9' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='38' r='5.5' fill='%23F3F0E9'/%3E%3C/svg%3E">
+<title>Everkeep case study · Aron</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* 版面：跟產品同一套「紙上的手作」——紙色底、墨色字、陶土橘只標重點和「你在哪」；
+   長捲動的產品案例，電腦左邊目錄（目前章節一條 2px 陶土橘），手機右下角一顆進度圓環，點了展開目錄 */
+:root {
+  --bg: #F3F0E9; --card: #FBF9F4; --card2: #ECE7DC; --line: #DDD6C9; --fg: #1E1B17; --muted: #6C645A;
+  --accent: #B8612F; --on-accent: #FBF9F4; --soft: rgba(184, 97, 47, .11); --frame: #E6E0D4;
+  --display: "Jost", "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+  --body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #100F0D; --card: #1A1815; --card2: #23201C; --line: #2F2B26; --fg: #EEEAE2; --muted: #A1988C;
+  --accent: #E08A52; --on-accent: #1A120C; --soft: rgba(224, 138, 82, .14); --frame: #1E1C18; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #100F0D; --card: #1A1815; --card2: #23201C; --line: #2F2B26; --fg: #EEEAE2; --muted: #A1988C;
+  --accent: #E08A52; --on-accent: #1A120C; --soft: rgba(224, 138, 82, .14); --frame: #1E1C18; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 400 16px/1.8 var(--body); margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: inherit; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 48px 110px; display: grid; grid-template-columns: 184px minmax(0, 1fr); gap: 56px; }
+
+/* 目錄 */
+nav.toc { position: sticky; top: calc(28px + env(safe-area-inset-top, 0px)); align-self: start; display: flex; flex-direction: column; gap: 2px; font: 500 13.5px/1.4 var(--body); }
+.brand { display: flex; align-items: center; gap: 10px; font: 600 19px var(--display); letter-spacing: -.01em; }
+.brand svg { width: 28px; height: 28px; flex: none; }
+a.who { text-decoration: none; }
+a.who:hover { color: var(--fg); }
+.who { font: 500 12px var(--mono); letter-spacing: .06em; color: var(--muted); margin: 6px 0 18px; }
+nav.toc a { color: var(--muted); text-decoration: none; padding: 5px 0 5px 13px; border-left: 2px solid var(--line); }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--fg); outline: none; }
+nav.toc a.on { color: var(--fg); border-left-color: var(--accent); }
+nav.toc a.who { border-left: 0; padding: 0; color: var(--muted); }
+nav.toc a.who:hover { color: var(--fg); }
+
+main { min-width: 0; display: flex; flex-direction: column; gap: 96px; }
+section { display: flex; flex-direction: column; gap: 22px; scroll-margin-top: 28px; }
+.eyebrow { display: flex; align-items: center; gap: 9px; font: 600 12px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.eyebrow::before { content: ""; width: 9px; height: 11px; border-radius: 5px 5px 1px 1px; background: var(--accent); }
+h1 { font: 900 clamp(34px, 5.4vw, 58px)/1.14 var(--body); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
+h1 em, h2 em { font-style: normal; color: var(--accent); }
+h2 { font: 900 clamp(25px, 3.3vw, 34px)/1.28 var(--body); margin: 0; text-wrap: balance; }
+h3 { font: 700 17px/1.5 var(--body); margin: 0; }
+p { margin: 0; max-width: 66ch; }
+.lede { font-size: 18px; line-height: 1.85; color: var(--muted); max-width: 58ch; }
+.muted { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+ul.plain { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 7px; }
+ul.plain li::marker { color: var(--accent); }
+.g2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+
+/* 開頭 */
+.hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 44px; align-items: center; }
+.hero .txt { display: flex; flex-direction: column; gap: 24px; }
+.hv { justify-self: end; width: min(100%, 320px); display: flex; flex-direction: column; gap: 10px; }
+.vwrap { position: relative; aspect-ratio: 9 / 16; border-radius: 26px; overflow: hidden; border: 1px solid var(--line); background: var(--frame); }
+.vwrap video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.snd { position: absolute; right: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; font: 700 13px/1 var(--body); color: #1E1B17;
+  background: rgba(251, 249, 244, .9); border: 1px solid rgba(30, 27, 23, .1); border-radius: 99px; padding: 9px 13px 9px 11px; cursor: pointer;
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: 0 6px 18px rgba(0, 0, 0, .18); }
+.snd svg { width: 16px; height: 16px; }
+.snd[aria-pressed="false"] .w { opacity: .3; }
+.snd:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.hv figcaption { font-size: 13px; color: var(--muted); }
+.meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 28px; padding-top: 20px; border-top: 1px solid var(--line); margin: 0; }
+.meta dt { font: 600 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.meta dd { margin: 0; font-weight: 500; font-size: 15px; line-height: 1.6; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 700 14px/1 var(--body); padding: 12px 16px; border-radius: 99px; border: 1px solid var(--line); background: var(--card); }
+.btn.pri { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 關鍵數字 */
+.nums { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.nums li { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+.nums b { font: 600 clamp(28px, 3.3vw, 38px)/1 var(--display); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.nums b small { font: 700 15px var(--body); margin-left: 3px; letter-spacing: 0; }
+.nums li:first-child b { color: var(--accent); }
+.nums span { font-size: 13px; line-height: 1.55; color: var(--muted); }
+
+/* 三段路線：真的有先後，所以有編號 */
+.road { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.stage { padding: 20px 22px 6px 0; display: flex; flex-direction: column; gap: 10px; position: relative; min-width: 0; }
+.stage + .stage { padding-left: 22px; border-left: 1px solid var(--line); }
+.stage::before { content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 2px; background: transparent; }
+.stage.now::before { background: var(--accent); right: 22px; }
+.stage .k { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font: 600 12px/1 var(--mono); letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+.pill { font: 700 11.5px/1 var(--body); letter-spacing: 0; padding: 5px 9px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; text-transform: none; }
+.stage.now .pill { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.stage h3 { font-size: 19px; }
+.stage dl { margin: 0; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 6px 10px; font-size: 14.5px; line-height: 1.7; }
+.stage dt { color: var(--muted); font-size: 13px; line-height: 1.95; }
+.stage dd { margin: 0; }
+
+/* 產品原則 */
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
+.rule { display: flex; flex-direction: column; gap: 6px; padding: 20px 0; border-top: 1px solid var(--line); }
+.rule h3 { font-size: 18px; }
+.rule p { color: var(--muted); font-size: 15px; }
+
+/* 體驗架構：一條流程，第五站分成兩個畫面 */
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.3fr) minmax(0, 1fr); gap: 0; align-items: stretch; overflow-x: auto; padding-bottom: 4px; }
+.st { position: relative; padding: 16px 18px 16px 0; display: flex; flex-direction: column; gap: 5px; min-width: 128px; }
+.st::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--line); }
+.st::after { content: ""; position: absolute; top: -4px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--bg); border: 2px solid var(--muted); }
+.st.key::after { background: var(--accent); border-color: var(--accent); }
+.st .n { font: 600 11.5px var(--mono); letter-spacing: .12em; color: var(--muted); margin-top: 8px; }
+.st b { font: 700 15.5px/1.4 var(--body); }
+.st small { font-size: 13px; line-height: 1.6; color: var(--muted); }
+.st .fork { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.st .fork div { padding-left: 12px; border-left: 2px solid var(--accent); display: flex; flex-direction: column; gap: 2px; }
+.st .fork div b { font-size: 15px; }
+.layers { display: flex; flex-direction: column; }
+.ly { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 18px; padding: 15px 0; border-top: 1px solid var(--line); align-items: baseline; }
+.ly:last-child { border-bottom: 1px solid var(--line); }
+.ly .lab { font: 700 15px var(--body); }
+.ly .lab span { display: block; font: 500 12px var(--mono); letter-spacing: .08em; color: var(--muted); margin-top: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-block; font: 500 13px/1 var(--body); padding: 7px 11px; border-radius: 99px; background: var(--card); border: 1px solid var(--line); }
+
+/* 決策紀錄 */
+.decs { display: flex; flex-direction: column; gap: 12px; }
+.dec { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px 26px; display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 22px; }
+.dec .when { font: 600 12px/1.5 var(--mono); color: var(--accent); letter-spacing: .12em; }
+.dec .when h3 { font: 700 17.5px/1.45 var(--body); color: var(--fg); letter-spacing: 0; margin-top: 8px; }
+.dec dl { margin: 0; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 9px 14px; }
+.dec dt { font: 500 12.5px/1.95 var(--body); color: var(--muted); }
+.dec dd { margin: 0; }
+.dec dd.out { font-weight: 500; }
+.dec dd.out::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: 1px; }
+.dec q { quotes: "「" "」"; }
+
+/* 品質標準：真的是一個流程 */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 28px; counter-reset: s; margin: 0; padding: 0; list-style: none; }
+.steps li { counter-increment: s; padding: 16px 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
+.steps li::before { content: counter(s, decimal-leading-zero); font: 600 12px var(--mono); letter-spacing: .12em; color: var(--accent); }
+.steps b { font-size: 16px; }
+.steps span { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.lesson { background: var(--soft); border-radius: 16px; padding: 18px 22px; display: flex; gap: 14px; align-items: flex-start; }
+.lesson b { flex: none; font: 600 12px/1.9 var(--mono); letter-spacing: .12em; color: var(--accent); }
+.lesson p { font-size: 15px; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+figure img { width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid var(--line); background: var(--frame); }
+figcaption { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+figcaption b { color: var(--fg); margin-right: 6px; }
+.tbl { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 6px 22px; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 15px; }
+th, td { text-align: left; padding: 14px 16px 14px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font: 600 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+td.res { font: 600 15px/1.5 var(--display); font-variant-numeric: tabular-nums; color: var(--accent); }
+td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; }
+
+/* 產品畫面 */
+.tour { display: flex; flex-direction: column; gap: 56px; }
+.tg { display: flex; flex-direction: column; gap: 18px; }
+.tgh { display: flex; gap: 14px; align-items: flex-start; }
+.tgh p { font-size: 14.5px; margin-top: 4px; }
+.tn { flex: none; font: 600 12.5px/1 var(--mono); color: var(--on-accent); background: var(--accent); border-radius: 8px; padding: 6px 7px; margin-top: 2px; }
+.phones { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.ph .fr { border: 1px solid var(--line); border-radius: 26px; overflow: hidden; background: var(--frame); aspect-ratio: 390 / 844; }
+.ph .fr img { width: 100%; height: 100%; object-fit: cover; border: 0; border-radius: 0; }
+.works { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.works li { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.works img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 14px; border: 1px solid var(--line); display: block; background: var(--frame); }
+.works .no { font: 600 11px var(--mono); letter-spacing: .1em; color: var(--accent); }
+.works b { font-size: 14px; line-height: 1.35; display: block; }
+.works small { font-size: 12px; line-height: 1.5; color: var(--muted); display: block; }
+.duo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+
+.close { border-top: 1px solid var(--line); padding-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+
+/* 手機目錄：右下角一顆進度圓環，點了從邊緣長出目錄 */
+.mtoc { display: none; }
+@media (max-width: 900px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; padding-block: 24px 88px; }
+  nav.toc { display: none; }
+  .mtop { display: flex; flex-direction: column; gap: 2px; margin-bottom: 28px; }
+  main { gap: 68px; }
+  .hero, .g2, .g3, .duo, .rules { grid-template-columns: minmax(0, 1fr); }
+  .hero { gap: 28px; }
+  .hv { justify-self: center; width: min(100%, 300px); }
+  .nums { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nums li:first-child { grid-column: 1 / -1; }
+  .road { grid-template-columns: minmax(0, 1fr); border-top: 0; }
+  .stage, .stage + .stage { padding: 18px 0 18px; border-left: 0; border-top: 1px solid var(--line); }
+  .stage.now::before { right: 0; }
+  .flow { grid-template-columns: minmax(0, 1fr); }
+  .st { padding: 0 0 18px 26px; min-width: 0; }
+  .st::before { top: 0; bottom: 0; left: 4px; right: auto; width: 1px; height: auto; }
+  .st::after { top: 6px; }
+  .st .n { margin-top: 0; }
+  .ly { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .dec { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 20px; }
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .phones { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding-bottom: 8px; }
+  .phones > .ph { flex: none; width: min(64vw, 250px); scroll-snap-align: start; }
+  .works { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
+  .works li { flex: none; width: 126px; scroll-snap-align: start; }
+  .mtoc { display: block; position: fixed; right: max(14px, env(safe-area-inset-right, 0px)); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); z-index: 20; }
+}
+@media (min-width: 901px) { .mtop { display: none; } }
+.mbtn { width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--fg); display: grid; place-items: center; cursor: pointer; padding: 0;
+  box-shadow: 0 1px 2px rgba(30, 27, 23, .08), 0 10px 26px -12px rgba(30, 27, 23, .35); position: relative; }
+.mbtn svg.ring { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); transform: rotate(-90deg); }
+.mbtn svg.ring circle { fill: none; stroke-width: 2.5; }
+.mbtn .bgc { stroke: var(--line); }
+.mbtn .pr { stroke: var(--accent); stroke-linecap: round; }
+.mbtn .ic { width: 18px; height: 18px; }
+.mbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.mpanel { position: absolute; right: 0; bottom: 62px; width: min(78vw, 280px); background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 10px;
+  box-shadow: 0 2px 4px rgba(30, 27, 23, .08), 0 24px 48px -18px rgba(30, 27, 23, .4); display: flex; flex-direction: column;
+  transform-origin: 100% 100%; transform: scale(.6); opacity: 0; pointer-events: none; }
+.mtoc.open .mpanel { transform: none; opacity: 1; pointer-events: auto; }
+.mpanel a { text-decoration: none; padding: 10px 12px; border-radius: 12px; font: 500 15px/1.3 var(--body); color: var(--muted); display: flex; justify-content: space-between; gap: 10px; }
+.mpanel a span { font: 500 11.5px var(--mono); letter-spacing: .08em; opacity: .8; }
+.mpanel a.on { color: var(--fg); background: var(--soft); }
+@media (prefers-reduced-motion: no-preference) {
+  nav.toc a { transition: color .15s, border-color .2s; }
+  .mpanel { transition: transform .42s cubic-bezier(.3, 1.45, .5, 1), opacity .2s; }
+  .mbtn { transition: transform .35s cubic-bezier(.3, 1.6, .5, 1); }
+  .mbtn:active { transform: scale(.9); }
+  .btn { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1); }
+  .btn:active { transform: scale(.95); }
+}
+
+/* 語言切換：中／EN 一對膠囊，現在的那個墨色底；電腦放在目錄上方，手機放在品牌右邊 */
+.langseg { display: inline-flex; align-self: flex-start; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 99px; background: var(--card); margin-bottom: 18px; }
+.langseg a, nav.toc .langseg a { border: 0; padding: 5px 11px; border-radius: 99px; font: 600 12px/1 var(--mono); letter-spacing: .06em; color: var(--muted); text-decoration: none; }
+.langseg a[aria-current="true"], nav.toc .langseg a[aria-current="true"] { background: var(--fg); color: var(--bg); }
+.langseg a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mrow .langseg { margin-bottom: 0; }
+html.leaving main, html.leaving nav.toc { opacity: 0; transform: translateY(6px); }
+@media (prefers-reduced-motion: no-preference) {
+  main, nav.toc { transition: opacity .22s ease, transform .22s ease; }
+  .langseg a { transition: background .25s, color .25s; }
+}
+
+/* 英文版：標題用 Jost，字距收一點 */
+h1, h2 { font-family: var(--display); font-weight: 600; letter-spacing: -.015em; }
+h1 { font-size: clamp(34px, 5vw, 56px); line-height: 1.08; }
+h2 { line-height: 1.18; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#B8612F"/><path d="M19 49V30a13 13 0 0 1 26 0v19" fill="none" stroke="#F3F0E9" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="38" r="5.5" fill="#F3F0E9"/></symbol>
+</svg>
+
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+  <div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Everkeep</span></div>
+  <a class="who" href="/#w-everkeep">← Aron Lab</a>
+  <div class="langseg" role="group" aria-label="語言 Language"><a href="/everkeep/case-study/?lang=zh" data-lang-set="zh" lang="zh-Hant">中</a><a href="/everkeep/case-study/en/?lang=en" data-lang-set="en" lang="en" aria-current="true">EN</a></div>
+  <a href="#problem">Opportunity</a><a href="#users">Users</a><a href="#strategy">Strategy</a><a href="#principles">Principles</a><a href="#architecture">Experience</a>
+  <a href="#decisions">Decisions</a><a href="#quality">Quality bar</a><a href="#product">Product</a><a href="#method">How I worked</a><a href="#next">What's next</a>
+</nav>
+<main>
+
+<div class="mtop"><div class="mrow"><div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Everkeep</span></div><div class="langseg" role="group" aria-label="語言 Language"><a href="/everkeep/case-study/?lang=zh" data-lang-set="zh" lang="zh-Hant">中</a><a href="/everkeep/case-study/en/?lang=en" data-lang-set="en" lang="en" aria-current="true">EN</a></div></div><a class="who" href="/#w-everkeep" style="margin-bottom:0">← Aron Lab</a></div>
+
+<section class="hero" aria-labelledby="t">
+  <div class="txt">
+    <div class="eyebrow">Case study · Everkeep</div>
+    <h1 id="t">Keeping a child's fragile crafts as <em>a world that grows</em></h1>
+    <p class="lede">The clay, pottery, New Year couplets and paper turkeys my child made between ages 4 and 6 crack, fade and get taken apart. I rebuilt them from photos as 3D pieces that turn and move, and gave them a small island and a gallery: the child plays on the island, the family keeps and shares them in the gallery. The first version serves one family. Its job is to set the quality bar and the experience before deciding how every child could upload their own work.</p>
+    <dl class="meta">
+      <div><dt>Role</dt><dd>Product owner: vision, strategy, experience and quality bar</dd></div>
+      <div><dt>Stage</dt><dd>Live, one-family version, 7 pieces</dd></div>
+      <div><dt>Team</dt><dd>Me + an AI coding agent (Claude Code)</dd></div>
+      <div><dt>Form</dt><dd>Mobile web, 3D, AR, 3D-print files</dd></div>
+    </dl>
+    <div class="cta"><a class="btn pri" href="https://everkeep.aronlab.dev/" target="_blank" rel="noopener">Open Everkeep <span aria-hidden="true">↗</span></a></div>
+  </div>
+  <figure class="hv">
+    <div class="vwrap" style="aspect-ratio: 390 / 844"><img src="../img/island.jpg" alt="The island: seven pieces live on it, next to a log cabin with a New Year couplet on the door" width="780" height="1688" style="width:100%;height:100%;object-fit:cover;display:block;border:0;border-radius:0"></div>
+    <figcaption>The island, as it looks on a phone. The interface shown is the Chinese version.</figcaption>
+  </figure>
+</section>
+
+<ul class="nums" aria-label="Key numbers">
+  <li><b>7</b><span>pieces made at ages 4 to 6, each rebuilt from photos of the real thing</span></li>
+  <li><b>7</b><span>materials and techniques: clay, glazed pottery, couplet paper, card, cotton, watercolor…</span></li>
+  <li><b>0</b><span>accounts: open the link and look; shared links open in the gallery</span></li>
+  <li><b>3</b><span>ways to take a piece home: AR on the table, 3D printing, share cards and clips</span></li>
+  <li><b>37<small>s</small></b><span>for Apple Object Capture to rebuild a piece from 21 photos</span></li>
+</ul>
+
+<section id="problem" aria-labelledby="h-problem">
+  <div class="eyebrow">Opportunity</div>
+  <h2 id="h-problem">Crafts <em>break</em>, and photos are <em>too flat</em></h2>
+  <p>Every home has a corner piled with a child's work. Parents usually have three options, and each one loses something.</p>
+  <div class="g3">
+    <div class="card"><h3>What parents do today</h3>
+      <ul class="plain">
+        <li>Take a photo: the look is kept, but it can't be turned, and it's lost in the camera roll within months</li>
+        <li>Keep the object: it takes space, clay cracks, paper fades, pieces get taken apart and remade</li>
+        <li>Throw it away: the easiest option, and the hardest to do</li>
+      </ul></div>
+    <div class="card"><h3>Three things a photo leaves out</h3>
+      <ul class="plain">
+        <li><b>Depth</b>: these are things a child holds and turns in their hands</li>
+        <li><b>Life</b>: to a child, the hen delivers food and the bear carries pancakes</li>
+        <li><b>Time</b>: you only see a child grow when the work from age 4 to 6 sits side by side</li>
+      </ul></div>
+    <div class="card"><h3>Why now</h3>
+      <ul class="plain">
+        <li>A phone can shoot photos from many angles and a short video circling the piece</li>
+        <li>Apple Object Capture rebuilds 3D from photos on an ordinary Mac</li>
+        <li>iPhone and Android browsers open AR directly, and web 3D runs well on phones</li>
+      </ul></div>
+  </div>
+</section>
+
+<section id="users" aria-labelledby="h-users">
+  <div class="eyebrow">Users</div>
+  <h2 id="h-users">One product, <em>three kinds of people</em></h2>
+  <p>Each of them moves at a completely different pace. The product's structure grew out of that difference.</p>
+  <div class="g3">
+    <div class="card"><h3>The child, age 6</h3><p class="muted">Wants to turn something, move it around, take a look, but won't play for long and can't really read yet. Needs big buttons, dragging, and a response to every tap.</p></div>
+    <div class="card"><h3>Parents</h3><p class="muted">Want to keep, organize and share the work, and to decide when the child gets to play. Adding a new piece shouldn't take extra effort.</p></div>
+    <div class="card"><h3>Family and friends who get the link</h3><p class="muted">No download, no sign-in; it opens on a phone. What they see is a numbered piece with an age and the original photo, not a game.</p></div>
+  </div>
+</section>
+
+<section id="strategy" aria-labelledby="h-strategy">
+  <div class="eyebrow">Strategy</div>
+  <h2 id="h-strategy">Get <em>one family</em> right first, then think about every child</h2>
+  <p>The end goal is that any child can upload photos and grow a world of their own. But before automating anything, you need to know what "good" looks like. I split the road into three stages. Each stage answers one question, and its answer becomes the spec for the next.</p>
+  <div class="road">
+    <div class="stage now"><div class="k">01 · Now <span class="pill">Live</span></div><h3>The first family's Everkeep</h3>
+      <dl><dt>Ask</dt><dd>How good does it have to be for the family to say "that's the one my child made"?</dd>
+        <dt>How</dt><dd>Rebuild each piece from photos to the highest standard, and ship it for the family to use</dd>
+        <dt>Out</dt><dd>A quality bar, a rebuild method, a fixed process for new pieces, a photo guide</dd></dl></div>
+    <div class="stage"><div class="k">02 · Next <span class="pill">To test</span></div><h3>A few families, hand-held</h3>
+      <dl><dt>Ask</dt><dd>Can ordinary parents shoot material good enough to rebuild? How much manual work does each piece take?</dd>
+        <dt>How</dt><dd>Shoot a circling video with the photo guide, rebuild semi-automatically, fix by hand</dd>
+        <dt>Out</dt><dd>Capture guidance for upload, and the labor and compute cost per piece</dd></dl></div>
+    <div class="stage"><div class="k">03 · Later <span class="pill">Direction</span></div><h3>Every child uploads their own</h3>
+      <dl><dt>Ask</dt><dd>Does quality hold without a person checking every piece?</dd>
+        <dt>How</dt><dd>Calibrate the camera automatically, turn the outline comparison into a score, let the program tune until the outlines match</dd>
+        <dt>Out</dt><dd>Upload photos, grow your own world: not just an island, but oceans and cities too</dd></dl></div>
+  </div>
+  <p class="muted">That's why the brand is Everkeep and not "something island": the island is only the first region. Later worlds can grow new places from the kinds of work that come in.</p>
+</section>
+
+<section id="principles" aria-labelledby="h-principles">
+  <div class="eyebrow">Principles</div>
+  <h2 id="h-principles">Six rules every trade-off is checked against</h2>
+  <div class="rules">
+    <div class="rule"><h3>Build what's there, don't fill in for the child</h3><p>Every part is measured against the front photo for size, position and outline. If the left and right sides differ, the model differs too. The child has to recognize it as theirs at a glance; the whole product's trust starts there.</p></div>
+    <div class="rule"><h3>Repair damage, keep character</h3><p>Cracks, mold and broken joints are left out. Hand-pressed bumps, fingerprints and uneven pools of glaze stay. True to the original, lightly polished.</p></div>
+    <div class="rule"><h3>The work is alive</h3><p>Each piece has a move of its own: the stegosaurus walks in circles, the turkey fans its tail, a character on a New Year couplet turns into a hen and goes off to deliver food. Even standing still, they breathe a little.</p></div>
+    <div class="rule"><h3>Play for the child, a collection for the adults</h3><p>The two jobs get two views. The island is for messing around; the gallery is quiet, with labels, and shared links open there.</p></div>
+    <div class="rule"><h3>Usable without reading</h3><p>Big buttons, icons, a response to every tap. Details live in a folded label that opens on tap, but the main action, "View in 3D", is always showing.</p></div>
+    <div class="rule"><h3>Open and look, then take it with you</h3><p>No sign-in; it can go on the home screen and opens offline. AR puts the piece on the table at real size, and the 3D-print file is ready to print.</p></div>
+  </div>
+</section>
+
+<section id="architecture" aria-labelledby="h-arch">
+  <div class="eyebrow">Experience architecture</div>
+  <h2 id="h-arch">From one real object to a world that's <em>a little different every day</em></h2>
+  <p>The product's backbone is a single line: a real object comes in, becomes 3D you can turn, splits into two views, and finally comes back to the table at real size.</p>
+  <div class="flow" role="img" aria-label="Flow: object, capture, rebuild, piece page, then the island and the gallery, then take it home">
+    <div class="st"><span class="n">01</span><b>Object</b><small>Clay, pottery, paper, cotton, the moment the child finishes it</small></div>
+    <div class="st"><span class="n">02</span><b>Capture</b><small>A short video circling the piece, plus front, side, back and top photos</small></div>
+    <div class="st key"><span class="n">03</span><b>Rebuild</b><small>Shape, material and a move of its own; damage repaired, character kept</small></div>
+    <div class="st"><span class="n">04</span><b>Piece page</b><small>Turn it; tap the original photo and the camera swings to the same angle</small></div>
+    <div class="st key"><span class="n">05</span><b>Two views</b>
+      <div class="fork"><div><b>Island</b><small>For the child: tap a piece to make it move, decorate, take photos</small></div><div><b>Gallery</b><small>For keeping: ordered by age, labels, share cards</small></div></div></div>
+    <div class="st"><span class="n">06</span><b>Take it home</b><small>AR at real size on the table, 3D printing, share cards and short clips</small></div>
+  </div>
+  <h3 style="margin-top:12px">Giving the child a reason to open it again</h3>
+  <p class="muted">A six-year-old won't play for long, so the world has to change by itself: a little different each time it opens, without new features.</p>
+  <div class="layers">
+    <div class="ly"><div class="lab">Time<span>TIME</span></div><div class="chips"><span class="chip">Day and night follow real time</span><span class="chip">Drag it to night</span><span class="chip">The Christmas tree lights up after dark</span></div></div>
+    <div class="ly"><div class="lab">Weather<span>WEATHER</span></div><div class="chips"><span class="chip">Sun</span><span class="chip">Clouds (shadows sweep the island)</span><span class="chip">Rain (the ground gets wet)</span><span class="chip">Snow</span><span class="chip">Fog</span><span class="chip">A rainbow after rain</span></div></div>
+    <div class="ly"><div class="lab">Holidays<span>CALENDAR</span></div><div class="chips"><span class="chip">Lunar New Year lanterns</span><span class="chip">Mid-Autumn paper lanterns</span><span class="chip">Halloween pumpkins</span><span class="chip">Thanksgiving leaves</span><span class="chip">Christmas snow</span><span class="chip">New Year's Eve fireworks</span></div></div>
+    <div class="ly"><div class="lab">Life<span>LIFE</span></div><div class="chips"><span class="chip">Butterflies and gulls by day</span><span class="chip">Fireflies at night</span><span class="chip">Fish jumping out of the water</span><span class="chip">Grass in the wind</span></div></div>
+    <div class="ly"><div class="lab">Between pieces<span>CAST</span></div><div class="chips"><span class="chip">The delivery hen drops orders in front of other pieces</span><span class="chip">They answer with their signature move</span><span class="chip">They greet each other when they meet</span></div></div>
+  </div>
+</section>
+
+<section id="decisions" aria-labelledby="h-decisions">
+  <div class="eyebrow">Decision log</div>
+  <h2 id="h-decisions">Seven key trade-offs</h2>
+  <div class="decs">
+    <article class="dec"><div class="when">Decision 01<h3>What the home screen should be</h3></div><dl>
+      <dt>Context</dt><dd>The child needs to play; the family needs to keep and share. The two run at completely different paces.</dd>
+      <dt>Options</dt><dd><span class="chip">A handmade island on the table</span> <span class="chip">A museum gallery</span> <span class="chip">A tiny planet</span></dd>
+      <dt>Call</dt><dd>Both the island and the gallery, as two views: the island for the child, the gallery for keeping. Tapping a piece on the island can take you straight to its plinth in the gallery. Shared links open in the gallery. The tiny planet stays as brand imagery.</dd>
+      <dt>Result</dt><dd class="out">One product serves both paces without giving up either.</dd></dl></article>
+    <article class="dec"><div class="when">Decision 02<h3>How to build a child's imagination</h3></div><dl>
+      <dt>Context</dt><dd>At 4, my child wrote a New Year couplet, 事事如意 ("may all go as you wish"). The family thought the character 如 looked like a hen carrying a food-delivery box.</dd>
+      <dt>Call</dt><dd>The silhouette has to match the character exactly: flat on the couplet it is the character; press "Go out" and it puffs up, grows feathers and hops off the paper. Its legs are the character's own two strokes, with no real chicken legs added. The couplet hangs on the door of the island's log cabin.</dd>
+      <dt>Result</dt><dd class="out">It became the most memorable moment in the product. The rule since: a child's imagination is the content itself, not raw material for us to reinterpret.</dd></dl></article>
+    <article class="dec"><div class="when">Decision 03<h3>Can automatic photo rebuilds be used as-is</h3></div><dl>
+      <dt>Context</dt><dd>It has to be automated eventually. I tried the off-the-shelf Apple Object Capture on four pieces, using the photos we already had.</dd>
+      <dt>Test</dt><dd>The taxi: 21 photos, a shape in 37 seconds. The stegosaurus and the bird had only been shot from one side and came out in fragments. The turkey is taped to a window, and the whole window was treated as one object.</dd>
+      <dt>Call</dt><dd>Use rebuilds only as a reference for shape and texture, and repair damage by the principles. At the same time, write a photo guide: piece on a table, one circle at eye level and one slightly above.</dd>
+      <dt>Result</dt><dd class="out">Automation is held back mainly by the input, not the algorithm. Capture guidance will be the first screen of the future product.</dd></dl></article>
+    <article class="dec"><div class="when">Decision 04<h3>Realism versus playfulness</h3></div><dl>
+      <dt>Context</dt><dd>After the island got a real sky, a filmic tone curve and trees built leaf by leaf, the detail improved a lot, but the contrast was too strong and the whole scene ran dark.</dd>
+      <dt>Call</dt><dd>Keep the detail; raise the exposure, add more sky light, soften the shadows; nights get a bluish moonlight instead of going black. From then on, every lighting change is reviewed as three columns side by side: original, current, this change.</dd>
+      <dt>Result</dt><dd class="out">A rule for every product: realistic doesn't mean dark. A product for children should still be easy to see at night.</dd></dl></article>
+    <article class="dec"><div class="when">Decision 05<h3>Where the buttons go</h3></div><dl>
+      <dt>Context</dt><dd>In full-screen 3D, more buttons means more of the work is covered, and it's worse on a phone.</dd>
+      <dt>Options</dt><dd>Three layouts, mocked up and compared side by side on phone and desktop.</dd>
+      <dt>Call</dt><dd>Only the brand and share at the top; all frequent controls in one bar at the bottom, within thumb reach. Select a piece and the bar springs into that piece's action bar. Everything is one size smaller on phones, giving the screen back to the work.</dd>
+      <dt>Result</dt><dd class="out">Everything works one-handed, and the piece is never hidden behind a title or a button.</dd></dl></article>
+    <article class="dec"><div class="when">Decision 06<h3>Parental control without accounts</h3></div><dl>
+      <dt>Context</dt><dd>The parent's need was simple: sometimes the child needs to be kept off the island. But the product deliberately has no accounts.</dd>
+      <dt>Call</dt><dd>Hold the logo in the top-left corner for 2 seconds and answer a multiplication question to lock or unlock the island. When locked, only the gallery opens. The setting is stored on that device.</dd>
+      <dt>Result</dt><dd class="out">No account, no password: multiplication the child can't do yet is the gate.</dd></dl></article>
+    <article class="dec"><div class="when">Decision 07<h3>Should a tap leave something behind</h3></div><dl>
+      <dt>Context</dt><dd>Tapping the grass used to grow a flower. But the flowers couldn't be removed, and after enough tapping the island became a mess.</dd>
+      <dt>Call</dt><dd>Separate feedback from lasting change: an ordinary tap sends out a soft ring of light and draws a butterfly over. To plant things, use "Decorate the island", where everything can be picked up, erased, or cleared at once.</dd>
+      <dt>Result</dt><dd class="out">Every tap gets a response, and the world never gets messed up.</dd></dl></article>
+  </div>
+</section>
+
+<section id="quality" aria-labelledby="h-quality">
+  <div class="eyebrow">Quality bar</div>
+  <h2 id="h-quality">Turning "does it look right" into a standard <em>you can measure</em></h2>
+  <p>The most important output of the one-family version isn't seven pieces. It's a quality bar that can be handed over and later automated. The level of detail reached on the first piece, the stegosaurus, became the minimum for every piece after it, and the process became a written method each new piece follows.</p>
+  <ol class="steps">
+    <li><b>Understand the piece</b><span>Zoom into every part: flat or round, how big relative to the body; tell the original apart from damage</span></li>
+    <li><b>Calibrate the camera</b><span>Render the 3D with the phone's main-camera field of view, and align size and position on an easy-to-spot part</span></li>
+    <li><b>Verify the reference</b><span>Check whether the parts farthest from the reference line up; if not, fix the reference, not the parts</span></li>
+    <li><b>Red and blue outlines</b><span>Trace the photo's outline in red and the 3D outline in blue; wherever they separate is what needs fixing</span></li>
+    <li><b>Whole, then parts, then surface</b><span>Proportions and positions → edges and forks → color, bumps, gloss</span></li>
+    <li><b>Change only what was pointed out</b><span>Before saying "fixed", prove it changed with measurements and traced outlines</span></li>
+  </ol>
+  <div class="lesson"><b>Lesson</b><p>On the bird, the tilt of the comparison camera was set in the wrong direction, and I spent several rounds fixing wings against a reference that was off by 16 degrees, getting worse each time. Step 3 comes from that: after two or three rounds that don't line up, stop and check the method and the reference.</p></div>
+  <div class="duo">
+    <figure><img src="../img/realism-works.jpg" alt="Before and after of the stegosaurus and bug taxi materials" loading="lazy" width="1220" height="1352"><figcaption><b>Materials follow the craft</b>The stegosaurus is matte clay with fine grit; the taxi is glazed pottery, with glaze pooling dark in hollows and thinning on ridges. Left: before. Right: after.</figcaption></figure>
+    <figure><img src="../img/hen.jpg" alt="Before and after of the delivery hen's feathers" loading="lazy" width="1400" height="742"><figcaption><b>Animals should be real animals</b>Every feather on the delivery hen is real geometry, with a shaft, barbs and down at the base; black feathers catch a hint of green and purple in the light. Left: before. Right: after.</figcaption></figure>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Item</th><th>Method</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>Automatic rebuilds</td><td>Object Capture on the existing photos of four pieces</td><td class="res">1 of 4 usable (taxi: 21 photos, 37 s)</td></tr>
+      <tr><td>Load time</td><td>Fine detail only near the surface; the taxi loads a pre-computed model, the others are built live on the phone</td><td class="res">Hen, turkey, tree &lt; 0.2 s</td></tr>
+      <tr><td>AR on the table</td><td>Every piece exported as USDZ (iPhone) and GLB (Android) at real size; USDZ checked with Apple's ARKit validator</td><td class="res">All 7, animated</td></tr>
+      <tr><td>Devices</td><td>Every change checked at 390 px phone width, light and dark, Chinese and English; every iPhone browser gets the AR link, desktops show a QR code</td><td class="res">A standing delivery rule</td></tr>
+      <tr><td>Not yet verified</td><td>Sound still needs a real listen before tuning; recording and video sharing in iPhone Safari haven't been tried on a device; reliability from mainland China hasn't been tested</td><td class="res no">Listed as-is</td></tr>
+    </tbody></table></div>
+</section>
+
+<section id="product" aria-labelledby="h-product">
+  <div class="eyebrow">Product</div>
+  <h2 id="h-product">The product</h2>
+  <p class="lede">Real phone screens below, from the Chinese interface. Names in the screens have been hidden.</p>
+  <div class="tour">
+    <div class="tg">
+      <div class="tgh"><span class="tn">01</span><div><h3>Island, gallery, piece page</h3><p class="muted">One bar at the bottom switches between the two views; select a piece and the bar becomes its action bar. The gallery is ordered by age, with a growth timeline on top.</p></div></div>
+      <div class="phones">
+        <figure class="ph"><div class="fr"><img src="../img/island.jpg" alt="The whole island: seven pieces, a log cabin, autumn trees" loading="lazy" width="780" height="1688"></div><figcaption><b>Island</b>Just before Thanksgiving, the trees turn autumn colors</figcaption></figure>
+        <figure class="ph"><div class="fr"><img src="../img/couplet.jpg" alt="The couplet on the cabin door, with the hen's action bar at the bottom" loading="lazy" width="780" height="1688"></div><figcaption><b>Hen selected</b>The character 如 on the couplet hops down when you tap "Go out"</figcaption></figure>
+        <figure class="ph"><div class="fr"><img src="../img/museum.jpg" alt="The bird on its plinth in the gallery, with the folded label" loading="lazy" width="780" height="1688"></div><figcaption><b>Gallery</b>Even the folded label shows "View in 3D"</figcaption></figure>
+        <figure class="ph"><div class="fr"><img src="../img/stego.jpg" alt="The stegosaurus piece page, with action and view buttons at the bottom" loading="lazy" width="780" height="1688"></div><figcaption><b>Piece page</b>Tap the original photo at bottom left and the camera turns to match</figcaption></figure>
+      </div>
+    </div>
+    <div class="tg">
+      <div class="tgh"><span class="tn">02</span><div><h3>The seven originals</h3><p class="muted">Numbers follow the order pieces joined Everkeep; the gallery orders them by age. Every piece is a different material, so every piece is built differently.</p></div></div>
+      <ul class="works">
+        <li><img src="../img/p1.jpg" alt="Photo of the original clay stegosaurus" loading="lazy"><div><span class="no">NO.01</span><b>Stegosaurus</b><small>Age 6 · clay</small></div></li>
+        <li><img src="../img/p2.jpg" alt="Photo of the original Dalí bird" loading="lazy"><div><span class="no">NO.02</span><b>Dalí Bird</b><small>Age 4 · light clay, wire</small></div></li>
+        <li><img src="../img/p3.jpg" alt="Photo of the original couplet" loading="lazy"><div><span class="no">NO.03</span><b>Delivery Hen</b><small>Age 4 · the character 如 on a couplet</small></div></li>
+        <li><img src="../img/p4.jpg" alt="Photo of the original bug taxi" loading="lazy"><div><span class="no">NO.04</span><b>Bug Taxi</b><small>Age 5 · pottery, glaze</small></div></li>
+        <li><img src="../img/p5.jpg" alt="Photo of the original paper turkey" loading="lazy"><div><span class="no">NO.05</span><b>Turkey</b><small>Age 4 · card</small></div></li>
+        <li><img src="../img/p6.jpg" alt="Photo of the original cotton Christmas tree" loading="lazy"><div><span class="no">NO.06</span><b>Christmas Tree</b><small>Age 5 · cotton, bottle, pompoms</small></div></li>
+        <li><img src="../img/p7.jpg" alt="Photo of the original pancake bear" loading="lazy"><div><span class="no">NO.07</span><b>Pancake Bear</b><small>Age 5 · soft clay, paper plate, watercolor</small></div></li>
+      </ul>
+      <figure><img src="../img/pancake.jpg" alt="Pancake bear: original photo, 3D, and the plate from directly above" loading="lazy" width="1500" height="620"><figcaption><b>No.07 Pancake Bear</b>The original, the 3D, and a view from directly above. The writing and drawings on the plate come straight from the photo; when the bear walks, it becomes a 3D bear shaped after the drawing, carrying the pancakes.</figcaption></figure>
+    </div>
+    <div class="tg">
+      <div class="tgh"><span class="tn">03</span><div><h3>Realistic, but not dark</h3><p class="muted">The three columns from decision 04: original, what was live at the time, and the adjustment. One row each for day, close-up, dusk and night.</p></div></div>
+      <figure><img src="../img/island-light.jpg" alt="Island lighting in three columns, original, live and this change, at four times of day" loading="lazy" width="1400" height="1327"><figcaption>The middle column had enough detail but was too dark; the right keeps the detail and brings back exposure and sky light, so the night is still easy to see.</figcaption></figure>
+    </div>
+    <div class="tg">
+      <div class="tgh"><span class="tn">04</span><div><h3>Where automatic rebuilds start</h3><p class="muted">The test from decision 03: the taxi's original 21 photos went into Object Capture, and 37 seconds later this came out. The shape is roughly right, but there are holes, mold spots and missing corners to repair by the principles.</p></div></div>
+      <figure style="max-width:620px"><img src="../img/capture.jpg" alt="The bug taxi rebuilt by Object Capture from 21 photos, from four angles" loading="lazy" width="1100" height="917"><figcaption>This is why shooting well matters more than computing fast.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="method" aria-labelledby="h-method">
+  <div class="eyebrow">How I worked</div>
+  <h2 id="h-method">I made sure we built the right thing; AI built it</h2>
+  <p>The 3D rebuilds, shaders, interaction, AR files, deployment and the intro video were all implemented by an AI coding agent. My job was to set the direction and the quality bar, choose between options, and sign off on every result. These rules kept the work moving without drifting.</p>
+  <div class="g2">
+    <div class="card"><h3>Working rules</h3><ul class="plain">
+      <li>Big directions start as mock-ups for me to pick from: 3 home screens, 3 button layouts, 10 site icons</li>
+      <li>Feedback is a circled or marked-up screenshot; change only what was pointed out, nothing else</li>
+      <li>"Fixed" needs evidence: overlays, measurements, phone screenshots</li>
+      <li>Feedback that would hold for any product goes into a shared style guide, so I never have to say it twice</li>
+      <li>Mistakes are reported plainly: what went wrong, for how long, and whether it's fixed</li></ul></div>
+    <div class="card"><h3>Calls I made</h3><ul class="plain">
+      <li>Serve one family first and define "good" at the highest standard, then think about scale</li>
+      <li>Treat a child's imagination as the content itself, with no reinterpretation from us</li>
+      <li>No accounts: shared links, a parental lock and on-device settings cover the need first</li>
+      <li>The intro video has to show the real interface in use, not just pretty shots</li>
+      <li>Realistic is fine, dark is not; a sense of life is fine, distraction is not</li></ul></div>
+  </div>
+</section>
+
+<section id="next" aria-labelledby="h-next">
+  <div class="eyebrow">What's next</div>
+  <h2 id="h-next">Next</h2>
+  <ul class="plain">
+    <li>Reshoot the stegosaurus, bird and turkey with the photo guide, run the automatic rebuild again, and measure how much manual repair each piece needs</li>
+    <li>Turn the red-and-blue outline comparison into a score and let the program tune parameters until they match: the first step toward automation</li>
+    <li>Decide how shapes get generated automatically (multiple photos, video, or 3D generated from images), and how good they must be to ship</li>
+    <li>Have a few families try shooting, and see how often ordinary parents get usable material with the guide</li>
+    <li>Before opening to other families, work out how children's photos and names are stored and shown</li>
+  </ul>
+  <div class="close"><div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Everkeep</span></div><p class="muted">What children make, kept, and brought to life.</p><p class="muted">Aron · Product owner. All screens on this page are real product screenshots (names hidden); the live product is at everkeep.aronlab.dev.</p></div>
+</section>
+
+</main>
+</div>
+
+<div class="mtoc" id="mtoc">
+  <div class="mpanel" id="mpanel" role="menu" aria-label="Contents"></div>
+  <button class="mbtn" id="mbtn" type="button" aria-expanded="false" aria-controls="mpanel" aria-label="Contents">
+    <svg class="ring" viewBox="0 0 46 46" aria-hidden="true"><circle class="bgc" cx="23" cy="23" r="21"/><circle class="pr" id="pr" cx="23" cy="23" r="21" stroke-dasharray="131.95" stroke-dashoffset="131.95"/></svg>
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h9"/></svg>
+  </button>
+</div>
+
+<script>
+(() => {   // 目錄：目前章節標一條陶土橘；手機版右下角圓環顯示讀到哪
+  const links = [...document.querySelectorAll("nav.toc a[href^='#']")];
+  const secs = links.map(a => document.querySelector(a.getAttribute("href")));
+  const panel = document.getElementById("mpanel"), box = document.getElementById("mtoc"), btn = document.getElementById("mbtn"), pr = document.getElementById("pr");
+  links.forEach((a, i) => {
+    const m = document.createElement("a");
+    m.href = a.getAttribute("href"); m.setAttribute("role", "menuitem");
+    m.innerHTML = a.textContent + "<span>" + String(i + 1).padStart(2, "0") + "</span>";
+    m.addEventListener("click", () => toggle(false));
+    panel.appendChild(m);
+  });
+  const mlinks = [...panel.querySelectorAll("a")];
+  const toggle = (open) => { box.classList.toggle("open", open); btn.setAttribute("aria-expanded", open); };
+  btn.addEventListener("click", () => toggle(!box.classList.contains("open")));
+  document.addEventListener("keydown", e => { if (e.key === "Escape") toggle(false); });
+  document.addEventListener("click", e => { if (!box.contains(e.target)) toggle(false); });
+  const C = 131.95;
+  let raf = 0;
+  const update = () => {
+    raf = 0;
+    const y = scrollY + innerHeight * 0.3;
+    let cur = -1;
+    secs.forEach((s, i) => { if (s && s.offsetTop <= y) cur = i; });
+    links.forEach((a, i) => a.classList.toggle("on", i === cur));
+    mlinks.forEach((a, i) => a.classList.toggle("on", i === cur));
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+    pr.setAttribute("stroke-dashoffset", (C * (1 - p)).toFixed(2));
+  };
+  addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+  addEventListener("resize", update);
+  update();
+})();
+
+(() => {   // 語言切換：記住選擇（跟 Aron Lab 首頁共用 lab.lang），淡出後換到另一個語言的同一個章節
+  const secs = [...document.querySelectorAll("main section[id]")];
+  document.querySelectorAll("[data-lang-set]").forEach(a => a.addEventListener("click", e => {
+    if (a.getAttribute("aria-current") === "true") { e.preventDefault(); return; }
+    try { localStorage.setItem("lab.lang", a.dataset.langSet); } catch (err) { /* 無痕模式：靠網址的 ?lang= */ }
+    const y = scrollY + innerHeight * 0.3;
+    let id = "";
+    secs.forEach(s => { if (s.offsetTop <= y) id = s.id; });
+    const url = a.getAttribute("href") + (id ? "#" + id : "");
+    e.preventDefault();
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { location.href = url; return; }
+    document.documentElement.classList.add("leaving");
+    setTimeout(() => { location.href = url; }, 200);
+  }));
+  addEventListener("pageshow", () => document.documentElement.classList.remove("leaving"));
+})();
+</script>
+</body>
+</html>

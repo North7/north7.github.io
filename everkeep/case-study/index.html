@@ -4,11 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="canonical" href="https://aronlab.dev/everkeep/case-study/">
+<link rel="alternate" hreflang="zh-Hant" href="https://aronlab.dev/everkeep/case-study/?lang=zh">
+<link rel="alternate" hreflang="en" href="https://aronlab.dev/everkeep/case-study/en/">
+<link rel="alternate" hreflang="x-default" href="https://aronlab.dev/everkeep/case-study/">
 <script>
   // 2026-11-14 Everkeep 產品案例，照 OneStroke 的做法放在 Aron Lab 底下（aronlab.dev/everkeep/case-study/）。
   // 2026-11-14 Aron：案例裡不寫具體的人名，一律寫「小朋友」。截圖裡的名字已遮掉；介紹影片的字幕和畫面有名字，所以開頭改放小島截圖。
+  // 2026-11-15 中英雙語：英文版在 en/。語言跟 Aron Lab 首頁同一套：網址的 ?lang= → 自己選過的（localStorage 的 lab.lang，整個 aronlab.dev 共用）
+  //   → IP 地區（functions/everkeep/case-study/index.js 寫進 <html data-geo>：台灣、香港、澳門、中國用中文，其他用英文）→ 瀏覽器語言。
   // 同一份網站也部署在 GitHub Pages；從 north7.github.io 進來的訪客轉到正式網域，路徑保留
   if (location.hostname === 'north7.github.io') location.replace('https://aronlab.dev' + location.pathname + location.search + location.hash);
+  else (function () {
+    var h = document.documentElement, q = new URLSearchParams(location.search).get('lang'), s = null;
+    try { s = localStorage.getItem('lab.lang'); } catch (e) {}
+    var g = h.dataset.geo, geo = /^[A-Z]{2}$/.test(g || '') ? (/^(TW|HK|MO|CN)$/.test(g) ? 'zh' : 'en') : null;
+    var l = q === 'en' || q === 'zh' ? q : s === 'en' || s === 'zh' ? s : geo || ([].concat(navigator.languages || navigator.language || []).some(function (x) { return /^zh/i.test(x); }) ? 'zh' : 'en');
+    if (l === 'en') location.replace('/everkeep/case-study/en/' + location.hash);
+  })();
 </script>
 <meta name="description" content="把孩子會壞掉的手作照實物重建成 3D，放進一座小島和一間展覽室：機會、策略、原則、決策紀錄、品質標準與實際畫面。">
 <meta property="og:type" content="article">
@@ -248,6 +260,19 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; }
   .btn { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1); }
   .btn:active { transform: scale(.95); }
 }
+
+/* 語言切換：中／EN 一對膠囊，現在的那個墨色底；電腦放在目錄上方，手機放在品牌右邊 */
+.langseg { display: inline-flex; align-self: flex-start; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 99px; background: var(--card); margin-bottom: 18px; }
+.langseg a, nav.toc .langseg a { border: 0; padding: 5px 11px; border-radius: 99px; font: 600 12px/1 var(--mono); letter-spacing: .06em; color: var(--muted); text-decoration: none; }
+.langseg a[aria-current="true"], nav.toc .langseg a[aria-current="true"] { background: var(--fg); color: var(--bg); }
+.langseg a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mrow .langseg { margin-bottom: 0; }
+html.leaving main, html.leaving nav.toc { opacity: 0; transform: translateY(6px); }
+@media (prefers-reduced-motion: no-preference) {
+  main, nav.toc { transition: opacity .22s ease, transform .22s ease; }
+  .langseg a { transition: background .25s, color .25s; }
+}
 </style>
 </head>
 <body>
@@ -259,12 +284,13 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; }
 <nav class="toc" aria-label="目錄">
   <div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Everkeep</span></div>
   <a class="who" href="/#w-everkeep">← Aron Lab</a>
+  <div class="langseg" role="group" aria-label="語言 Language"><a href="/everkeep/case-study/?lang=zh" data-lang-set="zh" lang="zh-Hant" aria-current="true">中</a><a href="/everkeep/case-study/en/?lang=en" data-lang-set="en" lang="en">EN</a></div>
   <a href="#problem">機會</a><a href="#users">使用者</a><a href="#strategy">產品策略</a><a href="#principles">產品原則</a><a href="#architecture">體驗架構</a>
   <a href="#decisions">決策紀錄</a><a href="#quality">品質標準</a><a href="#product">產品畫面</a><a href="#method">工作方式</a><a href="#next">下一步</a>
 </nav>
 <main>
 
-<div class="mtop"><div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Everkeep</span></div><a class="who" href="/#w-everkeep" style="margin-bottom:0">← Aron Lab</a></div>
+<div class="mtop"><div class="mrow"><div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Everkeep</span></div><div class="langseg" role="group" aria-label="語言 Language"><a href="/everkeep/case-study/?lang=zh" data-lang-set="zh" lang="zh-Hant" aria-current="true">中</a><a href="/everkeep/case-study/en/?lang=en" data-lang-set="en" lang="en">EN</a></div></div><a class="who" href="/#w-everkeep" style="margin-bottom:0">← Aron Lab</a></div>
 
 <section class="hero" aria-labelledby="t">
   <div class="txt">
@@ -569,6 +595,23 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; }
   addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
   addEventListener("resize", update);
   update();
+})();
+
+(() => {   // 語言切換：記住選擇（跟 Aron Lab 首頁共用 lab.lang），淡出後換到另一個語言的同一個章節
+  const secs = [...document.querySelectorAll("main section[id]")];
+  document.querySelectorAll("[data-lang-set]").forEach(a => a.addEventListener("click", e => {
+    if (a.getAttribute("aria-current") === "true") { e.preventDefault(); return; }
+    try { localStorage.setItem("lab.lang", a.dataset.langSet); } catch (err) { /* 無痕模式：靠網址的 ?lang= */ }
+    const y = scrollY + innerHeight * 0.3;
+    let id = "";
+    secs.forEach(s => { if (s.offsetTop <= y) id = s.id; });
+    const url = a.getAttribute("href") + (id ? "#" + id : "");
+    e.preventDefault();
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { location.href = url; return; }
+    document.documentElement.classList.add("leaving");
+    setTimeout(() => { location.href = url; }, 200);
+  }));
+  addEventListener("pageshow", () => document.documentElement.classList.remove("leaving"));
 })();
 </script>
 </body>
