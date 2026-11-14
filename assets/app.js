@@ -46,11 +46,13 @@
   const tr = (zh, en) => (EN ? en : zh);
   // 資料的英文版：每一筆都可以帶 en（字串＝換標題 t；物件＝換掉裡面列出的欄位），沒寫的就沿用中文
   const loc = (o) => (!EN || !o || o.en == null ? o : typeof o.en === 'string' ? { ...o, t: o.en } : { ...o, ...o.en });
+  // 宣傳素材的英文版：en.video／poster／pdf 寫字串只換標題，寫物件可以連檔案一起換（src、poster、thumb）；
+  // en.slideSuffix 讓說明圖改讀 slide-01<後綴>.jpg；en.release、en.date 換成英文版素材的出處和日期
+  const ovr = (base, e) => base && (e == null ? base : typeof e === 'string' ? { ...base, t: e } : { ...base, ...e });
   const locPromo = (m) => (!EN || !m.en ? m : {
-    ...m, note: m.en.note || m.note, slides: m.en.slides || m.slides,
-    video: m.video && { ...m.video, t: m.en.video || m.video.t },
-    poster: m.poster && { ...m.poster, t: m.en.poster || m.poster.t },
-    pdf: m.pdf && { ...m.pdf, t: m.en.pdf || m.pdf.t },
+    ...m, note: m.en.note || m.note, slides: m.en.slides || m.slides, slideSuffix: m.en.slideSuffix || '',
+    release: m.en.release || m.release, date: m.en.date || m.date,
+    video: ovr(m.video, m.en.video), poster: ovr(m.poster, m.en.poster), pdf: ovr(m.pdf, m.en.pdf),
   });
   const D = window.LAB;
   const L = !EN ? D : {
@@ -497,7 +499,7 @@
       items.push(fig(`<div class="m-item m-video"><video muted loop playsinline preload="none" poster="${u(m.video.poster)}"><source src="${u(m.video.src)}" type="video/mp4"></video><button type="button" class="m-play" aria-label="${tr('播放／暫停', 'Play / pause')}"><span></span></button>${snd}</div>`, `<i>VIDEO</i>${esc(m.video.t)}`, ar, wide ? ' wide' : ''));
     }
     if (m.poster) items.push(shot(m.poster.src, m.poster.thumb, m.poster.t, 'POSTER', m.poster.ar));
-    (m.slides || []).forEach((t, i) => { const n = pad(i + 1); items.push(shot(`slide-${n}.jpg`, `slide-${n}-s.jpg`, t, `${n} / ${pad(m.slides.length)}`, m.slidesAr)); });
+    (m.slides || []).forEach((t, i) => { const n = pad(i + 1); items.push(shot(`slide-${n}${m.slideSuffix || ''}.jpg`, `slide-${n}${m.slideSuffix || ''}-s.jpg`, t, `${n} / ${pad(m.slides.length)}`, m.slidesAr)); });
     const dl = [m.video && `<a href="${u(m.video.src)}" download>${tr('影片 MP4', 'Video MP4')} ↓</a>`, m.pdf && `<a href="${u(m.pdf.src)}" target="_blank" rel="noopener">${tr('說明圖 PDF', 'Slides PDF')} ↓</a>`, m.poster && `<a href="${u(m.poster.src)}" download>${tr('海報', 'Poster')} ↓</a>`].filter(Boolean).join('');
     return `<article class="mk pc" id="media-${p.id}" style="--pc:${p.color}">
       <div class="mk-head"><span class="sq1" aria-hidden="true"></span><div><h3>${esc(p.name)}<small>${esc(p.zh)}</small></h3><span class="meta">${dotted(m.date)} · ${[m.video && tr('影片', 'video'), m.poster && tr('海報', 'poster'), m.slides && tr(`${m.slides.length} 張說明圖`, `${m.slides.length} slides`)].filter(Boolean).join(' · ')}</span></div>
