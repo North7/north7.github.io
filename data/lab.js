@@ -340,8 +340,8 @@ window.LAB = {
         { n: '05', t: '風險', u: '#risk', en: 'Risk' },
         { n: '06', t: '報酬', u: '#returns', en: 'Returns' },
         { n: '07', t: '交易', u: '#trades', en: 'Trades' },
-        { n: '08', t: '紀錄', u: '#records', en: 'Log' },
-        { n: '09', t: '說明', u: '#intro', en: 'About' },
+        // 「紀錄」（#records）只在本機版看得到：操作提示和實際成交是私人資料，公開版藏起來了，所以不列
+        { n: '08', t: '說明', u: '#intro', en: 'About' },
       ],
       links: [
         { t: '策略規格 STRATEGY.md', u: 'https://github.com/North7/signals/blob/main/STRATEGY.md', type: 'data', en: 'Strategy spec STRATEGY.md' },
