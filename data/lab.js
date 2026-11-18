@@ -2,7 +2,7 @@
 // 欄位說明見 README.md。網址可以寫完整網址，或寫相對於 site 的路徑（例如 '#news'、'en/'）。
 // 英文版：每一筆都可以帶 en。字串＝英文標題；物件＝要換成英文的欄位（例如 { tagline, desc }，網址也可以換）。沒寫的就沿用中文。
 window.LAB = {
-  updated: '2026-11-14',
+  updated: '2026-11-18',
   owner: {
     name: 'Aron',
     github: 'https://github.com/North7',
@@ -421,7 +421,19 @@ window.LAB = {
       links: [
         { t: '產品案例：把孩子會壞掉的手作，留成一個會長大的世界', u: 'https://aronlab.dev/everkeep/case-study/', type: 'case', en: { t: "Case study: keeping a child's fragile crafts as a world that grows", u: 'https://aronlab.dev/everkeep/case-study/en/' } },
       ],
-      // 2026-11-14 介紹影片的字幕和畫面有小朋友的名字，Aron 要求對外不寫人名，所以不放宣傳素材
+      // 2026-11-14 介紹影片的字幕和畫面有小朋友的名字，Aron 要求對外不寫人名，所以那支不放。
+      // 2026-11-18 放 Blender 算的蟲蟲計程車短片當素材（Aron：「作為以後用的素材」）：畫面只有作品、沒有字幕和人名、沒有聲音。
+      // 原始的 192 張 PNG 和場景檔在 everkeep 那個 session 的暫存資料夾，沒進 git；要重算看 everkeep README 的 Blender 段落
+      promo: {
+        date: '2026-11-18',
+        note: '用 Blender 照 3D 模型算的寫實短片：蟲蟲計程車從桌子後面開過來、停下、原地跳兩下，鏡頭推到車頭特寫。沒有字幕和聲音，留著之後剪宣傳影片用。',
+        dir: 'assets/media/everkeep/',
+        video: { src: 'bug-taxi-8s.mp4', poster: 'bug-taxi-8s-poster.jpg', t: '蟲蟲計程車寫實短片 · 直式 8 秒' },
+        en: {
+          note: 'A photoreal short rendered in Blender from the 3D model: the Bug Taxi drives in across a wooden table, stops, hops twice, and the camera pushes in to a close-up. No captions or sound; kept as footage for future promo edits.',
+          video: 'Bug Taxi photoreal short · vertical, 8 s',
+        },
+      },
     },
   ],
 
@@ -549,5 +561,6 @@ window.LAB = {
     { d: '2026-11-12', p: null, t: '搬到自己的網域 aronlab.dev，每個作品一個子網域（例如 daybreak.aronlab.dev）', en: 'Moved to its own domain, aronlab.dev, with a subdomain for each work (for example daybreak.aronlab.dev)' },
     { d: '2026-11-13', p: 'everkeep', t: '介紹影片（直式 83 秒）：雞從春聯跳下來、天氣和節日、兩段實際操作手機頁面', en: 'Intro video (vertical, 83 s): the hen hopping out of the New Year couplet, weather and holidays, and two segments of the phone UI in use' },
     { d: '2026-11-14', p: 'everkeep', t: '產品案例上線：策略、原則、七個關鍵取捨、品質標準與實際畫面', en: 'Case study live: strategy, principles, seven key decisions, the quality bar and real screens' },
+    { d: '2026-11-18', p: 'everkeep', t: '第一支 Blender 寫實短片（直式 8 秒）：蟲蟲計程車開上木桌', en: 'First photoreal Blender short (vertical, 8 s): the Bug Taxi on a wooden table' },
   ],
 };
