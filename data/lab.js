@@ -2,7 +2,7 @@
 // 欄位說明見 README.md。網址可以寫完整網址，或寫相對於 site 的路徑（例如 '#news'、'en/'）。
 // 英文版：每一筆都可以帶 en。字串＝英文標題；物件＝要換成英文的欄位（例如 { tagline, desc }，網址也可以換）。沒寫的就沿用中文。
 window.LAB = {
-  updated: '2026-11-18',
+  updated: '2026-11-23',
   owner: {
     name: 'Aron',
     github: 'https://github.com/North7',
@@ -434,6 +434,35 @@ window.LAB = {
           video: 'Bug Taxi photoreal short · vertical, 8 s',
         },
       },
+    },
+    {
+      id: 'peelback', no: '10', name: 'Peelback', zh: '剝剝看',
+      color: '#2BC79A',
+      domains: ['family'], kind: '3D 拆解',
+      status: 'live', cadence: '有新的車就加',
+      started: '2026-11-22',
+      tagline: '公車、飛機、汽車，一層一層剝開看裡面。',
+      desc: '給小朋友在 iPad 上玩的互動 3D：從展廳挑一台走近看，可以 360 度轉、一層一層拆開（外面、裡面、底盤、引擎或電池），點零件看它是什麼、做什麼用。每個中文字都有注音，也可以切成英文；燈光可以一組組打開，晚上看車燈。',
+      facts: ['一層一層拆開', '每個字都有注音', '公車・飛機・汽車'],
+      en: {
+        zh: 'Peel it open', kind: '3D teardown', cadence: 'Grows with each new vehicle', sectionsLabel: 'Vehicle',
+        tagline: 'A bus, a plane and a car you can peel open layer by layer.',
+        desc: 'Interactive 3D for kids on an iPad: pick a vehicle in the gallery, spin it all the way round, take it apart one layer at a time (outside, inside, chassis, engine or battery), and tap any part to learn what it does. Every Chinese character has zhuyin, there is an English mode, and the lights switch on group by group for a night view.',
+        facts: ['Peels apart layer by layer', 'Zhuyin on every character', 'Bus · plane · car'],
+      },
+      site: 'https://peelback.aronlab.dev/',
+      repo: 'https://github.com/North7/peelback',
+      cover: 'assets/covers/peelback.jpg',
+      logo: '<svg viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#0d1010"/><g transform="translate(8 7)"><path d="M6 37.5L24 29 42 37.5 24 46z" fill="#ecede8" opacity=".26"/><path d="M6 26.5L24 18 42 26.5 24 35z" fill="#ecede8" opacity=".52"/><path d="M6 13.5L24 5 31.56 8.57 32.1 18.18 24 22z" fill="#3fe0b2"/><path d="M31.56 8.57L32.1 18.18Q28.92 15.01 22.94 11.04Q27.85 8.4 31.56 8.57z" fill="#ecede8"/></g></svg>',
+      sectionsLabel: '車',
+      sections: [
+        { n: '01', t: '台北客運低地板公車', u: '#bus', en: 'Taipei low-floor bus' },
+        { n: '02', t: '星宇航空 A350-1000', u: '#plane', en: 'STARLUX A350-1000' },
+        { n: '03', t: '特斯拉 Model Y', u: '#car', en: 'Tesla Model Y' },
+      ],
+      links: [
+        { t: '原始碼', u: 'https://github.com/North7/peelback', type: 'repo', en: 'Source code' },
+      ],
     },
   ],
 
