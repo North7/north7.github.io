@@ -222,6 +222,7 @@
     baseline: () => '<rect class="hm2" x="10" y="48" width="80" height="4"/><circle class="hm1 hm-bd" cx="20" cy="50" r="7"/>',
     signals: () => [16, 28, 40, 52].map((h, i) => `<rect class="hm1 hm-sb" style="animation-delay:${i * 0.25}s" x="${17 + i * 18}" y="${80 - h}" width="12" height="${h}"/>`).join(''),
     paypulse: () => '<circle class="hm2 hm-ring" cx="50" cy="50" r="20"/><circle class="hm1 hm-coin" cx="50" cy="50" r="20"/>',
+    peelback: () => '<path class="hm2" d="M14 74L50 58 86 74 50 90z" opacity=".5"/><path class="hm2" d="M14 56L50 40 86 56 50 72z"/><path class="hm1 hm-hop" d="M14 34L50 18 66 25 67 44 50 52z"/>',
     everkeep: () => '<rect class="hm2" x="18" y="80" width="64" height="6"/><path class="ho1" d="M31 80V52a19 19 0 0 1 38 0v28" stroke-width="7" stroke-linecap="round"/><circle class="hm1 hm-hop" cx="50" cy="68" r="6.5"/>',
   };
   const markOf = (p) => {
