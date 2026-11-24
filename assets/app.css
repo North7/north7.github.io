@@ -375,8 +375,9 @@ html[lang="en"] .log li.start .lt::before { content: 'Started'; font-family: var
 .foot { background: var(--foot-bg); color: #F1EEE7; padding: 90px var(--gut) 50px; }
 .foot-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; flex-wrap: wrap; }
 .foot h2 { margin: 0; font: 800 clamp(56px, 9vw, 150px)/.86 var(--geo); letter-spacing: -.02em; }
-.foot-tray { display: flex; gap: 0; }
-.foot-tray button { width: 38px; height: 38px; padding: 0; border: 0; cursor: copy; transition: transform .15s, background-color .4s; }
+/* 作品變多時（10 個以上），窄手機放不下每格 38px：每格跟著縮、保持正方形，不撐出橫向捲動 */
+.foot-tray { display: flex; gap: 0; max-width: 100%; }
+.foot-tray button { flex: 0 1 38px; min-width: 0; aspect-ratio: 1; height: auto; padding: 0; border: 0; cursor: copy; transition: transform .15s, background-color .4s; }
 .foot-tray button:hover { transform: translateY(-5px); }
 .foot-tray .nx { background: transparent; box-shadow: inset 0 0 0 2px #F1EEE7; cursor: pointer; }
 .foot-tray .nx.on { box-shadow: none; }

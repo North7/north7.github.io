@@ -2,7 +2,7 @@
 // 欄位說明見 README.md。網址可以寫完整網址，或寫相對於 site 的路徑（例如 '#news'、'en/'）。
 // 英文版：每一筆都可以帶 en。字串＝英文標題；物件＝要換成英文的欄位（例如 { tagline, desc }，網址也可以換）。沒寫的就沿用中文。
 window.LAB = {
-  updated: '2026-11-23',
+  updated: '2026-11-25',
   owner: {
     name: 'Aron',
     github: 'https://github.com/North7',
@@ -441,14 +441,14 @@ window.LAB = {
       domains: ['family'], kind: '3D 拆解',
       status: 'live', cadence: '有新的車就加',
       started: '2026-11-22',
-      tagline: '公車、飛機、汽車，一層一層剝開看裡面。',
-      desc: '給小朋友在 iPad 上玩的互動 3D：從展廳挑一台走近看，可以 360 度轉、一層一層拆開（外面、裡面、底盤、引擎或電池），點零件看它是什麼、做什麼用。每個中文字都有注音，也可以切成英文；燈光可以一組組打開，晚上看車燈。',
-      facts: ['一層一層拆開', '每個字都有注音', '公車・飛機・汽車'],
+      tagline: '公車、飛機、汽車、高鐵，一層一層剝開看裡面。',
+      desc: '給小朋友在 iPad 上玩的互動 3D：四台照真實資料做的台灣交通工具，從展廳挑一台走近看，可以 360 度轉、一層一層拆開（外面、裡面、底盤、引擎或動力），點零件看它是什麼、做什麼用。每個中文字都有注音，也可以切成英文；燈光可以一組組打開，晚上看車燈。第一次來會先看一段介紹片。',
+      facts: ['一層一層拆開', '每個字都有注音', '公車・飛機・汽車・高鐵'],
       en: {
         zh: 'Peel it open', kind: '3D teardown', cadence: 'Grows with each new vehicle', sectionsLabel: 'Vehicle',
-        tagline: 'A bus, a plane and a car you can peel open layer by layer.',
-        desc: 'Interactive 3D for kids on an iPad: pick a vehicle in the gallery, spin it all the way round, take it apart one layer at a time (outside, inside, chassis, engine or battery), and tap any part to learn what it does. Every Chinese character has zhuyin, there is an English mode, and the lights switch on group by group for a night view.',
-        facts: ['Peels apart layer by layer', 'Zhuyin on every character', 'Bus · plane · car'],
+        tagline: 'A bus, a plane, a car and a bullet train you can peel open layer by layer.',
+        desc: 'Interactive 3D for kids on an iPad: four real Taiwanese vehicles built from real-world data. Pick one in the gallery, spin it all the way round, take it apart one layer at a time (outside, inside, chassis, engine or power), and tap any part to learn what it does. Every Chinese character has zhuyin, there is an English mode, and the lights switch on group by group for a night view. First-time visitors see a short intro film.',
+        facts: ['Peels apart layer by layer', 'Zhuyin on every character', 'Bus · plane · car · bullet train'],
       },
       site: 'https://peelback.aronlab.dev/',
       repo: 'https://github.com/North7/peelback',
@@ -459,8 +459,11 @@ window.LAB = {
         { n: '01', t: '台北客運低地板公車', u: '#bus', en: 'Taipei low-floor bus' },
         { n: '02', t: '星宇航空 A350-1000', u: '#plane', en: 'STARLUX A350-1000' },
         { n: '03', t: '特斯拉 Model Y', u: '#car', en: 'Tesla Model Y' },
+        { n: '04', t: '台灣高鐵 700T', u: '#train', en: 'Taiwan High Speed Rail 700T' },
       ],
       links: [
+        // 產品案例只有中文版，英文版標 (Chinese)
+        { t: '產品案例：把真的交通工具，一層一層剝開給小朋友看', u: 'https://aronlab.dev/peelback/case-study/', type: 'case', en: 'Case study (Chinese): real vehicles, peeled open layer by layer for kids' },
         { t: '原始碼', u: 'https://github.com/North7/peelback', type: 'repo', en: 'Source code' },
       ],
     },
@@ -567,6 +570,30 @@ window.LAB = {
         ],
       },
     },
+    {
+      id: 'peelback-case', product: 'peelback',
+      title: '把真的交通工具，一層一層剝開給小朋友看',
+      sub: '剝剝看 Peelback 產品案例',
+      desc: '小朋友最常問「裡面長什麼樣子」。我挑了四台形狀完全不同的台灣交通工具，照真實資料做成可以一層一層拆開的 3D，每個字都有注音，再用八個關鍵取捨把「看得懂、真的、打開就順」做出來。',
+      meta: [['角色', '產品負責人（定位、體驗、真實度標準與取捨）'], ['階段', '已上線 · 4 台交通工具'], ['形態', '網頁 3D（iPad、手機、電腦）；注音、中文、英文']],
+      url: 'https://aronlab.dev/peelback/case-study/',
+      cover: 'assets/covers/peelback-case.jpg',
+      chapters: [
+        ['機會', '#problem'], ['使用者', '#users'], ['產品策略', '#strategy'], ['產品原則', '#principles'], ['體驗架構', '#architecture'],
+        ['決策紀錄', '#decisions'], ['真實度標準', '#quality'], ['產品畫面', '#product'], ['工作方式', '#method'], ['下一步', '#next'],
+      ],
+      // 目前只有中文版：英文介面照樣連到中文頁，標題標 (Chinese)
+      en: {
+        title: 'Real vehicles, peeled open layer by layer for kids',
+        sub: 'Peelback case study (Chinese)',
+        desc: 'The question kids ask most is "what\'s inside?" I picked four Taiwanese vehicles with completely different shapes, built them from real-world data as 3D you can take apart one layer at a time, put zhuyin on every character, and made it understandable, accurate and smooth through eight key decisions.',
+        meta: [['Role', 'Product owner (positioning, experience, accuracy bar and trade-offs)'], ['Stage', 'Live · 4 vehicles'], ['Form', 'Web 3D (iPad, phone, desktop); zhuyin, Chinese, English']],
+        chapters: [
+          ['Opportunity', '#problem'], ['Users', '#users'], ['Strategy', '#strategy'], ['Principles', '#principles'], ['Experience architecture', '#architecture'],
+          ['Decision log', '#decisions'], ['Accuracy bar', '#quality'], ['Product', '#product'], ['How I worked', '#method'], ["What's next", '#next'],
+        ],
+      },
+    },
   ],
 
   // 時間軸：每個作品的開工日會自動加入，這裡只放其他里程碑
@@ -591,5 +618,8 @@ window.LAB = {
     { d: '2026-11-13', p: 'everkeep', t: '介紹影片（直式 83 秒）：雞從春聯跳下來、天氣和節日、兩段實際操作手機頁面', en: 'Intro video (vertical, 83 s): the hen hopping out of the New Year couplet, weather and holidays, and two segments of the phone UI in use' },
     { d: '2026-11-14', p: 'everkeep', t: '產品案例上線：策略、原則、七個關鍵取捨、品質標準與實際畫面', en: 'Case study live: strategy, principles, seven key decisions, the quality bar and real screens' },
     { d: '2026-11-18', p: 'everkeep', t: '第一支 Blender 寫實短片（直式 8 秒）：蟲蟲計程車開上木桌', en: 'First photoreal Blender short (vertical, 8 s): the Bug Taxi on a wooden table' },
+    { d: '2026-11-24', p: 'peelback', t: '新增 No.04 台灣高鐵 700T：977 個座位照官網座位圖排，多一層「動力」', en: 'Added No.04, the Taiwan High Speed Rail 700T: 977 seats laid out from the official seat maps, plus a "power" layer' },
+    { d: '2026-11-24', p: 'peelback', t: '介紹片上線：粒子聚成車、一層一層拆開、四台照真實比例，第一次來自動播放', en: 'Intro film live: particles form the car, it peels apart layer by layer, then all four at true scale; plays on a first visit' },
+    { d: '2026-11-25', p: 'peelback', t: '產品案例上線：策略、六條原則、八個關鍵取捨、真實度標準與實際畫面', en: 'Case study live: strategy, six principles, eight key decisions, the accuracy bar and real screens' },
   ],
 };
