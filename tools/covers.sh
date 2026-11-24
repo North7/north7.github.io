@@ -24,6 +24,7 @@ SHOTS=(
   onestroke-case-en "https://aronlab.dev/onestroke/case-study/en/?lang=en"
   everkeep-case  "https://aronlab.dev/everkeep/case-study/?lang=zh"
   everkeep-case-en "https://aronlab.dev/everkeep/case-study/en/?lang=en"
+  peelback-case  "https://aronlab.dev/peelback/case-study/"
   peelback       "https://peelback.aronlab.dev/"
   paypulse       "https://paypulse.aronlab.dev/?lang=zh"
   paypulse-en    "https://paypulse.aronlab.dev/?lang=en"
