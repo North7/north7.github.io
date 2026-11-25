@@ -4,13 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="canonical" href="https://aronlab.dev/peelback/case-study/">
+<link rel="alternate" hreflang="zh-Hant" href="https://aronlab.dev/peelback/case-study/?lang=zh">
+<link rel="alternate" hreflang="en" href="https://aronlab.dev/peelback/case-study/en/">
+<link rel="alternate" hreflang="x-default" href="https://aronlab.dev/peelback/case-study/">
 <script>
   // 2026-11-24 剝剝看 Peelback 產品案例（產品經理角度），照 Everkeep、OneStroke 的做法放在 Aron Lab 底下（aronlab.dev/peelback/case-study/）。
   // 版型沿用 Everkeep 案例：電腦左邊目錄、手機右下角進度圓環。顏色用產品自己那一套（kit/style.css 最後生效的 v2「展廳」）：
   //   淺色紙色 #F3F1EA＋薄荷綠 #2BD1A2，深色近黑 #070808＋#3FE0B2。淺色版的薄荷太亮，小字改用壓深的 --accent-t。
-  // 案例裡不寫具體的人名，家人一律寫「小朋友」。目前只有中文版。
+  // 案例裡不寫具體的人名，家人一律寫「小朋友」。
+  // 2026-11-25 中英雙語：英文版在 en/（截圖是產品的英文模式）。語言跟 Aron Lab 首頁同一套：網址的 ?lang= → 自己選過的（localStorage 的 lab.lang，整個 aronlab.dev 共用）
+  //   → IP 地區（functions/peelback/case-study/index.js 寫進 <html data-geo>：台灣、香港、澳門、中國用中文，其他用英文）→ 瀏覽器語言。
   // 同一份網站也部署在 GitHub Pages；從 north7.github.io 進來的訪客轉到正式網域，路徑保留
   if (location.hostname === 'north7.github.io') location.replace('https://aronlab.dev' + location.pathname + location.search + location.hash);
+  else (function () {
+    var h = document.documentElement, q = new URLSearchParams(location.search).get('lang'), s = null;
+    try { s = localStorage.getItem('lab.lang'); } catch (e) {}
+    var g = h.dataset.geo, geo = /^[A-Z]{2}$/.test(g || '') ? (/^(TW|HK|MO|CN)$/.test(g) ? 'zh' : 'en') : null;
+    var l = q === 'en' || q === 'zh' ? q : s === 'en' || s === 'zh' ? s : geo || ([].concat(navigator.languages || navigator.language || []).some(function (x) { return /^zh/i.test(x); }) ? 'zh' : 'en');
+    if (l === 'en') location.replace('/peelback/case-study/en/' + location.hash);
+  })();
 </script>
 <meta name="description" content="把真的交通工具一層一層剝開給小朋友看：機會、使用者、策略、產品原則、八個關鍵取捨、真實度標準與實際畫面。">
 <meta property="og:type" content="article">
@@ -279,6 +291,19 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; whi
   .brand .peel { transform-origin: 24px 13px; animation: peel 1.4s cubic-bezier(.34, 1.56, .64, 1) .3s both; }
   @keyframes peel { 0% { transform: translateY(9px); opacity: 0; } 60% { opacity: 1; } 100% { transform: none; } }
 }
+
+/* 語言切換：中／EN 一對膠囊，現在的那個墨色底；電腦放在目錄上方，手機放在品牌右邊 */
+.langseg { display: inline-flex; align-self: flex-start; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 99px; background: var(--card); margin-bottom: 18px; }
+.langseg a, nav.toc .langseg a { border: 0; padding: 5px 11px; border-radius: 99px; font: 600 12px/1 var(--mono); letter-spacing: .06em; color: var(--muted); text-decoration: none; }
+.langseg a[aria-current="true"], nav.toc .langseg a[aria-current="true"] { background: var(--fg); color: var(--bg); }
+.langseg a:focus-visible { outline: 2px solid var(--accent-t); outline-offset: 2px; }
+.mrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mrow .langseg { margin-bottom: 0; }
+html.leaving main, html.leaving nav.toc { opacity: 0; transform: translateY(6px); }
+@media (prefers-reduced-motion: no-preference) {
+  main, nav.toc { transition: opacity .22s ease, transform .22s ease; }
+  .langseg a { transition: background .25s, color .25s; }
+}
 </style>
 </head>
 <body>
@@ -296,12 +321,13 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; whi
 <nav class="toc" aria-label="目錄">
   <div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Peelback <small>剝剝看</small></span></div>
   <a class="who" href="/#w-peelback">← Aron Lab</a>
+  <div class="langseg" role="group" aria-label="語言 Language"><a href="/peelback/case-study/?lang=zh" data-lang-set="zh" lang="zh-Hant" aria-current="true">中</a><a href="/peelback/case-study/en/?lang=en" data-lang-set="en" lang="en">EN</a></div>
   <a href="#problem">機會</a><a href="#users">使用者</a><a href="#strategy">產品策略</a><a href="#principles">產品原則</a><a href="#architecture">體驗架構</a>
   <a href="#decisions">決策紀錄</a><a href="#quality">真實度標準</a><a href="#product">產品畫面</a><a href="#method">工作方式</a><a href="#next">下一步</a>
 </nav>
 <main>
 
-<div class="mtop"><div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Peelback <small>剝剝看</small></span></div><a class="who" href="/#w-peelback" style="margin-bottom:0">← Aron Lab</a></div>
+<div class="mtop"><div class="mrow"><div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Peelback <small>剝剝看</small></span></div><div class="langseg" role="group" aria-label="語言 Language"><a href="/peelback/case-study/?lang=zh" data-lang-set="zh" lang="zh-Hant" aria-current="true">中</a><a href="/peelback/case-study/en/?lang=en" data-lang-set="en" lang="en">EN</a></div></div><a class="who" href="/#w-peelback" style="margin-bottom:0">← Aron Lab</a></div>
 
 <section class="hero" aria-labelledby="t">
   <div class="txt">
@@ -618,6 +644,23 @@ td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; whi
   addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
   addEventListener("resize", update);
   update();
+})();
+
+(() => {   // 語言切換：記住選擇（跟 Aron Lab 首頁共用 lab.lang），淡出後換到另一個語言的同一個章節
+  const secs = [...document.querySelectorAll("main section[id]")];
+  document.querySelectorAll("[data-lang-set]").forEach(a => a.addEventListener("click", e => {
+    if (a.getAttribute("aria-current") === "true") { e.preventDefault(); return; }
+    try { localStorage.setItem("lab.lang", a.dataset.langSet); } catch (err) { /* 無痕模式：靠網址的 ?lang= */ }
+    const y = scrollY + innerHeight * 0.3;
+    let id = "";
+    secs.forEach(s => { if (s.offsetTop <= y) id = s.id; });
+    const url = a.getAttribute("href") + (id ? "#" + id : "");
+    e.preventDefault();
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { location.href = url; return; }
+    document.documentElement.classList.add("leaving");
+    setTimeout(() => { location.href = url; }, 200);
+  }));
+  addEventListener("pageshow", () => document.documentElement.classList.remove("leaving"));
 })();
 </script>
 </body>

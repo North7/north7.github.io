@@ -462,8 +462,7 @@ window.LAB = {
         { n: '04', t: '台灣高鐵 700T', u: '#train', en: 'Taiwan High Speed Rail 700T' },
       ],
       links: [
-        // 產品案例只有中文版，英文版標 (Chinese)
-        { t: '產品案例：把真的交通工具，一層一層剝開給小朋友看', u: 'https://aronlab.dev/peelback/case-study/', type: 'case', en: 'Case study (Chinese): real vehicles, peeled open layer by layer for kids' },
+        { t: '產品案例：把真的交通工具，一層一層剝開給小朋友看', u: 'https://aronlab.dev/peelback/case-study/', type: 'case', en: { t: 'Case study: real vehicles, peeled open layer by layer for kids', u: 'https://aronlab.dev/peelback/case-study/en/' } },
         { t: '原始碼', u: 'https://github.com/North7/peelback', type: 'repo', en: 'Source code' },
       ],
       // 2026-11-25 宣傳影片：真網站一格一格錄的（peelback 的 tools/promo/），配樂和音效都是程式合成。
@@ -594,12 +593,14 @@ window.LAB = {
         ['機會', '#problem'], ['使用者', '#users'], ['產品策略', '#strategy'], ['產品原則', '#principles'], ['體驗架構', '#architecture'],
         ['決策紀錄', '#decisions'], ['真實度標準', '#quality'], ['產品畫面', '#product'], ['工作方式', '#method'], ['下一步', '#next'],
       ],
-      // 目前只有中文版：英文介面照樣連到中文頁，標題標 (Chinese)
+      // 中英雙語：英文版在 en/，案例頁自己依 IP 地區選預設語言（functions/peelback/case-study/）
       en: {
         title: 'Real vehicles, peeled open layer by layer for kids',
-        sub: 'Peelback case study (Chinese)',
+        sub: 'Peelback case study',
         desc: 'The question kids ask most is "what\'s inside?" I picked four Taiwanese vehicles with completely different shapes, built them from real-world data as 3D you can take apart one layer at a time, put zhuyin on every character, and made it understandable, accurate and smooth through eight key decisions.',
         meta: [['Role', 'Product owner (positioning, experience, accuracy bar and trade-offs)'], ['Stage', 'Live · 4 vehicles'], ['Form', 'Web 3D (iPad, phone, desktop); zhuyin, Chinese, English']],
+        url: 'https://aronlab.dev/peelback/case-study/en/',
+        cover: 'assets/covers/peelback-case-en.jpg',
         chapters: [
           ['Opportunity', '#problem'], ['Users', '#users'], ['Strategy', '#strategy'], ['Principles', '#principles'], ['Experience architecture', '#architecture'],
           ['Decision log', '#decisions'], ['Accuracy bar', '#quality'], ['Product', '#product'], ['How I worked', '#method'], ["What's next", '#next'],
@@ -632,7 +633,7 @@ window.LAB = {
     { d: '2026-11-18', p: 'everkeep', t: '第一支 Blender 寫實短片（直式 8 秒）：蟲蟲計程車開上木桌', en: 'First photoreal Blender short (vertical, 8 s): the Bug Taxi on a wooden table' },
     { d: '2026-11-24', p: 'peelback', t: '新增 No.04 台灣高鐵 700T：977 個座位照官網座位圖排，多一層「動力」', en: 'Added No.04, the Taiwan High Speed Rail 700T: 977 seats laid out from the official seat maps, plus a "power" layer' },
     { d: '2026-11-24', p: 'peelback', t: '介紹片上線：粒子聚成車、一層一層拆開、四台照真實比例，第一次來自動播放', en: 'Intro film live: particles form the car, it peels apart layer by layer, then all four at true scale; plays on a first visit' },
-    { d: '2026-11-25', p: 'peelback', t: '產品案例上線：策略、六條原則、八個關鍵取捨、真實度標準與實際畫面', en: 'Case study live: strategy, six principles, eight key decisions, the accuracy bar and real screens' },
+    { d: '2026-11-25', p: 'peelback', t: '產品案例上線（中英雙語）：策略、六條原則、八個關鍵取捨、真實度標準與實際畫面', en: 'Case study live in Chinese and English: strategy, six principles, eight key decisions, the accuracy bar and real screens' },
     { d: '2026-11-25', p: 'peelback', t: '宣傳影片：86 秒，介紹片加上 iPad 上真的操作四台車，配樂自己合成', en: 'Promo video: 86 seconds, the intro film plus real use of all four vehicles on an iPad, with a self-made score' },
   ],
 };
