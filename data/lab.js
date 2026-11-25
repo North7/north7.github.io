@@ -466,6 +466,18 @@ window.LAB = {
         { t: '產品案例：把真的交通工具，一層一層剝開給小朋友看', u: 'https://aronlab.dev/peelback/case-study/', type: 'case', en: 'Case study (Chinese): real vehicles, peeled open layer by layer for kids' },
         { t: '原始碼', u: 'https://github.com/North7/peelback', type: 'repo', en: 'Source code' },
       ],
+      // 2026-11-25 宣傳影片：真網站一格一格錄的（peelback 的 tools/promo/），配樂和音效都是程式合成。
+      // 原檔 promo-out/peelback-promo.mp4（14 Mbps，102 MB）沒進 git；這裡是網頁用的 1.9 Mbps 版（Cloudflare Pages 單檔上限 25 MB）
+      promo: {
+        date: '2026-11-25',
+        note: '介紹片的粒子聚成車、一層一層拆開，中間在 iPad 上真的操作四台車：拆開、點零件、換語言、公車換電動、飛機起飛、高鐵出發、晚上開燈。有配樂（預設靜音，右上角開聲音）。',
+        dir: 'assets/media/peelback/',
+        video: { src: 'promo.mp4', poster: 'promo-poster.jpg', t: '宣傳影片 · 橫式 86 秒', ar: '16 / 9', sound: true },
+        en: {
+          note: 'Particles form the car and it peels apart layer by layer, then real use on an iPad: taking the car apart, tapping parts, switching languages, the bus going electric, the plane taking off, the train setting off and the lights at night. Chinese captions with English subtitles and a music track (muted by default; turn sound on at the top right).',
+          video: 'Promo video · landscape, 86 s',
+        },
+      },
     },
   ],
 
@@ -621,5 +633,6 @@ window.LAB = {
     { d: '2026-11-24', p: 'peelback', t: '新增 No.04 台灣高鐵 700T：977 個座位照官網座位圖排，多一層「動力」', en: 'Added No.04, the Taiwan High Speed Rail 700T: 977 seats laid out from the official seat maps, plus a "power" layer' },
     { d: '2026-11-24', p: 'peelback', t: '介紹片上線：粒子聚成車、一層一層拆開、四台照真實比例，第一次來自動播放', en: 'Intro film live: particles form the car, it peels apart layer by layer, then all four at true scale; plays on a first visit' },
     { d: '2026-11-25', p: 'peelback', t: '產品案例上線：策略、六條原則、八個關鍵取捨、真實度標準與實際畫面', en: 'Case study live: strategy, six principles, eight key decisions, the accuracy bar and real screens' },
+    { d: '2026-11-25', p: 'peelback', t: '宣傳影片：86 秒，介紹片加上 iPad 上真的操作四台車，配樂自己合成', en: 'Promo video: 86 seconds, the intro film plus real use of all four vehicles on an iPad, with a self-made score' },
   ],
 };
