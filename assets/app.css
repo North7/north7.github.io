@@ -234,6 +234,18 @@ a.ir:hover .go2 { transform: translate(3px, -3px); }
 .fold-row i { font-style: normal; white-space: nowrap; }
 .fold-all { align-self: center; height: 32px; padding: 0 14px; border: 0; background: var(--idx-hi); color: var(--idx-tx); font: 500 13px/1 var(--cjk); cursor: pointer; }
 .fold-all:hover { background: rgba(241,238,231,.16); }
+/* 整段收合：標題列一直在，下面的搜尋、篩選和清單由 0 高長出來 */
+.idx-toggle { display: inline-flex; align-items: center; gap: 10px; align-self: center; height: 40px; padding: 0 14px 0 18px; border: 0; background: var(--idx-tx); color: #161616; font: 700 14px/1 var(--cjk); cursor: pointer; transition: transform .12s; }
+.idx-toggle:hover { background: #fff; }
+.idx-toggle:active { transform: scale(.96); }
+.idx-toggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .35s cubic-bezier(.3,1.5,.5,1); }
+.idx-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.idx-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .5s cubic-bezier(.4,0,.2,1), visibility 0s; }
+.idx-in { min-height: 0; overflow-y: clip; overflow-clip-margin: 4px; }
+.idx-sec.shut .idx-body { grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows .4s cubic-bezier(.4,0,.2,1), visibility 0s .4s; }
+.idx-sec.shut .sec-h { margin-bottom: 0; }
+.idx-sec .sec-h { transition: margin-bottom .4s cubic-bezier(.4,0,.2,1); }
+.idx-sec.shut .fold-all { display: none; }
 
 /* ── 作品集（赭黃色場） ── */
 .cases-sec { background: var(--cases-bg); }
@@ -419,7 +431,7 @@ html[lang="en"] .foot-about .who { font-family: var(--geo); font-weight: 700; }
   background-position: calc(var(--vx) - var(--vr) - var(--vb)) calc(var(--vy) - var(--vr) - var(--vb)); background-size: calc(2 * (var(--vr) + var(--vb))) calc(2 * (var(--vr) + var(--vb))); }
 @keyframes vtSq { from { --vr: 0px; } to { --vr: calc(var(--vR, 2000px) + 2 * var(--vb)); } }
 
-@media (prefers-reduced-motion: reduce) { .sq, .hero, .hero *, .top { transition: none !important; } html { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: reduce) { .sq, .hero, .hero *, .top, .idx-body, .idx-sec .sec-h, .idx-toggle, .idx-toggle svg { transition: none !important; } html { scroll-behavior: auto; } }
 
 @media (max-width: 1100px) {
   .ir { grid-template-columns: 170px minmax(0, 1.4fr) 96px minmax(0, 1fr) 20px; }

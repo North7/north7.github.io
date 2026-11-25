@@ -434,14 +434,34 @@
   });
   pick(idxProd, 'p', 'prod'); pick(idxType, 't', 'type');
   $('q').addEventListener('input', (ev) => { state.q = ev.target.value; renderIndex(); });
+  // 分頁索引放在頁面最後、預設收起來；打開過就記在這個分頁裡（切換語言、重新整理後維持）
+  const idxSec = $('index'), idxTg = $('idx-toggle');
+  const setIdx = (on) => {
+    idxSec.classList.toggle('shut', !on);
+    idxTg.setAttribute('aria-expanded', String(on));
+    idxTg.querySelector('span').textContent = on ? tr('收起索引', 'Hide index') : tr('展開索引', 'Show index');
+    try { sessionStorage.setItem('lab.idx', on ? '1' : '0'); } catch (e) { /* 無痕模式 */ }
+  };
+  const openIdx = () => { if (idxSec.classList.contains('shut')) setIdx(true); };
+  idxTg.addEventListener('click', () => {
+    const on = idxSec.classList.contains('shut');
+    setIdx(on);
+    // 收起時，如果標題已經捲出畫面上方，就把標題帶回來，不要停在頁尾
+    if (!on && idxSec.getBoundingClientRect().top < 0) idxSec.scrollIntoView({ behavior: 'instant' });
+  });
+  document.querySelectorAll('a[href="#index"]').forEach((a) => a.addEventListener('click', openIdx));
+  addEventListener('hashchange', () => { if (location.hash === '#index') openIdx(); });
+  let idx0 = location.hash === '#index';
+  try { idx0 = idx0 || sessionStorage.getItem('lab.idx') === '1'; } catch (e) { /* 無痕模式 */ }
+  setIdx(idx0);
   document.addEventListener('keydown', (ev) => {
-    if (ev.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) { ev.preventDefault(); $('q').focus({ preventScroll: true }); $('index').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); }
+    if (ev.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) { ev.preventDefault(); openIdx(); $('q').focus({ preventScroll: true }); $('index').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); }
   });
   document.addEventListener('click', (ev) => {
     const b = ev.target.closest('[data-goto]'); if (!b) return;
     idxProd.querySelector(`[data-p="${b.dataset.goto}"]`).click();
     idxType.querySelector('[data-t="all"]').click();
-    $('q').value = ''; state.q = ''; renderIndex();
+    $('q').value = ''; state.q = ''; renderIndex(); openIdx();
     $('index').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
   });
   renderIndex();
@@ -451,7 +471,7 @@
   let lx = false; // 是不是按語言切換過來的
   try { lx = sessionStorage.getItem('lab.lx') === '1'; sessionStorage.removeItem('lab.lx'); } catch (e) { /* 無痕模式 */ }
   if (q0) {
-    $('q').value = q0; state.q = q0; renderIndex();
+    $('q').value = q0; state.q = q0; renderIndex(); openIdx();
     atLoad(() => $('index').scrollIntoView({ behavior: 'instant' }));
   } else {
     let at0 = null;
@@ -600,7 +620,7 @@
   const navLinks = [...document.querySelectorAll('[data-nav]')];
   const io2 = new IntersectionObserver((list) => list.forEach((en) => { if (en.isIntersecting) navLinks.forEach((a) => a.classList.toggle('on', a.dataset.nav === en.target.dataset.sec)); }), { rootMargin: '-40% 0px -55% 0px' });
   document.querySelectorAll('.field').forEach((f) => { f.dataset.sec = 'works'; io2.observe(f); });
-  ['index', 'cases', 'media', 'log'].forEach((id) => { $(id).dataset.sec = id; io2.observe($(id)); });
+  ['cases', 'media', 'log', 'index'].forEach((id) => { $(id).dataset.sec = id; io2.observe($(id)); });
 
   // ── 小細節：複製色碼、幫下一個作品挑顏色 ──
   const toast = (msg) => {

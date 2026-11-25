@@ -48,10 +48,10 @@ try { var t = localStorage.getItem('lab.theme'); if (t === 'light' || t === 'dar
   <a class="brand" href="#hero" aria-label="Aron Lab 回到頂端" data-en-label="Aron Lab, back to top"><svg class="logo" viewBox="0 0 478.25 321" aria-hidden="true"><use href="#logo" width="478.25" height="321"/></svg>ARON LAB</a>
   <nav class="nav" aria-label="章節" data-en-label="Sections">
     <a href="#works" data-nav="works" data-en="Works">作品</a>
-    <a href="#index" data-nav="index" data-en="Index">索引</a>
     <a href="#cases" data-nav="cases" data-en="Cases">作品集</a>
     <a href="#media" data-nav="media" data-en="Media">宣傳素材</a>
     <a href="#log" data-nav="log" data-en="Log">時間軸</a>
+    <a href="#index" data-nav="index" data-en="Index">索引</a>
   </nav>
   <div class="seg lang" role="group" aria-label="語言 Language">
     <button type="button" data-lang-set="zh" lang="zh-Hant">中</button><button type="button" data-lang-set="en" lang="en">EN</button>
@@ -77,30 +77,33 @@ try { var t = localStorage.getItem('lab.theme'); if (t === 'light' || t === 'dar
   <div id="works"></div>
 
   <!-- 章節標題：英文版時大字換成英文，旁邊的斜體換成中文 -->
-  <section class="sec idx-sec" id="index" aria-labelledby="h-index">
-    <div class="sec-h"><span class="no">02</span><h2 id="h-index" data-en="Directory">分頁索引</h2><span class="en" data-en="分頁索引">Directory</span><span class="count" id="idx-count"></span><button type="button" class="fold-all" id="idx-fold" hidden>全部展開</button></div>
-    <div class="idx-tools">
-      <label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="搜尋入口、網址、說明…" autocomplete="off" aria-label="搜尋入口" data-en-ph="Search entries, URLs, notes…" data-en-label="Search entries"><kbd>/</kbd></label>
-      <div class="chips" id="idx-prod" role="group" aria-label="依作品篩選" data-en-label="Filter by work"></div>
-      <div class="chips" id="idx-type" role="group" aria-label="依類型篩選" data-en-label="Filter by type"></div>
-    </div>
-    <div class="idx" id="idx" role="table" aria-label="所有入口" data-en-label="All entries"></div>
-  </section>
-
   <section class="sec cases-sec" id="cases" aria-labelledby="h-cases">
-    <div class="sec-h"><span class="no">03</span><h2 id="h-cases" data-en="Case studies">作品集</h2><span class="en" data-en="作品集">Case studies</span></div>
+    <div class="sec-h"><span class="no">02</span><h2 id="h-cases" data-en="Case studies">作品集</h2><span class="en" data-en="作品集">Case studies</span></div>
     <div class="cases" id="case-list"></div>
   </section>
 
   <section class="sec media-sec" id="media" aria-labelledby="h-media">
-    <div class="sec-h"><span class="no">04</span><h2 id="h-media" data-en="Media">宣傳素材</h2><span class="en" data-en="宣傳素材">Media</span></div>
+    <div class="sec-h"><span class="no">03</span><h2 id="h-media" data-en="Media">宣傳素材</h2><span class="en" data-en="宣傳素材">Media</span></div>
     <div id="media-list"></div>
   </section>
 
   <section class="sec log-sec" id="log" aria-labelledby="h-log">
-    <div class="sec-h"><span class="no">05</span><h2 id="h-log" data-en="Log">時間軸</h2><span class="en" data-en="時間軸">Log</span></div>
+    <div class="sec-h"><span class="no">04</span><h2 id="h-log" data-en="Log">時間軸</h2><span class="en" data-en="時間軸">Log</span></div>
     <div class="gantt" id="gantt"></div>
     <ol class="log" id="log-list"></ol>
+  </section>
+
+  <!-- 分頁索引放在最後、預設收起來：按「展開索引」、頂欄的「索引」、按 / 搜尋、作品卡的「全部 N 個入口」都會打開 -->
+  <section class="sec idx-sec shut" id="index" aria-labelledby="h-index">
+    <div class="sec-h"><span class="no">05</span><h2 id="h-index" data-en="Directory">分頁索引</h2><span class="en" data-en="分頁索引">Directory</span><span class="count" id="idx-count"></span><button type="button" class="fold-all" id="idx-fold" hidden>全部展開</button><button type="button" class="idx-toggle" id="idx-toggle" aria-expanded="false" aria-controls="idx-body"><span>展開索引</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+    <div class="idx-body" id="idx-body"><div class="idx-in">
+      <div class="idx-tools">
+        <label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="搜尋入口、網址、說明…" autocomplete="off" aria-label="搜尋入口" data-en-ph="Search entries, URLs, notes…" data-en-label="Search entries"><kbd>/</kbd></label>
+        <div class="chips" id="idx-prod" role="group" aria-label="依作品篩選" data-en-label="Filter by work"></div>
+        <div class="chips" id="idx-type" role="group" aria-label="依類型篩選" data-en-label="Filter by type"></div>
+      </div>
+      <div class="idx" id="idx" role="table" aria-label="所有入口" data-en-label="All entries"></div>
+    </div></div>
   </section>
 </main>
 
