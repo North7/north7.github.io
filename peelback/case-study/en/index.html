@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="canonical" href="https://aronlab.dev/peelback/case-study/en/">
+<link rel="alternate" hreflang="zh-Hant" href="https://aronlab.dev/peelback/case-study/?lang=zh">
+<link rel="alternate" hreflang="en" href="https://aronlab.dev/peelback/case-study/en/">
+<link rel="alternate" hreflang="x-default" href="https://aronlab.dev/peelback/case-study/">
+<script>
+  // 英文版。中文版在上一層；語言規則寫在中文版開頭。英文版只看網址的 ?lang= 和自己選過的，不依 IP 轉回中文。
+  // 截圖是產品的英文模式（img/en/）；三個產品方向的效果圖沿用中文版那三張。
+  // 同一份網站也部署在 GitHub Pages；從 north7.github.io 進來的訪客轉到正式網域，路徑保留
+  if (location.hostname === 'north7.github.io') location.replace('https://aronlab.dev' + location.pathname + location.search + location.hash);
+  else (function () {
+    var q = new URLSearchParams(location.search).get('lang'), s = null;
+    try { s = localStorage.getItem('lab.lang'); } catch (e) {}
+    var l = q === 'en' || q === 'zh' ? q : s;
+    if (l === 'zh') location.replace('/peelback/case-study/' + location.hash);
+  })();
+</script>
+<meta name="description" content="Real vehicles peeled open layer by layer for kids: opportunity, users, strategy, principles, eight key decisions, the accuracy bar and real screens.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Peelback case study · Aron">
+<meta property="og:description" content="Real vehicles peeled open layer by layer for kids: opportunity, users, strategy, principles, eight key decisions, the accuracy bar and real screens.">
+<meta property="og:url" content="https://aronlab.dev/peelback/case-study/en/">
+<meta property="og:image" content="https://aronlab.dev/assets/covers/peelback-case-en.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%230d1010'/%3E%3Cg transform='translate(8 6)'%3E%3Cpath d='M6 37.5L24 29 42 37.5 24 46z' fill='%23ecede8' opacity='.26'/%3E%3Cpath d='M6 26.5L24 18 42 26.5 24 35z' fill='%23ecede8' opacity='.52'/%3E%3Cpath d='M6 13.5L24 5 31.56 8.57 32.1 18.18 24 22z' fill='%233fe0b2'/%3E%3Cpath d='M31.56 8.57L32.1 18.18Q28.92 15.01 22.94 11.04Q27.85 8.4 31.56 8.57z' fill='%23ecede8'/%3E%3C/g%3E%3C/svg%3E">
+<meta name="theme-color" content="#F3F1EA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#070808" media="(prefers-color-scheme: dark)">
+<title>Peelback case study · Aron</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* 版面：跟產品同一套「展廳」——紙色底、墨色字，薄荷綠只標重點和「你在哪」；
+   長捲動的產品案例，電腦左邊目錄（目前章節一條 2px 薄荷綠），手機右下角一顆進度圓環，點了展開目錄 */
+:root {
+  --bg: #F3F1EA; --card: #FBFAF6; --card2: #EBE8DF; --line: #DEDBD1; --fg: #141513; --muted: #6A6C66;
+  --accent: #2BD1A2; --accent-t: #0B7A5C; --on-accent: #04130E; --soft: rgba(43, 209, 162, .14); --frame: #EBE8DF;
+  --display: "Inter Tight", "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+  --body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --gut: max(22px, env(safe-area-inset-left, 0px)); --gut-r: max(22px, env(safe-area-inset-right, 0px));
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #070808; --card: #111313; --card2: #181B1B; --line: #232727; --fg: #ECEDE8; --muted: #959A95;
+  --accent: #3FE0B2; --accent-t: #3FE0B2; --on-accent: #04130E; --soft: rgba(63, 224, 178, .13); --frame: #0F1111; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #070808; --card: #111313; --card2: #181B1B; --line: #232727; --fg: #ECEDE8; --muted: #959A95;
+  --accent: #3FE0B2; --accent-t: #3FE0B2; --on-accent: #04130E; --soft: rgba(63, 224, 178, .13); --frame: #0F1111; color-scheme: dark }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { background: var(--bg); color: var(--fg); font: 400 16px/1.8 var(--body); margin: 0; padding-left: var(--gut); padding-right: var(--gut-r); }
+@media (min-width: 901px) { body { padding-left: clamp(32px, 4vw, 56px); padding-right: clamp(32px, 4vw, 56px); } }
+a { color: inherit; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 48px 110px; display: grid; grid-template-columns: 184px minmax(0, 1fr); gap: 56px; }
+
+/* 品牌：產品的標誌（三片板子往上拆開，最上面那片右上角往回捲） */
+.brand { display: flex; align-items: center; gap: 10px; font: 700 19px var(--display); letter-spacing: -.01em; }
+.brand svg { width: 30px; height: 30px; flex: none; }
+.brand small { font: 500 12px var(--body); color: var(--muted); letter-spacing: .08em; margin-left: 2px; }
+.mk-ink { fill: var(--fg); }
+.mk-acc { fill: var(--accent); }
+
+/* 目錄 */
+nav.toc { position: sticky; top: calc(28px + env(safe-area-inset-top, 0px)); align-self: start; display: flex; flex-direction: column; gap: 2px; font: 500 13.5px/1.4 var(--body); }
+.who { font: 500 12px var(--mono); letter-spacing: .06em; color: var(--muted); margin: 6px 0 18px; text-decoration: none; }
+.who:hover { color: var(--fg); }
+nav.toc a { color: var(--muted); text-decoration: none; padding: 5px 0 5px 13px; border-left: 2px solid var(--line); }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--fg); outline: none; }
+nav.toc a.on { color: var(--fg); border-left-color: var(--accent); }
+nav.toc a.who { border-left: 0; padding: 0; }
+
+main { min-width: 0; display: flex; flex-direction: column; gap: 96px; }
+section { display: flex; flex-direction: column; gap: 22px; scroll-margin-top: 28px; }
+.eyebrow { display: flex; align-items: center; gap: 10px; font: 600 12px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.eyebrow::before { content: ""; width: 12px; height: 7px; background: var(--accent); clip-path: polygon(0 50%, 50% 0, 100% 50%, 50% 100%); }
+h1 { font: 900 clamp(34px, 5.4vw, 58px)/1.16 var(--body); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
+h1 em, h2 em { font-style: normal; color: var(--accent-t); }
+.nb { display: inline-block; }   /* 標題按詞組換行，不在詞中間斷開 */
+h2 { font: 900 clamp(25px, 3.3vw, 34px)/1.3 var(--body); margin: 0; text-wrap: balance; }
+h3 { font: 700 17px/1.5 var(--body); margin: 0; }
+p { margin: 0; max-width: 66ch; }
+.lede { font-size: 18px; line-height: 1.85; color: var(--muted); max-width: 58ch; }
+.muted { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px 26px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+ul.plain { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 7px; }
+ul.plain li::marker { color: var(--accent); }
+.g2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+q { quotes: "「" "」"; }
+
+/* 開頭 */
+.hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 44px; align-items: center; }
+.hero .txt { display: flex; flex-direction: column; gap: 24px; }
+.hv { justify-self: end; width: min(100%, 300px); display: flex; flex-direction: column; gap: 10px; margin: 0; }
+.meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 28px; padding-top: 20px; border-top: 1px solid var(--line); margin: 0; }
+.meta dt { font: 600 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.meta dd { margin: 0; font-weight: 500; font-size: 15px; line-height: 1.6; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 700 14px/1 var(--body); padding: 13px 18px; border-radius: 99px; border: 1px solid var(--line); background: var(--card); }
+.btn.pri { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.btn:focus-visible { outline: 2px solid var(--accent-t); outline-offset: 2px; }
+
+/* 關鍵數字 */
+.nums { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.nums li { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+.nums b { font: 700 clamp(28px, 3.3vw, 38px)/1 var(--display); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.nums b small { font: 700 15px var(--body); margin-left: 3px; letter-spacing: 0; }
+.nums li:first-child b { color: var(--accent-t); }
+.nums span { font-size: 13px; line-height: 1.55; color: var(--muted); }
+
+/* 三段路線 */
+.road { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.stage { padding: 20px 22px 6px 0; display: flex; flex-direction: column; gap: 10px; position: relative; min-width: 0; }
+.stage + .stage { padding-left: 22px; border-left: 1px solid var(--line); }
+.stage::before { content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 2px; background: transparent; }
+.stage.now::before { background: var(--accent); right: 22px; }
+.stage .k { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font: 600 12px/1 var(--mono); letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+.pill { font: 700 11.5px/1 var(--body); letter-spacing: 0; padding: 5px 9px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; text-transform: none; }
+.stage.now .pill { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.stage h3 { font-size: 19px; }
+.stage dl { margin: 0; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 6px 10px; font-size: 14.5px; line-height: 1.7; }
+.stage dt { color: var(--muted); font-size: 13px; line-height: 1.95; }
+.stage dd { margin: 0; }
+
+/* 產品原則 */
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; }
+.rule { display: flex; flex-direction: column; gap: 6px; padding: 20px 0; border-top: 1px solid var(--line); }
+.rule h3 { font-size: 18px; display: flex; gap: 10px; align-items: baseline; }
+.rule h3 span { font: 600 12px var(--mono); color: var(--accent-t); letter-spacing: .1em; }
+.rule p { color: var(--muted); font-size: 15px; }
+
+/* 體驗架構：一條流程，第四站分成兩條路 */
+.flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.3fr) repeat(2, minmax(0, 1fr)); align-items: stretch; }
+.st { position: relative; padding: 16px 18px 16px 0; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.st::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--line); }
+.st::after { content: ""; position: absolute; top: -4px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--bg); border: 2px solid var(--muted); }
+.st.key::after { background: var(--accent); border-color: var(--accent); }
+.st .n { font: 600 11.5px var(--mono); letter-spacing: .12em; color: var(--muted); margin-top: 8px; }
+.st b { font: 700 15.5px/1.4 var(--body); }
+.st small { font-size: 13px; line-height: 1.6; color: var(--muted); }
+.st .fork { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.st .fork div { padding-left: 12px; border-left: 2px solid var(--accent); display: flex; flex-direction: column; gap: 2px; }
+.st .fork div b { font-size: 15px; }
+
+/* 四台車的層：每一格就是產品裡層數列的一格 */
+.layers { display: flex; flex-direction: column; }
+.ly { display: grid; grid-template-columns: 170px minmax(0, 1fr) 200px; gap: 18px; padding: 15px 0; border-top: 1px solid var(--line); align-items: baseline; }
+.ly:last-child { border-bottom: 1px solid var(--line); }
+.ly .lab { font: 700 15px var(--body); }
+.ly .lab span { display: block; font: 500 12px var(--mono); letter-spacing: .08em; color: var(--muted); margin-top: 2px; }
+.ly .act { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+.ly .act b { color: var(--fg); font-weight: 500; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 500 13px/1 var(--body); padding: 7px 11px; border-radius: 99px; background: var(--card); border: 1px solid var(--line); }
+.chip i { font: 600 10.5px var(--mono); font-style: normal; color: var(--muted); }
+.chips .arr { color: var(--muted); font-size: 12px; }
+
+/* 決策紀錄 */
+.decs { display: flex; flex-direction: column; gap: 12px; }
+.dec { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 26px 28px; display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 22px; }
+.dec .when { font: 600 12px/1.5 var(--mono); color: var(--accent-t); letter-spacing: .12em; }
+.dec .when h3 { font: 700 17.5px/1.45 var(--body); color: var(--fg); letter-spacing: 0; margin-top: 8px; }
+.dec dl { margin: 0; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 9px 14px; }
+.dec dt { font: 500 12.5px/1.95 var(--body); color: var(--muted); }
+.dec dd { margin: 0; }
+.dec dd.out { font-weight: 500; }
+.dec dd.out::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: 1px; }
+.dec .chip { font-size: 12.5px; padding: 6px 10px; margin: 0 2px 5px 0; }
+.dec .chip.pick { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+.dirs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 4px; }
+.dirs figure img { border-radius: 10px; }
+.dirs figcaption { font-size: 12.5px; }
+
+/* 品質標準 */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 28px; counter-reset: s; margin: 0; padding: 0; list-style: none; }
+.steps li { counter-increment: s; padding: 16px 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
+.steps li::before { content: counter(s, decimal-leading-zero); font: 600 12px var(--mono); letter-spacing: .12em; color: var(--accent-t); }
+.steps b { font-size: 16px; }
+.steps span { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.lesson { background: var(--soft); border-radius: 16px; padding: 18px 22px; display: flex; gap: 14px; align-items: flex-start; }
+.lesson b { flex: none; font: 600 12px/1.9 var(--mono); letter-spacing: .12em; color: var(--accent-t); }
+.lesson p { font-size: 15px; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+figure img { width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid var(--line); background: var(--frame); }
+figcaption { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+figcaption b { color: var(--fg); margin-right: 6px; }
+.tbl { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 6px 24px; }
+table { border-collapse: collapse; width: 100%; min-width: 660px; font-size: 15px; }
+th, td { text-align: left; padding: 14px 16px 14px 0; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.65; }
+tr:last-child td { border-bottom: 0; }
+th { font: 600 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+td:first-child { font-weight: 700; white-space: nowrap; }
+td.guess { color: var(--muted); font-size: 14px; }
+td.res { font: 700 15px/1.5 var(--display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.res s { color: var(--muted); font-weight: 500; text-decoration-thickness: 1px; margin-right: 6px; }
+td.res em { font-style: normal; color: var(--accent-t); }
+td.res.no { color: var(--muted); font-family: var(--body); font-weight: 500; white-space: normal; }
+
+/* 產品畫面 */
+.tour { display: flex; flex-direction: column; gap: 56px; }
+.tg { display: flex; flex-direction: column; gap: 18px; }
+.tgh { display: flex; gap: 14px; align-items: flex-start; }
+.tgh p { font-size: 14.5px; margin-top: 4px; }
+.tn { flex: none; font: 600 12.5px/1 var(--mono); color: var(--on-accent); background: var(--accent); border-radius: 8px; padding: 6px 7px; margin-top: 2px; }
+.phones { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.phones.three { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 760px; }
+.ph .fr { border: 1px solid var(--line); border-radius: 26px; overflow: hidden; background: var(--frame); aspect-ratio: 390 / 844; }
+.ph .fr img { width: 100%; height: 100%; object-fit: cover; border: 0; border-radius: 0; }
+.wide img { border-radius: 18px; }
+
+.close { border-top: 1px solid var(--line); padding-top: 28px; display: flex; flex-direction: column; gap: 10px; }
+
+/* 手機目錄：右下角一顆進度圓環，點了從邊緣長出目錄 */
+.mtoc { display: none; }
+@media (max-width: 900px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; padding-block: 24px 88px; }
+  nav.toc { display: none; }
+  .mtop { display: flex; flex-direction: column; gap: 2px; margin-bottom: 28px; }
+  main { gap: 68px; }
+  .hero, .g2, .g3, .rules { grid-template-columns: minmax(0, 1fr); }
+  .hero { gap: 28px; }
+  .hv { justify-self: center; width: min(100%, 280px); }
+  .nums { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nums li:first-child { grid-column: 1 / -1; }
+  .road { grid-template-columns: minmax(0, 1fr); border-top: 0; }
+  .stage, .stage + .stage { padding: 18px 0; border-left: 0; border-top: 1px solid var(--line); }
+  .stage.now::before { right: 0; }
+  .flow { grid-template-columns: minmax(0, 1fr); }
+  .st { padding: 0 0 18px 26px; }
+  .st::before { top: 0; bottom: 0; left: 4px; right: auto; width: 1px; height: auto; }
+  .st::after { top: 6px; }
+  .st .n { margin-top: 0; }
+  .ly { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .dec { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 22px 20px; }
+  .dec dl { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .dec dd + dt { margin-top: 10px; }
+  .dec dt { line-height: 1.6; }
+  .dirs { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding-bottom: 6px; }
+  .dirs figure { flex: none; width: 78%; scroll-snap-align: start; }
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .tbl { padding: 6px 20px; }
+  /* 手機上表格不橫向捲：每一列變成直排，欄名寫在格子前面 */
+  table.stk { min-width: 0; }
+  table.stk thead { display: none; }
+  table.stk tr { display: block; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  table.stk tr:last-child { border-bottom: 0; }
+  table.stk td { display: block; border: 0; padding: 2px 0; white-space: normal; }
+  table.stk td::before { display: block; font: 600 10.5px/1.4 var(--mono); letter-spacing: .14em; color: var(--muted); margin-top: 6px; }
+  table.stk td:first-child { font-size: 16px; }
+  .src td:nth-child(2)::before { content: "BASED ON"; }
+  .src td:nth-child(3)::before { content: "STILL INFERRED"; }
+  .perf td:nth-child(2) { color: var(--muted); font-size: 14px; }
+  .perf td.res { margin-top: 4px; }
+  .phones, .phones.three { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding-bottom: 8px; max-width: none; }
+  .phones > .ph { flex: none; width: min(64vw, 250px); scroll-snap-align: start; }
+  .mtoc { display: block; position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 20; }
+}
+@media (min-width: 901px) { .mtop { display: none; } }
+.mbtn { width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--fg); display: grid; place-items: center; cursor: pointer; padding: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), 0 1px 2px rgba(20, 21, 19, .08), 0 10px 26px -12px rgba(20, 21, 19, .35); position: relative; }
+.mbtn svg.ring { position: absolute; inset: 3px; width: calc(100% - 6px); height: calc(100% - 6px); transform: rotate(-90deg); }
+.mbtn svg.ring circle { fill: none; stroke-width: 2.5; }
+.mbtn .bgc { stroke: var(--line); }
+.mbtn .pr { stroke: var(--accent); stroke-linecap: round; }
+.mbtn .ic { width: 18px; height: 18px; }
+.mbtn:focus-visible { outline: 2px solid var(--accent-t); outline-offset: 3px; }
+.mpanel { position: absolute; right: 0; bottom: 62px; width: min(78vw, 280px); background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 10px;
+  box-shadow: 0 2px 4px rgba(20, 21, 19, .08), 0 24px 48px -18px rgba(20, 21, 19, .4); display: flex; flex-direction: column;
+  transform-origin: 100% 100%; transform: scale(.6); opacity: 0; pointer-events: none; }
+.mtoc.open .mpanel { transform: none; opacity: 1; pointer-events: auto; }
+.mpanel a { text-decoration: none; padding: 10px 12px; border-radius: 12px; font: 500 15px/1.3 var(--body); color: var(--muted); display: flex; justify-content: space-between; gap: 10px; }
+.mpanel a span { font: 500 11.5px var(--mono); letter-spacing: .08em; opacity: .8; }
+.mpanel a.on { color: var(--fg); background: var(--soft); }
+@media (prefers-reduced-motion: no-preference) {
+  nav.toc a { transition: color .15s, border-color .2s; }
+  .mpanel { transition: transform .42s cubic-bezier(.34, 1.56, .64, 1), opacity .2s; }
+  .mbtn { transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
+  .mbtn:active { transform: scale(.9); }
+  .btn { transition: transform .3s cubic-bezier(.34, 1.56, .64, 1); }
+  .btn:active { transform: scale(.95); }
+  /* 標誌：最上面那片像被剝開一樣輕輕掀一下（只在載入時一次） */
+  .brand .peel { transform-origin: 24px 13px; animation: peel 1.4s cubic-bezier(.34, 1.56, .64, 1) .3s both; }
+  @keyframes peel { 0% { transform: translateY(9px); opacity: 0; } 60% { opacity: 1; } 100% { transform: none; } }
+}
+
+/* 語言切換：中／EN 一對膠囊，現在的那個墨色底；電腦放在目錄上方，手機放在品牌右邊 */
+.langseg { display: inline-flex; align-self: flex-start; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 99px; background: var(--card); margin-bottom: 18px; }
+.langseg a, nav.toc .langseg a { border: 0; padding: 5px 11px; border-radius: 99px; font: 600 12px/1 var(--mono); letter-spacing: .06em; color: var(--muted); text-decoration: none; }
+.langseg a[aria-current="true"], nav.toc .langseg a[aria-current="true"] { background: var(--fg); color: var(--bg); }
+.langseg a:focus-visible { outline: 2px solid var(--accent-t); outline-offset: 2px; }
+.mrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mrow .langseg { margin-bottom: 0; }
+html.leaving main, html.leaving nav.toc { opacity: 0; transform: translateY(6px); }
+@media (prefers-reduced-motion: no-preference) {
+  main, nav.toc { transition: opacity .22s ease, transform .22s ease; }
+  .langseg a { transition: background .25s, color .25s; }
+}
+
+/* 英文版：標題用 Inter Tight，字距收一點 */
+h1, h2 { font-family: var(--display); font-weight: 700; letter-spacing: -.02em; }
+h1 { font-size: clamp(34px, 5vw, 56px); line-height: 1.08; }
+h2 { line-height: 1.18; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 48 48">
+    <path class="mk-ink" d="M6 37.5L24 29 42 37.5 24 46z" opacity=".26"/>
+    <path class="mk-ink" d="M6 26.5L24 18 42 26.5 24 35z" opacity=".52"/>
+    <g class="peel"><path class="mk-acc" d="M6 13.5L24 5 31.56 8.57 32.1 18.18 24 22z"/>
+    <path d="M31.56 8.57L32.1 18.18Q28.92 15.01 22.94 11.04Q27.85 8.4 31.56 8.57z" fill="#000" opacity=".28" transform="translate(-1 1.4)"/>
+    <path class="mk-ink" d="M31.56 8.57L32.1 18.18Q28.92 15.01 22.94 11.04Q27.85 8.4 31.56 8.57z"/></g>
+  </symbol>
+</svg>
+
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+  <div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Peelback <small>剝剝看</small></span></div>
+  <a class="who" href="/?lang=en#w-peelback">← Aron Lab</a>
+  <div class="langseg" role="group" aria-label="語言 Language"><a href="/peelback/case-study/?lang=zh" data-lang-set="zh" lang="zh-Hant">中</a><a href="/peelback/case-study/en/?lang=en" data-lang-set="en" lang="en" aria-current="true">EN</a></div>
+  <a href="#problem">Opportunity</a><a href="#users">Users</a><a href="#strategy">Strategy</a><a href="#principles">Principles</a><a href="#architecture">Experience</a>
+  <a href="#decisions">Decision log</a><a href="#quality">Accuracy bar</a><a href="#product">Product</a><a href="#method">How I worked</a><a href="#next">What's next</a>
+</nav>
+<main>
+
+<div class="mtop"><div class="mrow"><div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Peelback <small>剝剝看</small></span></div><div class="langseg" role="group" aria-label="語言 Language"><a href="/peelback/case-study/?lang=zh" data-lang-set="zh" lang="zh-Hant">中</a><a href="/peelback/case-study/en/?lang=en" data-lang-set="en" lang="en" aria-current="true">EN</a></div></div><a class="who" href="/?lang=en#w-peelback" style="margin-bottom:0">← Aron Lab</a></div>
+
+<section class="hero" aria-labelledby="t">
+  <div class="txt">
+    <div class="eyebrow">Case study · Peelback</div>
+    <h1 id="t">Real vehicles, <em>peeled open layer by layer</em> for kids</h1>
+    <p class="lede">Kids ride the bus, watch planes and wait for the bullet train every day, and the question they ask most is "what's inside?" Peelback is 3D on the web for an iPad or a phone: four vehicles built from real-world data that come apart from the shell all the way down to the engine. Every part has a name, reads itself aloud and comes with one number you can count. Every Chinese character carries zhuyin, so kids who can't read yet can still play on their own, and there is a full English mode.</p>
+    <dl class="meta">
+      <div><dt>Role</dt><dd>Product owner: positioning, experience, the accuracy bar and every trade-off</dd></div>
+      <div><dt>Stage</dt><dd>Live, 4 vehicles</dd></div>
+      <div><dt>Team</dt><dd>Me + an AI coding agent (Claude Code)</dd></div>
+      <div><dt>Form</dt><dd>Web 3D (iPad, phone, desktop); zhuyin, Chinese, English</dd></div>
+    </dl>
+    <div class="cta"><a class="btn pri" href="https://peelback.aronlab.dev/" target="_blank" rel="noopener">Open Peelback <span aria-hidden="true">↗</span></a></div>
+  </div>
+  <figure class="hv">
+    <div class="ph"><div class="fr"><img src="../img/en/home.jpg" alt="Peelback's gallery: the Taipei low-floor bus, with thumbnails of all four vehicles below" width="780" height="1688"></div></div>
+    <figcaption>The gallery on a phone, in English mode.</figcaption>
+  </figure>
+</section>
+
+<ul class="nums" aria-label="Key numbers">
+  <li><b>4<small>vehicles</small></b><span>Taipei Bus, STARLUX A350-1000, Tesla Model Y, Taiwan High Speed Rail 700T</span></li>
+  <li><b>118<small>parts</small></b><span>Each with a name, a spoken description and a number</span></li>
+  <li><b>977<small>seats</small></b><span>The bullet train, laid out car by car from the official seat maps</span></li>
+  <li><b>3<small>scripts</small></b><span>Zhuyin, Chinese, English; the voice switches too</span></li>
+  <li><b>1.7<small>MB</small></b><span>The page itself; a vehicle downloads only when you open it (was 10.5 MB)</span></li>
+</ul>
+
+<section id="problem" aria-labelledby="h-problem">
+  <div class="eyebrow">Opportunity</div>
+  <h2 id="h-problem">Kids ask what's inside, and grown-ups <em>often can't answer</em></h2>
+  <p>Vehicles are things kids see and touch every day without ever seeing inside. Every tool a parent can reach for leaves something out.</p>
+  <div class="g3">
+    <div class="card"><h3>What people use today</h3>
+      <ul class="plain">
+        <li>Picture books and cutaways: dozens of labels crammed on one flat page, and you can't turn it over</li>
+        <li>Videos: beautifully shot, but you can only watch; a kid can't point and ask</li>
+        <li>Toys and models: the ones that come apart don't look real, and the real-looking ones don't come apart</li>
+      </ul></div>
+    <div class="card"><h3>What kids actually want</h3>
+      <ul class="plain">
+        <li><b>Hands on</b>: spin it, look underneath, take it apart</li>
+        <li><b>A little at a time</b>: one layer, a few parts, then the next layer</li>
+        <li><b>That exact one</b>: the bus they rode today, not "a bus"</li>
+      </ul></div>
+    <div class="card"><h3>Why now</h3>
+      <ul class="plain">
+        <li>iPad and phone browsers can run real-time 3D with soft shadows and lighting</li>
+        <li>Detailed models under open licences (engines, landing gear, train cars) can lend parts</li>
+        <li>An AI coding agent lets one person build the data, interaction and three languages for four vehicles</li>
+      </ul></div>
+  </div>
+</section>
+
+<section id="users" aria-labelledby="h-users">
+  <div class="eyebrow">Users</div>
+  <h2 id="h-users">The player can't read; <em>the grown-up beside them</em> has to get it right</h2>
+  <p>Kids and adults look at the same screen for different things. The product only gets opened together if both are looked after.</p>
+  <div class="g3">
+    <div class="card"><h3>Kids, 4 to 7</h3><p class="muted">Mostly can't read yet. They spin, tap and pinch with a finger. Attention is short, so every touch needs a response, and the vehicle has to be the one they see every day: the orange roof of a Taipei bus, the orange stripe of the bullet train.</p></div>
+    <div class="card"><h3>The grown-up beside them</h3><p class="muted">Has to keep up with a chain of "why?" questions. Get something wrong and a kid remembers it for a long time, so the content has to be right. A number to talk about helps too, like "this battery could charge 5,000 phones".</p></div>
+    <div class="card"><h3>Where it gets opened</h3><p class="muted">At the bus stop, on the train, before bed. Often a phone held upright in one hand, so the buttons sit within thumb reach and long vehicles still need to read clearly on a tall, narrow screen.</p></div>
+  </div>
+</section>
+
+<section id="strategy" aria-labelledby="h-strategy">
+  <div class="eyebrow">Strategy</div>
+  <h2 id="h-strategy">Start with the vehicles kids <em>see every day</em>, and take each one all the way</h2>
+  <p>There are more vehicles than anyone could build. Instead of chasing numbers, I picked four with completely different shapes that kids in Taiwan actually live with: a box (the bus), a tube with wings (the plane), a free-form surface (the car) and a very long train. If the teardown framework holds up for all four, it works, and every vehicle after that is a matter of filling in data.</p>
+  <div class="road">
+    <div class="stage now"><div class="k">01 · Now <span class="pill">Live</span></div><h3>Four Taiwanese vehicles</h3>
+      <dl><dt>Question</dt><dd>Will kids take it apart, tap and ask for the next part on their own?</dd>
+        <dt>How</dt><dd>4 to 5 layers per vehicle, 4 to 9 parts per layer; each vehicle has its own actions: open the doors, depart, flap the wings, follow the power</dd>
+        <dt>Output</dt><dd>A shared teardown framework: a new vehicle needs one parts file and one layer config</dd></dl></div>
+    <div class="stage"><div class="k">02 · Next <span class="pill">To validate</span></div><h3>More kinds</h3>
+      <dl><dt>Question</dt><dd>Can the framework handle things that change shape? (an excavator's arm, a garbage truck's bin, linked metro cars)</dd>
+        <dt>How</dt><dd>Add one at a time, in the order kids point at them on the street</dd>
+        <dt>Output</dt><dd>The cost of each new vehicle, and the data that must exist before work starts</dd></dl></div>
+    <div class="stage"><div class="k">03 · Later <span class="pill">Direction</span></div><h3>From seen to remembered</h3>
+      <dl><dt>Question</dt><dd>After playing, how many part names does a kid remember?</dd>
+        <dt>How</dt><dd>Once a layer is done, flip it around: say a name and ask the kid to tap it</dd>
+        <dt>Output</dt><dd>A number that shows learning happened, for the grown-up to see</dd></dl></div>
+  </div>
+</section>
+
+<section id="principles" aria-labelledby="h-principles">
+  <div class="eyebrow">Principles</div>
+  <h2 id="h-principles">Six rules every trade-off is checked against</h2>
+  <div class="rules">
+    <div class="rule"><h3><span>01</span>One layer at a time</h3><p>Layers go from outside in: outside, inside, chassis, engine. Only this layer's 4 to 9 parts come off and get labels; the others fade, and the camera frames this layer.</p></div>
+    <div class="rule"><h3><span>02</span>Playable without reading</h3><p>Every Chinese character on screen carries zhuyin, and tapping a name reads the description aloud. A three-way switch in the corner (ㄅㄆ｜中｜EN) changes the script, and English mode switches the voice as well.</p></div>
+    <div class="rule"><h3><span>03</span>Everything has a source</h3><p>Dimensions, doors and windows, seat layouts and part positions follow manufacturer specs, seat maps, rescue manuals and photos of the real vehicles. Where there was no data, it says "this part is inferred".</p></div>
+    <div class="rule"><h3><span>04</span>Gestures first, buttons as shortcuts</h3><p>One finger spins freely through 360°, including underneath; two fingers zoom. When the camera is moving on its own, one touch stops it. Every gesture also has a visible button.</p></div>
+    <div class="rule"><h3><span>05</span>System buttons and vehicle buttons stay apart</h3><p>The top-right corner holds only things unrelated to the content: language, sound, day and night. Everything that acts on the vehicle (take apart, X-ray, lights, drive) sits at the bottom, within thumb reach.</p></div>
+    <div class="rule"><h3><span>06</span>Smooth from the first second</h3><p>A vehicle downloads only when you open it. Slow devices start at conservative quality and effects fade in once the frame rate proves it can take them. No kid should stare at a frozen screen.</p></div>
+  </div>
+</section>
+
+<section id="architecture" aria-labelledby="h-arch">
+  <div class="eyebrow">Experience architecture</div>
+  <h2 id="h-arch">From one look to <em>the very last layer</em></h2>
+  <p>The product is a path that leads inward: see the whole vehicle, peel your way in layer by layer, tap parts to hear about them at each layer, or make the vehicle move.</p>
+  <div class="flow" role="img" aria-label="Flow: intro film, gallery, vehicle view, then two paths (peel or make it move), numbers, switch vehicle">
+    <div class="st"><span class="n">01</span><b>Intro film</b><small>Plays on a first visit: particles form the car, it peels apart, then all four line up at true scale</small></div>
+    <div class="st"><span class="n">02</span><b>Gallery</b><small>One vehicle at a time; category tabs at the top left, No.01–04 thumbnails below</small></div>
+    <div class="st key"><span class="n">03</span><b>Vehicle view</b><small>The whole vehicle in the middle; one finger spins it freely, two fingers zoom</small></div>
+    <div class="st key"><span class="n">04</span><b>Two paths</b>
+      <div class="fork"><div><b>Peel it layer by layer</b><small>The layer bar shows every layer at once; tap one to jump there, tap a name to hear about it</small></div><div><b>Make it move</b><small>Open the doors, depart, flap the wings, follow the power, turn on the lights</small></div></div></div>
+    <div class="st"><span class="n">05</span><b>Numbers</b><small>Speed, wheel turns per second, height in Taipei 101s</small></div>
+    <div class="st"><span class="n">06</span><b>Next vehicle</b><small>Back to the gallery; #bus, #plane, #car and #train open a vehicle directly</small></div>
+  </div>
+  <h3 style="margin-top:12px">Four vehicles, each split its own way</h3>
+  <p class="muted">The layers follow how each vehicle is really built instead of one template: the plane gets an extra layer for its wings, and the train's last layer is "power".</p>
+  <div class="layers">
+    <div class="ly"><div class="lab">Taipei Bus<span>NO.01 · 35 PARTS</span></div><div class="chips"><span class="chip"><i>1</i>Outside</span><span class="chip"><i>2</i>Inside</span><span class="chip"><i>3</i>Chassis</span><span class="chip"><i>4</i>Engine</span></div><div class="act"><b>Drive, Doors</b>; a diesel/electric switch turns layer 4 into motor and batteries</div></div>
+    <div class="ly"><div class="lab">STARLUX A350-1000<span>NO.02 · 35 PARTS</span></div><div class="chips"><span class="chip"><i>1</i>Outside the plane</span><span class="chip"><i>2</i>Inside the cabin</span><span class="chip"><i>3</i>Wings</span><span class="chip"><i>4</i>The belly</span><span class="chip"><i>5</i>Engines</span></div><div class="act"><b>Take off, Move wings</b>; altitude shown as a stack of Taipei 101s</div></div>
+    <div class="ly"><div class="lab">Tesla Model Y<span>NO.03 · 27 PARTS</span></div><div class="chips"><span class="chip"><i>1</i>Outside</span><span class="chip"><i>2</i>Inside</span><span class="chip"><i>3</i>Chassis</span><span class="chip"><i>4</i>Battery and motors</span></div><div class="act"><b>Drive, Open</b>; the trunks and doors open together</div></div>
+    <div class="ly"><div class="lab">THSR 700T<span>NO.04 · 21 PARTS</span></div><div class="chips"><span class="chip"><i>1</i>Outside</span><span class="chip"><i>2</i>Inside</span><span class="chip"><i>3</i>Underneath</span><span class="chip"><i>4</i>Power</span></div><div class="act"><b>Go, Turn seats, Power flow</b>; pantograph → transformer → converter → motor light up in turn</div></div>
+  </div>
+</section>
+
+<section id="decisions" aria-labelledby="h-decisions">
+  <div class="eyebrow">Decision log</div>
+  <h2 id="h-decisions">Eight key trade-offs</h2>
+  <div class="decs">
+    <article class="dec"><div class="when">Decision 01<h3>What the product should look like</h3></div><dl>
+      <dt>Context</dt><dd>The same teardown features could wear many faces. That decides whether a kid's first impression is a toy, a textbook or an exhibition.</dd>
+      <dt>Options</dt><dd>Three directions, each mocked up as desktop and phone home screens plus a vehicle view, side by side: <span class="chip">A Blueprint</span> <span class="chip">B Peel orange</span> <span class="chip pick">C Gallery</span>
+        <div class="dirs">
+          <figure><img src="../img/dir_a.jpg" alt="Direction A, Blueprint: dark background, blue accent, card list" loading="lazy" width="1180" height="950"><figcaption>A Blueprint: dark, engineering-drawing feel</figcaption></figure>
+          <figure><img src="../img/dir_b.jpg" alt="Direction B, Peel orange: paper background, orange, a grid asking what to open today" loading="lazy" width="1180" height="950"><figcaption>B Peel orange: paper tones, grid list</figcaption></figure>
+          <figure><img src="../img/dir_c.jpg" alt="Direction C, Gallery: near-black background, one vehicle at a time, mint accent" loading="lazy" width="1180" height="950"><figcaption>C Gallery: one at a time, like a plinth</figcaption></figure>
+        </div></dd>
+      <dt>Decision</dt><dd>C: one vehicle in the middle of the screen at a time, like walking up to a single exhibit. Its buttons, though, were separate circles where selection was only a thin ring, which wasn't clear enough. Related buttons now share one frosted capsule, and the selected one fills solid mint.</dd>
+      <dt>Result</dt><dd class="out">One button language across the whole product. Outlines are kept for things you can't press yet, like "coming soon".</dd></dl></article>
+
+    <article class="dec"><div class="when">Decision 02<h3>Taking it apart without the mess</h3></div><dl>
+      <dt>Context</dt><dd>In the first bus, pressing "take apart" sent 29 parts flying with 29 labels at once. The screen was all name tags and kids didn't know where to look.</dd>
+      <dt>Options</dt><dd><span class="chip">Side parts list</span> <span class="chip">Dots, names on tap</span> <span class="chip">Names on zoom</span> <span class="chip">Thumbnail strip</span> <span class="chip pick">Layer by layer</span></dd>
+      <dt>Decision</dt><dd>Layer by layer, labelling only the current layer. Switching layers started as left and right arrows, which hid how many layers there were and made skipping impossible; it became a layer bar with an icon and a name per layer, all visible at once, so a tap jumps straight there.</dd>
+      <dt>Result</dt><dd class="out">At most 9 names on screen. How deep you've peeled becomes progress in itself, and kids want to reach the last layer.</dd></dl></article>
+
+    <article class="dec"><div class="when">Decision 03<h3>Where the zhuyin goes</h3></div><dl>
+      <dt>Context</dt><dd>Most 4 to 7-year-olds read zhuyin before characters, so every Chinese character needs it, buttons and labels included. Buttons are small, and zhuyin crowds them fast.</dd>
+      <dt>Options</dt><dd>Three rounds: textbook-style vertical text (too cramped, looked messy) → horizontal above the characters (pushed line height up) → a smaller vertical column.</dd>
+      <dt>Decision</dt><dd>A vertical column to the right of each character, about 35% of its size, so three symbols stack to the character's height without stretching the line. The tone slot is always reserved so spacing stays even. Zhuyin is generated at build time: readings for characters with several pronunciations are chosen by word, then corrected with a table of Taiwanese readings.</dd>
+      <dt>Result</dt><dd class="out">New text gets zhuyin on the next build with no manual tagging; the generated table gets a read-through after every copy change.</dd></dl></article>
+
+    <article class="dec"><div class="when">Decision 04<h3>How real is real enough</h3></div><dl>
+      <dt>Context</dt><dd>The first bus used estimated dimensions and a "generic low-floor bus" layout. It looked like a bus, just not the one kids ride every day.</dd>
+      <dt>Decision</dt><dd>Everything needs a source, and before building, a list of what follows real data and what is still inferred. The bus was rebuilt from the coachbuilder's published specs and photos and interior video of Taipei Bus vehicles; the plane follows Airbus's airport planning manual and the STARLUX seat map row by row; the bullet train's 977 seats follow the official seat maps car by car.</dd>
+      <dt>Trade-off</dt><dd>THSR doesn't publish where each car's underfloor equipment sits, so it follows the Japanese 700 Series it is based on, and the data notes say so.</dd>
+      <dt>Result</dt><dd class="out">Grown-ups can explain from it with confidence. What's inferred is written down instead of quietly filled in with a generic layout.</dd></dl></article>
+
+    <article class="dec"><div class="when">Decision 05<h3>Build the shapes, or borrow models</h3></div><dl>
+      <dt>Context</dt><dd>A bus is a box and a fuselage is a tube; dimensions and parameters get them right. A car is a free-form surface everyone sees daily. Two centimetres off and it looks like another brand, and a hand-tuned Model Y looked wrong at a glance.</dd>
+      <dt>Decision</dt><dd>Decide per vehicle: borrow detailed parts where an openly licensed model exists (the plane's engines and landing gear, the train's cab and cars, the Model Y's body and chassis), then correct their positions against real dimensions and manuals; build the rest (the bus body in Blender from specs, the plane's mid-fuselage drawn in code from measured widths and heights).</dd>
+      <dt>Result</dt><dd class="out">Every source is credited inside the product. The Model Y body is licensed for non-commercial use, so it has to be replaced before the product ever charges money.</dd></dl></article>
+
+    <article class="dec"><div class="when">Decision 06<h3>Where buttons and panels go</h3></div><dl>
+      <dt>Context</dt><dd>As features grew, three problems showed up. The lights button sat in the top-right corner next to language and day/night. On phones, the "what's different" card covered the layer bar and pushed into the driving numbers. And the day/night key controlled the page theme while the lights panel had its own day/night for the 3D, so the page could be at night while the car sat in daylight.</dd>
+      <dt>Decision</dt><dd>Two kinds of buttons: system functions top right, vehicle actions in the bottom bar (all on one row when they fit, a "more" menu only when they don't, and that menu stays open after a press). Floating panels stack from the bottom up, each sitting on the one below, with one card open at a time. Day and night became a single switch for page and vehicle together.</dd>
+      <dt>Result</dt><dd class="out">With a phone upright in one hand, every vehicle action is within thumb reach and no panel covers another.</dd></dl></article>
+
+    <article class="dec"><div class="when">Decision 07<h3>How fast it has to open</h3></div><dl>
+      <dt>Context</dt><dd>All four vehicles' models and textures were bundled into the page: 10.5 MB, with all four decompressed on load and 343 MB of memory. On large desktop screens it also stuttered at first and flashed before turning smooth.</dd>
+      <dt>Decision</dt><dd>Models became separate files that download only when that vehicle opens, with content-hashed names cached for a year. Quality now starts conservative and climbs: ambient occlusion starts off and fades in only once the real frame time proves fast enough, and the canvas has a pixel cap.</dd>
+      <dt>Result</dt><dd class="out">1.7 MB page, about 7 MB of memory on load; desktop frames at the start went from 110–150 ms to about 35 ms.</dd></dl></article>
+
+    <article class="dec"><div class="when">Decision 08<h3>Helping first-time visitors get it</h3></div><dl>
+      <dt>Context</dt><dd>You only discover that things come apart by trying. The first look at the gallery is just a vehicle, with no hint of how deep it goes.</dd>
+      <dt>Options</dt><dd>Five opening drafts built with the product's real 3D models: <span class="chip">Particle morph</span> <span class="chip">Scan line</span> <span class="chip">Frozen explosion</span> <span class="chip">True scale</span> <span class="chip">Torn poster</span>, plus a later <span class="chip pick">Cinematic cut</span></dd>
+      <dt>Decision</dt><dd>The cinematic cut: one scene and one camera moving continuously. Particles form a Model Y, it peels apart layer by layer the same way it does in the product, the camera visits the seats and the battery, then all four line up at true scale before night falls and their lights come on one by one. Colours, buttons, day/night and all three languages come straight from the product.</dd>
+      <dt>Result</dt><dd class="out">About 31 seconds to show what the product does, ending on "enter the gallery". It can be skipped and replayed from the gallery. The slowest frame is 76 ms (it used to freeze for 0.5 to 1 s).</dd></dl></article>
+  </div>
+</section>
+
+<section id="quality" aria-labelledby="h-quality">
+  <div class="eyebrow">Accuracy bar</div>
+  <h2 id="h-quality">Turning "looks real" into <em>a list you can check</em></h2>
+  <p>Things made for kids deserve more care, not less. Before each vehicle, I list what follows real data and what is inferred, chase data for the inferred parts, and write down whatever can't be found. Here is where it stands now.</p>
+  <div class="tbl"><table class="stk src">
+    <thead><tr><th>Vehicle</th><th>Based on</th><th>Still inferred</th></tr></thead>
+    <tbody>
+      <tr><td>Taipei Bus</td><td>The coachbuilder's published specs (12.2 × 2.5 × 3.28 m), the chassis spec sheet, photos and interior video of Taipei Bus vehicles; the 24 seats follow the interior video</td><td class="guess">Positions of the engine, fuel tank and other inner parts are simplified from a typical rear-engine low-floor bus; the electric version is a generic electric bus layout, not a specific model</td></tr>
+      <tr><td>STARLUX A350-1000</td><td>Airbus airport planning manual (doors, wheel track, engine positions), STARLUX seat map: 4 first, 40 business, 36 premium economy, 270 economy</td><td class="guess">The mid-fuselage is drawn in code from widths and heights measured on the borrowed model, not from factory drawings</td></tr>
+      <tr><td>Tesla Model Y</td><td>Tesla Taiwan owner's manual and emergency response guide: 2.08 × 1.47 m battery, 116 L front trunk, 16-inch screen, charge port hidden in the left tail light</td><td class="guess">Chassis details come from a Model X chassis model, corrected against the manuals</td></tr>
+      <tr><td>THSR 700T</td><td>Official THSR seat maps (977 seats, business class in car 6, wheelchair spaces in car 7), pantographs on cars 4 and 9, 9 powered cars</td><td class="guess">Underfloor transformers and converters are placed following the Japanese 700 Series</td></tr>
+    </tbody></table></div>
+  <ol class="steps">
+    <li><b>List it first</b><span>For each vehicle, what follows real data and what is inferred; then chase specs, seat maps and manuals for the inferred parts</span></li>
+    <li><b>Side by side with photos</b><span>Same angle as a photo of the real thing; doors, windows, lights and livery checked one by one</span></li>
+    <li><b>Zoom in and hunt</b><span>A crossbar through a wheel, a grey box floating in the cabin, a fuel tank poking out under a wing: all only visible up close</span></li>
+    <li><b>Every view, every mode</b><span>390 px phone held upright, desktop, day and night, zhuyin, Chinese and English</span></li>
+    <li><b>Measure performance</b><span>Real frame times and memory; three rounds of switching vehicles must not grow memory</span></li>
+    <li><b>"Done" needs evidence</b><span>Screenshots, measured numbers, before and after side by side</span></li>
+  </ol>
+  <div class="lesson"><b>Lesson</b><p>While building the intro film, I took colours from an old block at the top of the product's stylesheet and made several versions in blue. The colour actually in effect was the mint that a later block overrides it with. Now product colours are always read from what's live on screen, or the work happens inside the product itself, never from a hand-copied palette.</p></div>
+  <div class="tbl"><table class="stk perf">
+    <thead><tr><th>Item</th><th>How</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>Page size</td><td>Models and textures split into separate files, downloaded per vehicle</td><td class="res"><s>10.5 MB</s><em>1.7 MB</em></td></tr>
+      <tr><td>Memory on load</td><td>No more decompressing all four vehicles up front</td><td class="res"><s>343 MB</s><em>~7 MB</em></td></tr>
+      <tr><td>Switching vehicles</td><td>Removed the listeners, timers and audio that held on to old scenes</td><td class="res"><em>Flat after 3 rounds</em></td></tr>
+      <tr><td>Desktop frames at start</td><td>Canvas pixel cap; ambient occlusion off first, on when fast enough</td><td class="res"><s>110–150 ms</s><em>~35 ms</em></td></tr>
+      <tr><td>Intro film, slowest frame</td><td>One continuous camera timeline; all four vehicles built and warmed up before playback</td><td class="res"><s>0.5–1 s</s><em>76 ms</em></td></tr>
+      <tr><td>Not yet verified</td><td>Performance was measured on a desktop and in a headless browser; older iPads haven't been measured on real hardware, and observations of kids playing on their own aren't summarised as numbers yet</td><td class="res no">Listed as is</td></tr>
+    </tbody></table></div>
+</section>
+
+<section id="product" aria-labelledby="h-product">
+  <div class="eyebrow">Product</div>
+  <h2 id="h-product">The product</h2>
+  <p class="lede">These are real screens from the product in English mode, on a phone held upright at 390 px.</p>
+  <div class="tour">
+    <div class="tg">
+      <div class="tgh"><span class="tn">01</span><div><h3>Layer by layer</h3><p class="muted">The bottom bar holds the actions, with the layer bar above it. Whatever layer you're on is the only one labelled; tap a name for a card that reads aloud and gives one number.</p></div></div>
+      <div class="phones">
+        <figure class="ph"><div class="fr"><img src="../img/en/bus1.jpg" alt="The bus at layer one: roof, air conditioner and both sides lifted off and labelled" loading="lazy" width="780" height="1688"></div><figcaption><b>Bus · Outside</b>Roof, air conditioner and both sides come off</figcaption></figure>
+        <figure class="ph"><div class="fr"><img src="../img/en/plane2.jpg" alt="The plane opened to its cabin: first, business, premium economy and economy, galleys and lavatories" loading="lazy" width="780" height="1688"></div><figcaption><b>Plane · Cabin</b>Seats placed row by row from the STARLUX seat map</figcaption></figure>
+        <figure class="ph"><div class="fr"><img src="../img/en/car_card.jpg" alt="The Model Y opened to its chassis with the battery pack card showing" loading="lazy" width="780" height="1688"></div><figcaption><b>Model Y · Battery</b>One number: enough to charge about 5,000 phones</figcaption></figure>
+        <figure class="ph"><div class="fr"><img src="../img/en/train2.jpg" alt="The bullet train opened to its inside: cab, standard cars, luggage racks, toilets, vending machines" loading="lazy" width="780" height="1688"></div><figcaption><b>Train · Inside</b>977 seats from the official seat maps</figcaption></figure>
+      </div>
+    </div>
+    <div class="tg">
+      <div class="tgh"><span class="tn">02</span><div><h3>Each vehicle has its own story</h3><p class="muted">Beyond taking it apart, each vehicle does one thing only it can: on the train you follow the power from pantograph to motor; at night the lights come on. Day and night is one switch shared with the page.</p></div></div>
+      <div class="phones three">
+        <figure class="ph"><div class="fr"><img src="../img/en/train4.jpg" alt="The bullet train's power layer: motor car and trailer car signs, main transformers, traction converters, auxiliary power" loading="lazy" width="780" height="1688"></div><figcaption><b>Train · Power</b>Which cars are powered and where the electricity comes from</figcaption></figure>
+        <figure class="ph"><div class="fr"><img src="../img/en/car_night.jpg" alt="The Model Y at night with its light bar and headlights on" loading="lazy" width="780" height="1688"></div><figcaption><b>Night</b>Every group of lights switches on its own</figcaption></figure>
+        <figure class="ph"><div class="fr"><img src="../img/en/intro.jpg" alt="The intro film: the Model Y peeling apart with a label on its suspension" loading="lazy" width="780" height="1688"></div><figcaption><b>Intro film</b>Plays on a first visit; can be skipped</figcaption></figure>
+      </div>
+    </div>
+    <div class="tg">
+      <div class="tgh"><span class="tn">03</span><div><h3>On desktop</h3><p class="muted">Same rules: title and numbers top left, the layer bar standing upright on the right, the action bar centred at the bottom.</p></div></div>
+      <figure class="wide"><img src="../img/en/desk_car.jpg" alt="The Model Y on desktop, opened to its inside" loading="lazy" width="1440" height="900"><figcaption><b>Model Y · Inside</b>Desktop, 1440 px wide.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="method" aria-labelledby="h-method">
+  <div class="eyebrow">How I worked</div>
+  <h2 id="h-method">I own "building the right thing"; AI does "building the thing"</h2>
+  <p>Cleaning up 3D models, the teardown animation, the zhuyin system, lighting, the intro film and deployment were all implemented by an AI coding agent. I chose which vehicles to build, set the bar for accuracy and experience, decided between options and signed off every result.</p>
+  <div class="g2">
+    <div class="card"><h3>Working rules</h3><ul class="plain">
+      <li>Big directions come as mock-ups to choose from: 3 product directions, 5 teardown styles, 6 intro openings</li>
+      <li>When I point out one problem, first ask whether it's a site-wide rule; if so, write the rule, then fix every place at once</li>
+      <li>Change only what was pointed out; leave everything else alone</li>
+      <li>"Fixed" needs evidence: screenshots, measured numbers, side by side with photos of the real thing</li>
+      <li>Mistakes get stated plainly: what went wrong, for how long, and whether it's fixed</li></ul></div>
+    <div class="card"><h3>Calls I made</h3><ul class="plain">
+      <li>Four Taiwanese vehicles with completely different shapes to prove the framework, instead of chasing numbers</li>
+      <li>One layer at a time: fewer names in exchange for something kids understand</li>
+      <li>Accuracy needs sources, and inferred parts are written down</li>
+      <li>Zhuyin is the foundation of the product, not an option</li>
+      <li>Performance is part of the experience: smooth first, then beautiful</li></ul></div>
+  </div>
+</section>
+
+<section id="next" aria-labelledby="h-next">
+  <div class="eyebrow">What's next</div>
+  <h2 id="h-next">What's next</h2>
+  <ul class="plain">
+    <li>Measure load and frame times on older iPads and mid-range Android phones, and set the minimum supported device</li>
+    <li>Sit beside kids while they play and note how deep they peel, which parts they tap and where they get stuck</li>
+    <li>Add a fifth vehicle that changes shape (an excavator or a garbage truck) to see whether the framework holds</li>
+    <li>Build a quiz: after a layer, say a name and ask the kid to tap it</li>
+    <li>Replace the Model Y body with a commercially licensed version before deciding whether to charge</li>
+  </ul>
+  <div class="close"><div class="brand"><svg aria-hidden="true"><use href="#logo"/></svg><span>Peelback <small>剝剝看</small></span></div><p class="muted">Real vehicles, peeled open layer by layer.</p><p class="muted">Aron · Product owner. Every screen here is a real product screenshot; the live version is at peelback.aronlab.dev, and the sources and licences of the 3D models are listed in the product.</p></div>
+</section>
+
+</main>
+</div>
+
+<div class="mtoc" id="mtoc">
+  <div class="mpanel" id="mpanel" role="menu" aria-label="Contents"></div>
+  <button class="mbtn" id="mbtn" type="button" aria-expanded="false" aria-controls="mpanel" aria-label="Contents">
+    <svg class="ring" viewBox="0 0 46 46" aria-hidden="true"><circle class="bgc" cx="23" cy="23" r="21"/><circle class="pr" id="pr" cx="23" cy="23" r="21" stroke-dasharray="131.95" stroke-dashoffset="131.95"/></svg>
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h9"/></svg>
+  </button>
+</div>
+
+<script>
+(() => {   // 目錄：目前章節標一條薄荷綠；手機版右下角圓環顯示讀到哪
+  const links = [...document.querySelectorAll("nav.toc a[href^='#']")];
+  const secs = links.map(a => document.querySelector(a.getAttribute("href")));
+  const panel = document.getElementById("mpanel"), box = document.getElementById("mtoc"), btn = document.getElementById("mbtn"), pr = document.getElementById("pr");
+  links.forEach((a, i) => {
+    const m = document.createElement("a");
+    m.href = a.getAttribute("href"); m.setAttribute("role", "menuitem");
+    m.innerHTML = a.textContent + "<span>" + String(i + 1).padStart(2, "0") + "</span>";
+    m.addEventListener("click", () => toggle(false));
+    panel.appendChild(m);
+  });
+  const mlinks = [...panel.querySelectorAll("a")];
+  const toggle = (open) => { box.classList.toggle("open", open); btn.setAttribute("aria-expanded", open); };
+  btn.addEventListener("click", () => toggle(!box.classList.contains("open")));
+  document.addEventListener("keydown", e => { if (e.key === "Escape") toggle(false); });
+  document.addEventListener("click", e => { if (!box.contains(e.target)) toggle(false); });
+  const C = 131.95;
+  let raf = 0;
+  const update = () => {
+    raf = 0;
+    const y = scrollY + innerHeight * 0.3;
+    let cur = -1;
+    secs.forEach((s, i) => { if (s && s.offsetTop <= y) cur = i; });
+    links.forEach((a, i) => a.classList.toggle("on", i === cur));
+    mlinks.forEach((a, i) => a.classList.toggle("on", i === cur));
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+    pr.setAttribute("stroke-dashoffset", (C * (1 - p)).toFixed(2));
+  };
+  addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+  addEventListener("resize", update);
+  update();
+})();
+
+(() => {   // 語言切換：記住選擇（跟 Aron Lab 首頁共用 lab.lang），淡出後換到另一個語言的同一個章節
+  const secs = [...document.querySelectorAll("main section[id]")];
+  document.querySelectorAll("[data-lang-set]").forEach(a => a.addEventListener("click", e => {
+    if (a.getAttribute("aria-current") === "true") { e.preventDefault(); return; }
+    try { localStorage.setItem("lab.lang", a.dataset.langSet); } catch (err) { /* 無痕模式：靠網址的 ?lang= */ }
+    const y = scrollY + innerHeight * 0.3;
+    let id = "";
+    secs.forEach(s => { if (s.offsetTop <= y) id = s.id; });
+    const url = a.getAttribute("href") + (id ? "#" + id : "");
+    e.preventDefault();
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { location.href = url; return; }
+    document.documentElement.classList.add("leaving");
+    setTimeout(() => { location.href = url; }, 200);
+  }));
+  addEventListener("pageshow", () => document.documentElement.classList.remove("leaving"));
+})();
+</script>
+</body>
+</html>
